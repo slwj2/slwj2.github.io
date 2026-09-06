@@ -2,218 +2,249 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>God Field - 신계 훈련장</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>God Field Mobile</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", sans-serif; }
   body {
-    background-color: #0b1f1a;
+    background-color: #1a0f12;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
   }
-  #gf-screen {
+
+  /* 모바일 세로 뷰포트 컨테이너 */
+  #app {
     position: relative;
-    width: 1000px;
-    height: 700px;
-    background: radial-gradient(ellipse at 50% 30%, #b8f2e6 0%, #6cd4ba 45%, #2a9d8f 100%);
-    border: 3px solid #005f56;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 440px;
+    height: 100vh;
+    max-height: 900px;
+    background: radial-gradient(circle at 50% 30%, #df7f8d 0%, #c45d6e 40%, #a43f52 100%);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
-  /* 상단 헤더 */
+  /* 상단 헤더 바 */
   #header {
-    height: 44px;
+    height: 48px;
     background: #008f7a;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
-    border-bottom: 2px solid #005f56;
+    border-bottom: 2px solid #006b5b;
+    flex-shrink: 0;
   }
-  .header-btn {
+  .icon-btn {
     background: transparent;
-    color: #fff;
     border: none;
-    font-size: 16px;
-    font-weight: bold;
+    color: #fff;
+    font-size: 22px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  #gf-turn-pill {
-    background: #fff;
-    color: #d62828;
-    padding: 3px 24px;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 900;
-    border: 1px solid #c9c9c9;
-  }
-
-  /* 메인 배틀 아레나 */
-  #arena {
-    flex: 1;
-    position: relative;
-    display: flex;
-    padding: 16px 20px;
-    gap: 20px;
-  }
-
-  /* 좌측: 공방 대치 필드 */
-  #clash-zone {
-    flex: 1.2;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    position: relative;
-  }
-  #clash-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  .player-name-badge {
-    background: rgba(255, 255, 255, 0.9);
-    color: #264653;
-    padding: 4px 18px;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  .player-name-badge .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #a8dadc;
-  }
-  .arrow-pink {
-    color: #e63946;
-    font-size: 26px;
-    font-weight: 900;
     line-height: 1;
   }
+  #turn-pill {
+    background: #111;
+    color: #ff5964;
+    padding: 4px 28px;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
 
-  /* 카드 대치 슬롯 */
-  #clash-cards {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 15px;
+  /* 현재 턴 플레이어 뱃지 */
+  #turn-badge-row {
+    padding: 10px 14px 4px 14px;
+    flex-shrink: 0;
   }
-  .clash-card-box {
-    width: 190px;
-    height: 80px;
-    background: #e9fbf6;
-    border: 2px solid #52b788;
-    border-radius: 8px;
-    padding: 6px;
-    display: flex;
+  .badge-pill {
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 4px 18px;
+    border-radius: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
   }
-  .card-icon-sq {
-    width: 55px;
-    height: 55px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: #fff;
-    background: #2a9d8f;
+  .badge-pill .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #90a4ae;
+    margin-right: 10px;
   }
-  .clash-card-info {
-    flex: 1;
-    font-size: 12px;
+  .badge-pill .name {
+    font-size: 15px;
+    font-weight: bold;
     color: #1d3557;
   }
-  .clash-card-title { font-weight: bold; font-size: 13px; margin-bottom: 3px; }
-  .clash-card-price { text-align: right; color: #b08968; font-weight: bold; font-size: 11px; }
 
-  /* 중앙 대미지 팝업 */
-  #damage-modal {
+  /* 중앙 결투 연출 / 손패 영역 */
+  #mid-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 4px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 피격 대치창 (공격 발동 시 표시) */
+  #clash-banner {
     position: absolute;
-    top: 90px;
-    left: 100px;
-    width: 190px;
-    height: 130px;
-    background: #38383e;
-    border: 2px solid #5a5a66;
+    top: 6px;
+    left: 14px;
+    right: 14px;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid #ff758f;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 20;
+    color: #fff;
+    font-size: 13px;
+  }
+  .clash-card-thumb {
+    background: #fff;
+    color: #111;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+
+  /* 대미지 연출 모달 (스크린샷 1의 대미지 박스 재현) */
+  #damage-box {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 170px;
+    height: 120px;
+    background: #34343a;
+    border: 2px solid #555566;
     border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
     display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 30;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
-  #damage-number {
-    font-size: 68px;
+  #damage-val {
+    font-size: 64px;
     font-weight: 900;
-    color: #e63946;
-    -webkit-text-stroke: 2px #fff;
+    color: #ff3344;
+    -webkit-text-stroke: 2px #ffffff;
     line-height: 1;
-    text-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
+    text-shadow: 0 0 12px rgba(255, 51, 68, 0.7);
   }
-  #damage-label {
-    color: #e63946;
-    font-size: 18px;
+  #damage-sub {
+    color: #ff3344;
+    font-size: 17px;
     font-weight: bold;
     margin-top: 4px;
   }
 
-  /* 우측: 5인 플레이어 목록 */
-  #player-list {
-    flex: 1;
+  /* 손패 카드 그리드 (스크린샷 2의 2줄 배열) */
+  #hand-area {
+    margin-top: auto;
+    margin-bottom: 8px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+  .card-slot {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.1s;
   }
-  .player-item {
-    background: rgba(255, 255, 255, 0.88);
-    border-radius: 20px;
-    height: 38px;
+  .card-slot:hover { transform: translateY(-3px); }
+  .card-slot.selected .card-face {
+    border-color: #ffbe0b;
+    box-shadow: 0 0 10px rgba(255, 190, 11, 0.8);
+    transform: translateY(-4px);
+  }
+  .card-face {
+    width: 52px;
+    height: 52px;
+    background: #fff;
+    border: 2px solid #b0bec5;
+    border-radius: 6px;
     display: flex;
     align-items: center;
-    padding: 0 14px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .card-pill {
+    margin-top: 3px;
+    background: #d8f3dc;
+    color: #1b4332;
+    border: 1px solid #74c69d;
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .pill-shield { background: #e0f2fe; color: #0369a1; border-color: #7dd3fc; }
+  .pill-item { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+
+  /* 하단 플레이어 목록 (스크린샷 2 완벽 재현) */
+  #player-container {
+    background: rgba(0, 0, 0, 0.12);
+    padding: 6px 14px 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .p-row {
+    height: 36px;
+    background: #ffffff;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     cursor: pointer;
     border: 2px solid transparent;
-    transition: all 0.15s ease;
+    transition: all 0.15s;
   }
-  .player-item:hover { transform: scale(1.02); }
-  .player-item.target {
+  .p-row.target {
     border-color: #e63946;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(230, 57, 70, 0.4);
+    background: #fff0f3;
+    box-shadow: 0 0 8px rgba(230, 57, 70, 0.5);
   }
-  .player-item.current-turn {
+  .p-row.turn-now {
     border-color: #ffb703;
-    background: #fff8e7;
+    background: #fffbeb;
   }
-  .player-item.dead { opacity: 0.45; background: #bbb; cursor: not-allowed; }
+  .p-row.dead {
+    opacity: 0.4;
+    background: #d6d6d6;
+    cursor: not-allowed;
+  }
   .p-dot {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
-    background: #73939b;
-    margin-right: 12px;
+    background: #90a4ae;
+    margin-right: 14px;
+    flex-shrink: 0;
   }
   .p-name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
-    color: #2b4c7e;
+    color: #1e3a8a;
     width: 90px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -221,198 +252,99 @@
   }
   .p-stats {
     flex: 1;
-    font-size: 13px;
-    color: #222;
     text-align: right;
+    font-size: 13px;
+    color: #262626;
     font-weight: 500;
   }
 
-  /* 중단 액션 알약 버튼 열 */
-  #action-pills-row {
+  /* 최하단 기적 및 액션 제어 버튼 바 */
+  #bottom-bar {
+    padding: 4px 14px 12px 14px;
     display: flex;
-    gap: 15px;
-    margin-top: auto;
-    margin-bottom: 8px;
+    gap: 8px;
+    flex-shrink: 0;
   }
-  .pill-action-btn {
-    background: #d8f3dc;
+  .action-btn {
+    flex: 1;
+    height: 38px;
+    background: #e6f7f4;
+    border: 2px solid #52b788;
     color: #1b4332;
-    border: 2px solid #2d6a4f;
-    border-radius: 18px;
-    padding: 6px 28px;
-    font-size: 15px;
+    border-radius: 19px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: all 0.1s;
-  }
-  .pill-action-btn:hover:not(:disabled) { background: #b7e4c7; transform: translateY(-2px); }
-  .pill-action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .pill-action-btn.btn-defend { background: #d8f3dc; border-color: #2d6a4f; }
-  .pill-action-btn.btn-miracle {
-    background: #fff;
-    border-color: #999;
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  /* 하단 손패 덱 */
-  #hand-tray {
-    height: 175px;
-    background: #006d61;
-    border-top: 3px solid #004d44;
-    padding: 10px 18px;
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    align-items: center;
-  }
-  .hand-card {
-    flex: 0 0 88px;
-    height: 135px;
-    background: #e9fbf6;
-    border: 2px solid #52b788;
-    border-radius: 8px;
-    padding: 6px 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: transform 0.1s, border-color 0.1s;
-  }
-  .hand-card:hover { transform: translateY(-6px); }
-  .hand-card.selected {
-    border-color: #ffb703;
-    background: #fff8e7;
-    transform: translateY(-10px);
-    box-shadow: 0 0 10px rgba(255, 183, 3, 0.6);
-  }
-  .hand-card-icon {
-    width: 65px;
-    height: 65px;
-    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
-    background: #cbf3f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  .hand-card-name { font-size: 11px; font-weight: bold; color: #1d3557; text-align: center; }
-  .hand-card-stat-pill {
-    background: #fff;
-    border: 1px solid #777;
-    border-radius: 12px;
-    padding: 2px 10px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #222;
-  }
-
-  /* 최하단 시스템 상태바 */
-  #footer-bar {
-    height: 24px;
-    background: #004d44;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 14px;
-    font-size: 11px;
-    color: #b7e4c7;
-  }
+  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-attack { background: #ffe3e3; border-color: #e63946; color: #b7094c; }
+  .btn-forgive { background: #fef08a; border-color: #ca8a04; color: #713f12; }
 </style>
 </head>
 <body>
 
-<div id="gf-screen">
+<div id="app">
   <!-- 상단 바 -->
   <div id="header">
-    <button class="header-btn" onclick="alert('훈련 모드입니다.')">← 훈련</button>
-    <div id="gf-turn-pill">G.F. 1</div>
-    <button class="header-btn" onclick="alert('속성 상성: 화↔수, 목↔토, 광(방어불가), 암(관통시 즉사)')">📖 교전</button>
+    <button class="icon-btn" onclick="alert('신계 훈련 모드입니다.')">←</button>
+    <div id="turn-pill">G.F.1 /1</div>
+    <button class="icon-btn" onclick="alert('규칙: 공격할 대상을 아래 목록에서 클릭하고 손패의 무기를 누르세요!')">📑</button>
   </div>
 
-  <!-- 메인 결투 아레나 -->
-  <div id="arena">
-    <!-- 좌측 공방 대치창 -->
-    <div id="clash-zone">
-      <div id="clash-header">
-        <div class="player-name-badge">
-          <span class="dot"></span>
-          <span id="attacker-name">노누</span>
-        </div>
-        <div class="arrow-pink">➜</div>
-        <div class="player-name-badge">
-          <span class="dot"></span>
-          <span id="defender-name">챠기</span>
-        </div>
-      </div>
-
-      <!-- 양측 낸 카드 대치 -->
-      <div id="clash-cards">
-        <div class="clash-card-box" id="atk-card-box">
-          <div class="card-icon-sq" id="atk-card-icon">⚔</div>
-          <div class="clash-card-info">
-            <div class="clash-card-title" id="atk-card-name">소드실드</div>
-            <div id="atk-card-stat" style="color:#d90429; font-weight:bold;">공격10 방어10</div>
-            <div class="clash-card-price" id="atk-card-price">₩15</div>
-          </div>
-        </div>
-
-        <div class="clash-card-box" id="def-card-box">
-          <div class="card-icon-sq" id="def-card-icon" style="background:#3a86ff;">🛡</div>
-          <div class="clash-card-info">
-            <div class="clash-card-title" id="def-card-name">아이스 실드</div>
-            <div id="def-card-stat" style="color:#0077b6; font-weight:bold;">방어5 [수]</div>
-            <div class="clash-card-price" id="def-card-price">₩10</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 대미지 연출 팝업 (스크린샷 일치) -->
-      <div id="damage-modal">
-        <div id="damage-number">3</div>
-        <div id="damage-label">대미지</div>
-      </div>
-
-      <!-- 중단 알약 액션 버튼 열 -->
-      <div id="action-pills-row">
-        <button id="btn-attack" class="pill-action-btn" disabled onclick="handleUserAttack()">공격10</button>
-        <button id="btn-defend" class="pill-action-btn btn-defend" style="display:none;" onclick="handleUserDefend()">방어</button>
-        <button id="btn-forgive" class="pill-action-btn" style="display:none; background:#ffcbf2;" onclick="handleUserForgive()">용서하기</button>
-        <button id="btn-pray" class="pill-action-btn" onclick="handleUserPray()">기도하기</button>
-        <button class="pill-action-btn btn-miracle" onclick="alert('일으킨 기적이 없습니다.')">☼ 일으킨 기적</button>
-      </div>
-    </div>
-
-    <!-- 우측 5인 플레이어 목록 -->
-    <div id="player-list">
-      <!-- 5명 플레이어 렌더링 영역 -->
+  <!-- 현재 턴 플레이어 뱃지 -->
+  <div id="turn-badge-row">
+    <div class="badge-pill">
+      <span class="dot"></span>
+      <span class="name" id="current-badge-name">지브</span>
     </div>
   </div>
 
-  <!-- 하단 손패 트레이 -->
-  <div id="hand-tray">
-    <!-- 손패 렌더링 영역 -->
+  <!-- 중앙 전장 및 손패 그리드 -->
+  <div id="mid-field">
+    <!-- 피격 안내 배너 -->
+    <div id="clash-banner">
+      <span id="clash-text">공방 대치 중</span>
+      <span class="clash-card-thumb" id="clash-thumb">⚔</span>
+    </div>
+
+    <!-- 스크린샷 1 대미지 연출 모달 -->
+    <div id="damage-box">
+      <div id="damage-val">3</div>
+      <div id="damage-sub">대미지</div>
+    </div>
+
+    <!-- 손패 그리드 (스크린샷 2 일치) -->
+    <div id="hand-area">
+      <!-- 2줄 카드 슬롯 자동 렌더링 -->
+    </div>
   </div>
 
-  <!-- 최하단 상태바 -->
-  <div id="footer-bar">
-    <span id="combat-log">신계 훈련이 시작되었습니다.</span>
-    <span>연결: GitHub 덱 연동 완료 (5인 대전)</span>
+  <!-- 하단 5인 플레이어 목록 (스크린샷 2 일치) -->
+  <div id="player-container">
+    <!-- 플레이어 바 렌더링 -->
+  </div>
+
+  <!-- 최하단 액션 버튼 바 -->
+  <div id="bottom-bar">
+    <button id="btn-attack-act" class="action-btn btn-attack" disabled onclick="handleAttack()">공격하기</button>
+    <button id="btn-forgive-act" class="action-btn btn-forgive" style="display:none;" onclick="handleForgive()">용서하기</button>
+    <button id="btn-pray-act" class="action-btn" onclick="handlePray()">기도하기</button>
+    <button class="action-btn" onclick="alert('일으킨 기적이 없습니다.')">☼ 일으킨 기적</button>
   </div>
 </div>
 
 <script>
 /* ==========================================================================
-   1. 오디오 합성 엔진 (Web Audio API)
+   1. 내장 사운드 신시사이저 (Web Audio API)
    ========================================================================== */
-class AudioEngine {
+class AudioFx {
   constructor() { this.ctx = null; }
   init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
-  play(freq, type, dur, vol = 0.2) {
+  beep(freq, type, dur, vol = 0.2) {
     this.init();
     if (!this.ctx) return;
     const o = this.ctx.createOscillator();
@@ -426,61 +358,34 @@ class AudioEngine {
     o.start();
     o.stop(this.ctx.currentTime + dur);
   }
-  atk() { this.play(220, "sawtooth", 0.15, 0.2); }
-  def() { this.play(440, "triangle", 0.2, 0.2); }
-  hit() { this.play(90, "square", 0.35, 0.3); }
-  turn() { this.play(650, "sine", 0.18, 0.15); }
+  atk() { this.beep(240, "sawtooth", 0.15, 0.2); }
+  def() { this.beep(460, "triangle", 0.2, 0.2); }
+  hit() { this.beep(85, "square", 0.35, 0.3); }
+  turn() { this.beep(680, "sine", 0.18, 0.15); }
 }
-const sfx = new AudioEngine();
+const sfx = new AudioFx();
 
 /* ==========================================================================
-   2. GitHub 연동 덱 및 마스터 데이터
+   2. 성물(카드) 덱 데이터 (스크린샷 아이템 구현)
    ========================================================================== */
-const GITHUB_CARDS_URL = "https://raw.githubusercontent.com/Igoorx/godfield-flash/master/server-src/cards_data.json";
-
-const DEFAULT_CARDS = [
-  { name: "소드실드", type: "WEAPON", elem: "NONE", atk: 10, def: 10, price: 15, icon: "⚔" },
-  { name: "화염검", type: "WEAPON", elem: "FIRE", atk: 12, def: 0, price: 14, icon: "🔥" },
-  { name: "수류궁", type: "WEAPON", elem: "WATER", atk: 12, def: 0, price: 14, icon: "🏹" },
-  { name: "수목봉", type: "WEAPON", elem: "WOOD", atk: 12, def: 0, price: 14, icon: "🪵" },
-  { name: "토석추", type: "WEAPON", elem: "EARTH", atk: 12, def: 0, price: 14, icon: "🪨" },
-  { name: "광선의 활", type: "WEAPON", elem: "LIGHT", atk: 15, def: 0, price: 25, icon: "⚡" },
-  { name: "사신의 낫", type: "WEAPON", elem: "DARK", atk: 5, def: 0, price: 30, icon: "☠" },
-  { name: "나무 방패", type: "SHIELD", elem: "NONE", atk: 0, def: 8, price: 8, icon: "🛡" },
-  { name: "아이스 실드", type: "SHIELD", elem: "WATER", atk: 0, def: 5, price: 10, icon: "❄" },
-  { name: "화염 방패", type: "SHIELD", elem: "FIRE", atk: 0, def: 12, price: 14, icon: "🛡" },
-  { name: "대지 방패", type: "SHIELD", elem: "WOOD", atk: 0, def: 12, price: 14, icon: "🛡" },
-  { name: "성스러운 갑옷", type: "SHIELD", elem: "LIGHT", atk: 0, def: 11, price: 20, icon: "🦺" },
-  { name: "체력 포션", type: "ITEM", elem: "NONE", atk: 0, def: 0, heal: 15, price: 10, icon: "🧪" }
+const CARD_DECK = [
+  { name: "채찍", type: "WEAPON", elem: "NONE", val: 2, icon: "➰" },
+  { name: "나뭇가지 활", type: "WEAPON", elem: "WOOD", val: 7, icon: "🏹" },
+  { name: "광선의 검", type: "WEAPON", elem: "LIGHT", val: 10, icon: "⚔" },
+  { name: "삼지창", type: "WEAPON", elem: "DARK", val: 5, icon: "🔱" },
+  { name: "화염창", type: "WEAPON", elem: "FIRE", val: 8, icon: "🔥" },
+  { name: "가죽 투구", type: "SHIELD", elem: "NONE", val: 1, icon: "🪖" },
+  { name: "갑옷", type: "SHIELD", elem: "WATER", val: 5, icon: "🦺" },
+  { name: "강철 건틀릿", type: "SHIELD", elem: "EARTH", val: 6, icon: "🥊" },
+  { name: "마법 방패", type: "SHIELD", elem: "LIGHT", val: 11, icon: "🛡" },
+  { name: "약초", type: "ITEM", elem: "NONE", val: 10, icon: "🌿" }
 ];
 
-let cardDeck = [...DEFAULT_CARDS];
-let cardIdInc = 1;
-
-function drawRandomCard() {
-  const t = cardDeck[Math.floor(Math.random() * cardDeck.length)];
-  return { ...t, id: cardIdInc++ };
+let cardSeq = 1;
+function drawCard() {
+  const t = CARD_DECK[Math.floor(Math.random() * CARD_DECK.length)];
+  return { ...t, id: cardSeq++ };
 }
-
-/* ==========================================================================
-   3. 5인 플레이어 상태 (스크린샷 일치)
-   ========================================================================== */
-const state = {
-  turnNumber: 2,
-  currentTurnIdx: 1, // 노누(유저) = 1
-  selectedTargetIdx: 2, // 챠기 = 2
-  selectedCardIds: [],
-  pendingAttack: null,
-  recentAttacksOnUser: 0, // 다굴 방지 카운터
-
-  players: [
-    { name: "죠뱌마기", isBot: true, hp: 30, mp: 30, money: 10, hand: [] },
-    { name: "노누", isBot: false, hp: 40, mp: 10, money: 20, hand: [] }, // 사용자
-    { name: "챠기", isBot: true, hp: 40, mp: 10, money: 20, hand: [] },
-    { name: "두점(..)", isBot: true, hp: 40, mp: 10, money: 20, hand: [] },
-    { name: "툐사파퓨", isBot: true, hp: 40, mp: 10, money: 20, hand: [] }
-  ]
-};
 
 /* 속성 상성 검증 */
 function canBlock(atkElem, defElem) {
@@ -494,78 +399,85 @@ function canBlock(atkElem, defElem) {
 }
 
 /* ==========================================================================
-   4. 게임 초기화
+   3. 게임 상태 (스크린샷 2 플레이어 명단 적용)
    ========================================================================== */
-async function init() {
-  // GitHub 비동기 덱 조회 (오프라인 폴백 탑재)
-  try {
-    const res = await fetch(GITHUB_CARDS_URL, { cache: "no-cache" });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data)) cardDeck = data;
-    }
-  } catch (e) {}
+const state = {
+  turnCount: 1,
+  turnSlot: 0, // 0: 지브 (유저)
+  targetSlot: 1, // 모효
+  selectedCardId: null,
+  pendingAttack: null,
+  recentAttacksOnUser: 0, // 다굴 방지 카운터
 
-  // 5명 모두에게 9장 랜덤 지급
-  state.players.forEach(p => {
-    p.hand = Array.from({ length: 9 }, drawRandomCard);
-  });
-
-  renderAll();
-  startTurn(state.currentTurnIdx);
-}
+  players: [
+    { slot: 0, name: "지브", isBot: false, hp: 40, mp: 10, money: 20, hand: [] }, // 유저
+    { slot: 1, name: "모효", isBot: true, hp: 40, mp: 10, money: 20, hand: [] },
+    { slot: 2, name: "우유", isBot: true, hp: 40, mp: 10, money: 20, hand: [] },
+    { slot: 3, name: "휴셔", isBot: true, hp: 40, mp: 10, money: 20, hand: [] },
+    { slot: 4, name: "뎌샤", isBot: true, hp: 40, mp: 10, money: 20, hand: [] }
+  ]
+};
 
 /* ==========================================================================
-   5. 턴 제어 및 봇 상호 공격 (다굴 방지 AI)
+   4. 게임 시작 & 턴 전환 루프
    ========================================================================== */
-function nextTurn() {
-  document.getElementById("damage-modal").style.display = "none";
-  state.selectedCardIds = [];
+function init() {
+  // 시작 시 각자 9장 랜덤 지급
+  state.players.forEach(p => {
+    p.hand = Array.from({ length: 9 }, drawCard);
+  });
+  renderAll();
+  startTurn(0);
+}
 
-  // 승천자 제외 다음 생존 플레이어 탐색
-  const aliveCount = state.players.filter(p => p.hp > 0).length;
-  if (aliveCount <= 1) {
-    alert(state.players.hp > 0 ? "축하합니다! 신계 훈련에서 우승했습니다!" : "승천하였습니다. 게임 종료.");
+function nextTurn() {
+  document.getElementById("damage-box").style.display = "none";
+  document.getElementById("clash-banner").style.display = "none";
+  state.selectedCardId = null;
+
+  const alive = state.players.filter(p => p.hp > 0);
+  if (alive.length <= 1) {
+    alert(state.players[0].hp > 0 ? "축하합니다! 신계 훈련에서 최종 승리하셨습니다!" : "승천하셨습니다. 게임 종료.");
     return;
   }
 
   do {
-    state.currentTurnIdx = (state.currentTurnIdx + 1) % 5;
-  } while (state.players[state.currentTurnIdx].hp <= 0);
+    state.turnSlot = (state.turnSlot + 1) % state.players.length;
+  } while (state.players[state.turnSlot].hp <= 0);
 
-  state.turnNumber++;
-  document.getElementById("gf-turn-pill").textContent = `G.F. ${state.turnNumber}`;
-  startTurn(state.currentTurnIdx);
+  state.turnCount++;
+  document.getElementById("turn-pill").textContent = `G.F.${state.turnCount} /1`;
+  startTurn(state.turnSlot);
 }
 
-function startTurn(idx) {
-  const p = state.players[idx];
+function startTurn(slot) {
+  const p = state.players[slot];
+  document.getElementById("current-badge-name").textContent = p.name;
   sfx.turn();
   renderAll();
 
   if (!p.isBot) {
-    // 유저(노누) 턴
-    setLog("당신의 차례입니다. 대상을 선택하고 공격 카드를 내세요.");
-    // 대상이 사망했으면 다음 생존 봇으로 자동 타겟팅
-    if (state.players[state.selectedTargetIdx].hp <= 0) {
-      const aliveBot = state.players.findIndex((pl, i) => pl.isBot && pl.hp > 0);
-      if (aliveBot !== -1) state.selectedTargetIdx = aliveBot;
+    // 유저(지브) 턴
+    if (state.players[state.targetSlot].hp <= 0) {
+      const aliveBot = state.players.findIndex((pl, i) => i !== 0 && pl.hp > 0);
+      if (aliveBot !== -1) state.targetSlot = aliveBot;
     }
-    updateActionPills();
+    updateUI();
   } else {
     // 봇 턴
-    setLog(`${p.name}이(가) 생각을 거듭하고 있습니다...`);
-    setTimeout(() => executeBotTurn(p, idx), 1100);
+    updateUI();
+    setTimeout(() => runBotTurn(p, slot), 1000);
   }
 }
 
-/* 봇 지능: 다굴 방지 및 상호 공격 */
-function executeBotTurn(bot, botIdx) {
+/* ==========================================================================
+   5. 봇 지능 (상호 공격 & 다굴 방지)
+   ========================================================================== */
+function runBotTurn(bot, botSlot) {
   const weapons = bot.hand.filter(c => c.type === "WEAPON");
   if (weapons.length === 0) {
-    bot.hand.push(drawRandomCard());
-    setLog(`${bot.name}이(가) 무기가 없어 기도를 올렸습니다.`);
-    setTimeout(nextTurn, 1000);
+    bot.hand.push(drawCard());
+    setTimeout(nextTurn, 800);
     return;
   }
 
@@ -575,104 +487,96 @@ function executeBotTurn(bot, botIdx) {
   // [다굴 방지 타겟팅]
   let candidates = state.players
     .map((pl, i) => ({ ...pl, idx: i }))
-    .filter(pl => pl.idx !== botIdx && pl.hp > 0);
+    .filter(pl => pl.idx !== botSlot && pl.hp > 0);
 
-  // 유저가 최근 공격받았다면 봇들은 서로를 우선 타겟팅
+  // 유저가 최근 공격받았다면 봇끼리 싸우도록 유저 제외
   if (state.recentAttacksOnUser > 0 && candidates.some(pl => pl.isBot)) {
     candidates = candidates.filter(pl => pl.isBot);
   }
 
   const target = candidates[Math.floor(Math.random() * candidates.length)];
 
-  if (target.idx === 1) state.recentAttacksOnUser++;
+  if (target.idx === 0) state.recentAttacksOnUser++;
   else state.recentAttacksOnUser = Math.max(0, state.recentAttacksOnUser - 1);
 
-  // 상단 공방 대치창 갱신
-  displayClash(bot.name, target.name, weapon, null);
+  showClashBanner(`${bot.name} ➜ ${target.name} (${weapon.name} ${weapon.val})`, weapon.icon);
   sfx.atk();
 
-  if (target.idx === 1) {
-    // 유저 피격 -> 유저 방어 페이즈
-    setLog(`[경보] ${bot.name}이(가) 당신에게 ${weapon.name}(위력 ${weapon.atk}) 공격!`);
+  if (target.idx === 0) {
+    // 유저 피격 -> 유저 방어 단계
     state.pendingAttack = { attacker: bot, weapon: weapon };
-    showDefenseUI(weapon);
+    showDefenseUI();
   } else {
-    // 봇 vs 봇 전투
-    setTimeout(() => resolveBotVsBot(bot, target, weapon), 900);
+    // 봇 vs 봇 전투 자동 계산
+    setTimeout(() => resolveBotVsBot(bot, target, weapon), 800);
   }
 }
 
 function resolveBotVsBot(attacker, target, weapon) {
   const shields = target.hand.filter(c => c.type === "SHIELD" && canBlock(weapon.elem, c.elem));
   let defVal = 0;
-  let usedShield = null;
 
   if (shields.length > 0) {
-    usedShield = shields[0];
-    target.hand = target.hand.filter(c => c.id !== usedShield.id);
-    defVal = usedShield.def;
+    const shield = shields[0];
+    target.hand = target.hand.filter(c => c.id !== shield.id);
+    defVal = shield.val;
     sfx.def();
-    target.hand.push(drawRandomCard());
+    target.hand.push(drawCard());
   }
 
-  displayClash(attacker.name, target.name, weapon, usedShield);
-
-  const netDmg = Math.max(0, weapon.atk - defVal);
+  const netDmg = Math.max(0, weapon.val - defVal);
   if (weapon.elem === "DARK" && netDmg > 0) target.hp = 0;
   else target.hp = Math.max(0, target.hp - netDmg);
 
   sfx.hit();
-  showDamagePopup(netDmg);
-  attacker.hand.push(drawRandomCard());
+  showDamage(netDmg);
+  attacker.hand.push(drawCard());
   renderAll();
 
-  setTimeout(nextTurn, 1400);
+  setTimeout(nextTurn, 1200);
 }
 
 /* ==========================================================================
-   6. 유저 공격 및 방어 핸들러
+   6. 유저 조작 (공격, 방어, 용서, 기도)
    ========================================================================== */
-function handleUserAttack() {
-  const weapon = state.players.hand.find(c => state.selectedCardIds.includes(c.id));
-  const target = state.players[state.selectedTargetIdx];
+function handleAttack() {
+  const weapon = state.players[0].hand.find(c => c.id === state.selectedCardId);
+  const target = state.players[state.targetSlot];
   if (!weapon || !target || target.hp <= 0) return;
 
-  state.players.hand = state.players.hand.filter(c => c.id !== weapon.id);
-  displayClash("노누", target.name, weapon, null);
+  state.players[0].hand = state.players[0].hand.filter(c => c.id !== weapon.id);
+  showClashBanner(`지브 ➜ ${target.name} (${weapon.name} ${weapon.val})`, weapon.icon);
   sfx.atk();
-  setLog(`당신이 ${target.name}에게 ${weapon.name} 공격!`);
 
   setTimeout(() => {
     const shields = target.hand.filter(c => c.type === "SHIELD" && canBlock(weapon.elem, c.elem));
     let defVal = 0;
-    let usedShield = null;
     if (shields.length > 0) {
-      usedShield = shields[0];
-      target.hand = target.hand.filter(c => c.id !== usedShield.id);
-      defVal = usedShield.def;
+      const shield = shields[0];
+      target.hand = target.hand.filter(c => c.id !== shield.id);
+      defVal = shield.val;
       sfx.def();
-      target.hand.push(drawRandomCard());
+      target.hand.push(drawCard());
     }
 
-    displayClash("노누", target.name, weapon, usedShield);
-    const netDmg = Math.max(0, weapon.atk - defVal);
+    const netDmg = Math.max(0, weapon.val - defVal);
     if (weapon.elem === "DARK" && netDmg > 0) target.hp = 0;
     else target.hp = Math.max(0, target.hp - netDmg);
 
     sfx.hit();
-    showDamagePopup(netDmg);
-    state.players.hand.push(drawRandomCard());
+    showDamage(netDmg);
+    state.players[0].hand.push(drawCard());
     renderAll();
-    setTimeout(nextTurn, 1400);
+    setTimeout(nextTurn, 1200);
   }, 800);
 }
 
-function handleUserDefend() {
-  const shield = state.players.hand.find(c => state.selectedCardIds.includes(c.id));
+function handleDefend() {
+  const shield = state.players[0].hand.find(c => c.id === state.selectedCardId);
   resolveUserDefense(shield ? [shield] : []);
 }
 
-function handleUserForgive() {
+function handleForgive() {
   resolveUserDefense([]);
 }
 
@@ -680,170 +584,145 @@ function resolveUserDefense(shields) {
   const atk = state.pendingAttack;
   let defVal = 0;
   shields.forEach(s => {
-    if (canBlock(atk.weapon.elem, s.elem)) defVal += s.def;
-    state.players.hand = state.players.hand.filter(c => c.id !== s.id);
-    state.players.hand.push(drawRandomCard());
+    if (canBlock(atk.weapon.elem, s.elem)) defVal += s.val;
+    state.players[0].hand = state.players[0].hand.filter(c => c.id !== s.id);
+    state.players[0].hand.push(drawCard());
   });
 
-  displayClash(atk.attacker.name, "노누", atk.weapon, shields[0] || null);
-
-  const netDmg = Math.max(0, atk.weapon.atk - defVal);
-  if (atk.weapon.elem === "DARK" && netDmg > 0) state.players.hp = 0;
-  else state.players.hp = Math.max(0, state.players.hp - netDmg);
+  const netDmg = Math.max(0, atk.weapon.val - defVal);
+  if (atk.weapon.elem === "DARK" && netDmg > 0) state.players[0].hp = 0;
+  else state.players[0].hp = Math.max(0, state.players[0].hp - netDmg);
 
   sfx.hit();
-  showDamagePopup(netDmg);
-  atk.attacker.hand.push(drawRandomCard());
+  showDamage(netDmg);
+  atk.attacker.hand.push(drawCard());
 
   hideDefenseUI();
   renderAll();
-  setTimeout(nextTurn, 1400);
+  setTimeout(nextTurn, 1200);
 }
 
-function handleUserPray() {
-  state.players.hand.push(drawRandomCard());
-  setLog("무기가 없어 기도를 올려 성물을 1장 받았습니다.");
+function handlePray() {
+  state.players[0].hand.push(drawCard());
   renderAll();
   nextTurn();
 }
 
 /* ==========================================================================
-   7. 화면 렌더링 & UI 헬퍼
+   7. 뷰 렌더링
    ========================================================================== */
-function setLog(txt) {
-  document.getElementById("combat-log").textContent = txt;
+function showClashBanner(txt, icon) {
+  const b = document.getElementById("clash-banner");
+  document.getElementById("clash-text").textContent = txt;
+  document.getElementById("clash-thumb").textContent = icon;
+  b.style.display = "flex";
 }
 
-function showDamagePopup(num) {
-  const m = document.getElementById("damage-modal");
-  document.getElementById("damage-number").textContent = num;
-  m.style.display = "flex";
+function showDamage(dmg) {
+  const box = document.getElementById("damage-box");
+  document.getElementById("damage-val").textContent = dmg;
+  box.style.display = "flex";
 }
 
-function displayClash(atkName, defName, atkCard, defCard) {
-  document.getElementById("attacker-name").textContent = atkName;
-  document.getElementById("defender-name").textContent = defName;
-
-  if (atkCard) {
-    document.getElementById("atk-card-icon").textContent = atkCard.icon;
-    document.getElementById("atk-card-name").textContent = atkCard.name;
-    document.getElementById("atk-card-stat").textContent = `공격${atkCard.atk} ${atkCard.def ? "방어"+atkCard.def : ""}`;
-    document.getElementById("atk-card-price").textContent = `₩${atkCard.price}`;
-    document.getElementById("atk-card-box").style.visibility = "visible";
-  } else {
-    document.getElementById("atk-card-box").style.visibility = "hidden";
-  }
-
-  if (defCard) {
-    document.getElementById("def-card-icon").textContent = defCard.icon;
-    document.getElementById("def-card-name").textContent = defCard.name;
-    document.getElementById("def-card-stat").textContent = `방어${defCard.def}`;
-    document.getElementById("def-card-price").textContent = `₩${defCard.price}`;
-    document.getElementById("def-card-box").style.visibility = "visible";
-  } else {
-    document.getElementById("def-card-box").style.visibility = "hidden";
-  }
-}
-
-function showDefenseUI(weapon) {
-  document.getElementById("btn-attack").style.display = "none";
-  document.getElementById("btn-defend").style.display = "inline-block";
-  document.getElementById("btn-forgive").style.display = "inline-block";
-  document.getElementById("btn-pray").style.display = "none";
-  renderHand();
+function showDefenseUI() {
+  document.getElementById("btn-attack-act").textContent = "방어하기";
+  document.getElementById("btn-attack-act").onclick = handleDefend;
+  document.getElementById("btn-attack-act").disabled = false;
+  document.getElementById("btn-forgive-act").style.display = "inline-flex";
+  document.getElementById("btn-pray-act").style.display = "none";
 }
 
 function hideDefenseUI() {
-  document.getElementById("btn-attack").style.display = "inline-block";
-  document.getElementById("btn-defend").style.display = "none";
-  document.getElementById("btn-forgive").style.display = "none";
-  document.getElementById("btn-pray").style.display = "inline-block";
+  document.getElementById("btn-attack-act").textContent = "공격하기";
+  document.getElementById("btn-attack-act").onclick = handleAttack;
+  document.getElementById("btn-forgive-act").style.display = "none";
+  document.getElementById("btn-pray-act").style.display = "inline-flex";
   state.pendingAttack = null;
 }
 
-function updateActionPills() {
-  const isMyTurn = state.currentTurnIdx === 1;
-  const selCard = state.players.hand.find(c => state.selectedCardIds.includes(c.id));
-  const btnAtk = document.getElementById("btn-attack");
+function updateUI() {
+  const isMyTurn = state.turnSlot === 0;
+  const selCard = state.players[0].hand.find(c => c.id === state.selectedCardId);
+  const btnAtk = document.getElementById("btn-attack-act");
 
-  if (selCard && selCard.type === "WEAPON") {
-    btnAtk.textContent = `공격${selCard.atk}`;
-    btnAtk.disabled = !isMyTurn;
-  } else {
-    btnAtk.textContent = "공격";
-    btnAtk.disabled = true;
+  if (!state.pendingAttack) {
+    btnAtk.disabled = !isMyTurn || !selCard || selCard.type !== "WEAPON";
   }
 
-  const weapons = state.players.hand.filter(c => c.type === "WEAPON");
-  document.getElementById("btn-pray").disabled = !isMyTurn || weapons.length > 0;
+  const weapons = state.players[0].hand.filter(c => c.type === "WEAPON");
+  document.getElementById("btn-pray-act").disabled = !isMyTurn || weapons.length > 0;
 }
 
 function renderAll() {
-  renderPlayerList();
+  renderPlayers();
   renderHand();
-  updateActionPills();
+  updateUI();
 }
 
-function renderPlayerList() {
-  const listEl = document.getElementById("player-list");
-  listEl.innerHTML = "";
+function renderPlayers() {
+  const box = document.getElementById("player-container");
+  box.innerHTML = "";
   state.players.forEach((p, idx) => {
-    const item = document.createElement("div");
-    const isTarget = idx === state.selectedTargetIdx;
-    const isTurn = idx === state.currentTurnIdx;
+    const row = document.createElement("div");
+    const isTurn = idx === state.turnSlot;
+    const isTarget = idx === state.targetSlot;
     const isDead = p.hp <= 0;
 
-    item.className = `player-item ${isTarget ? "target" : ""} ${isTurn ? "current-turn" : ""} ${isDead ? "dead" : ""}`;
-    item.innerHTML = `
-      <div class="p-dot" style="background:${isTurn ? "#ffb703" : (isTarget ? "#e63946" : "#73939b")};"></div>
+    row.className = `p-row ${isTurn ? "turn-now" : ""} ${isTarget ? "target" : ""} ${isDead ? "dead" : ""}`;
+    row.innerHTML = `
+      <div class="p-dot" style="background:${isTurn ? "#ffb703" : (isTarget ? "#e63946" : "#90a4ae")};"></div>
       <div class="p-name">${p.name}</div>
       <div class="p-stats">HP ${p.hp} MP ${p.mp} ₩ ${p.money}</div>
     `;
-    item.onclick = () => {
-      if (p.hp > 0 && idx !== 1) {
-        state.selectedTargetIdx = idx;
-        renderPlayerList();
+
+    row.onclick = () => {
+      if (p.hp > 0 && idx !== 0) {
+        state.targetSlot = idx;
+        renderPlayers();
       }
     };
-    listEl.appendChild(item);
+    box.appendChild(row);
   });
 }
 
 function renderHand() {
-  const tray = document.getElementById("hand-tray");
-  tray.innerHTML = "";
-  state.players.hand.forEach(card => {
-    const isSel = state.selectedCardIds.includes(card.id);
-    const box = document.createElement("div");
-    box.className = `hand-card ${isSel ? "selected" : ""}`;
+  const area = document.getElementById("hand-area");
+  area.innerHTML = "";
+  state.players[0].hand.forEach(card => {
+    const isSel = card.id === state.selectedCardId;
+    const slot = document.createElement("div");
+    slot.className = `card-slot ${isSel ? "selected" : ""}`;
 
-    let statLabel = "";
-    if (card.atk > 0 && card.def > 0) statLabel = `공${card.atk} 방${card.def}`;
-    else if (card.atk > 0) statLabel = `공격${card.atk}`;
-    else if (card.def > 0) statLabel = `방어${card.def}`;
-    else if (card.heal) statLabel = `회복+${card.heal}`;
+    let pillClass = "card-pill";
+    let pillText = `공격${card.val}`;
+    if (card.type === "SHIELD") {
+      pillClass = "card-pill pill-shield";
+      pillText = `방어${card.val}`;
+    } else if (card.type === "ITEM") {
+      pillClass = "card-pill pill-item";
+      pillText = `회복${card.val}`;
+    }
 
-    box.innerHTML = `
-      <div class="hand-card-icon">${card.icon}</div>
-      <div class="hand-card-name">${card.name}</div>
-      <div class="hand-card-stat-pill">${statLabel}</div>
+    slot.innerHTML = `
+      <div class="card-face">${card.icon}</div>
+      <div class="${pillClass}">${pillText}</div>
     `;
 
-    box.onclick = () => {
+    slot.onclick = () => {
       sfx.init();
-      if (state.selectedCardIds.includes(card.id)) {
-        state.selectedCardIds = [];
+      if (state.selectedCardId === card.id) {
+        state.selectedCardId = null;
       } else {
-        state.selectedCardIds = [card.id];
+        state.selectedCardId = card.id;
       }
       renderHand();
-      updateActionPills();
+      updateUI();
     };
-    tray.appendChild(box);
+    area.appendChild(slot);
   });
 }
 
-// 게임 시작
+// 게임 기동
 init();
 </script>
 </body>
