@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- 모바일에서도 화면에 맞게 표시 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Card Deck Animation</title>
+
+    <style>
+        /* ==============================
+           전체 페이지
+        ============================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #26324a 0%,
+                    #111827 45%,
+                    #070b12 100%
+                );
+
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+
+        /* ==============================
+           카드 덱 영역
+        ============================== */
+
+        .card-deck {
+            position: relative;
+
+            width: 900px;
+            height: 420px;
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+
+            perspective: 1200px;
+        }
+
+
+        /* ==============================
+           카드 기본
+        ============================== */
+
+        .card {
+            position: relative;
+
+            width: 160px;
+            height: 240px;
+
+            margin-left: -45px;
+
+            border-radius: 18px;
+
+            border: 2px solid rgba(255, 255, 255, 0.2);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff 0%,
+                    #e8edf5 100%
+                );
+
+            box-shadow:
+                0 15px 30px rgba(0, 0, 0, 0.45);
+
+            cursor: pointer;
+
+            transition:
+                transform 0.35s cubic-bezier(.2,.8,.2,1),
+                box-shadow 0.35s ease,
+                filter 0.35s ease;
+
+            transform-origin: bottom center;
+
+            z-index: 1;
+        }
+
+
+        /* 첫 번째 카드만 margin 제거 */
+
+        .card:first-child {
+            margin-left: 0;
+        }
+
+
+        /* ==============================
+           카드 내용
+        ============================== */
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+
+            padding: 16px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            border-radius: inherit;
+
+            overflow: hidden;
+        }
+
+
+        .card-number {
+            font-size: 14px;
+            font-weight: bold;
+
+            color: #222;
+        }
+
+
+        .card-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 64px;
+
+            flex: 1;
+        }
+
+
+        .card-name {
+            text-align: center;
+
+            font-size: 17px;
+            font-weight: bold;
+
+            color: #151515;
+        }
+
+
+        /* ==============================
+           카드별 기본 위치
+        ============================== */
+
+        .card:nth-child(1) {
+            transform: rotate(-14deg) translateY(25px);
+        }
+
+        .card:nth-child(2) {
+            transform: rotate(-9deg) translateY(12px);
+        }
+
+        .card:nth-child(3) {
+            transform: rotate(-4deg) translateY(4px);
+        }
+
+        .card:nth-child(4) {
+            transform: rotate(0deg) translateY(0);
+        }
+
+        .card:nth-child(5) {
+            transform: rotate(4deg) translateY(4px);
+        }
+
+        .card:nth-child(6) {
+            transform: rotate(9deg) translateY(12px);
+        }
+
+        .card:nth-child(7) {
+            transform: rotate(14deg) translateY(25px);
+        }
+
+
+        /* ==============================
+           마우스가 올라간 카드
+        ============================== */
+
+        .card:hover {
+            transform:
+                translateY(-80px)
+                scale(1.12)
+                rotate(0deg);
+
+            z-index: 100;
+
+            box-shadow:
+                0 35px 60px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(255, 255, 255, 0.15);
+
+            filter: brightness(1.08);
+        }
+
+
+        /* ==============================
+           다른 카드 흐리게 처리
+        ============================== */
+
+        .card-deck:hover .card:not(:hover) {
+            filter: brightness(0.75);
+        }
+
+
+        /* ==============================
+           카드 선택 상태
+        ============================== */
+
+        .card.selected {
+            transform:
+                translateY(-95px)
+                scale(1.15)
+                rotate(0deg);
+
+            z-index: 200;
+
+            box-shadow:
+                0 35px 70px rgba(0, 0, 0, 0.7),
+                0 0 35px rgba(255, 215, 80, 0.45);
+
+            border-color: rgba(255, 215, 80, 0.8);
+        }
+
+
+        /* ==============================
+           카드별 색상
+        ============================== */
+
+        .card:nth-child(1) {
+            background: linear-gradient(145deg, #fff, #ffcaca);
+        }
+
+        .card:nth-child(2) {
+            background: linear-gradient(145deg, #fff, #c9dcff);
+        }
+
+        .card:nth-child(3) {
+            background: linear-gradient(145deg, #fff, #d2ffd4);
+        }
+
+        .card:nth-child(4) {
+            background: linear-gradient(145deg, #fff, #ffe8b5);
+        }
+
+        .card:nth-child(5) {
+            background: linear-gradient(145deg, #fff, #e5d1ff);
+        }
+
+        .card:nth-child(6) {
+            background: linear-gradient(145deg, #fff, #bff5ff);
+        }
+
+        .card:nth-child(7) {
+            background: linear-gradient(145deg, #fff, #ffd0ec);
+        }
+
+
+        /* ==============================
+           모바일 대응
+        ============================== */
+
+        @media (max-width: 700px) {
+
+            .card-deck {
+                width: 100%;
+                height: 360px;
+            }
+
+            .card {
+                width: 110px;
+                height: 165px;
+
+                margin-left: -55px;
+            }
+
+            .card-icon {
+                font-size: 42px;
+            }
+
+            .card-name {
+                font-size: 12px;
+            }
+
+            .card:hover {
+                transform:
+                    translateY(-65px)
+                    scale(1.1)
+                    rotate(0deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==============================
+         카드 덱
+    ============================== -->
+
+    <div class="card-deck">
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-number">01</div>
+                <div class="card-icon">🔥</div>
+                <div class="card-name">화염의 카드</div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-number">02</div>
+                <div class="card-icon">❄️</div>
+                <div class="card-name">빙결의 카드</div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-number">03</div>
+                <div class="card-icon">🌿</div>
+                <div class="card-name">자연의 카드</div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-number">04</div>
+                <div class="card-icon">⚡</div>
+                <div class="card-name">번개의 카드</div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-number">05</div>
+                <div class="card-icon">🌙</div>
+                <div class="card-name">달빛의 카드</div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-number">06</div>
+                <div class="card-icon">💧</div>
+                <div class="card-name">물의 카드</div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-number">07</div>
+                <div class="card-icon">☀️</div>
+                <div class="card-name">태양의 카드</div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        /*
+         * ==========================================
+         * 카드 선택 기능
+         * ==========================================
+         */
+
+        const cards = document.querySelectorAll(".card");
+
+
+        cards.forEach(card => {
+
+            card.addEventListener("click", () => {
+
+                /*
+                 * 이미 선택된 카드라면 선택 해제
+                 */
+
+                if (card.classList.contains("selected")) {
+
+                    card.classList.remove("selected");
+
+                }
+
+                /*
+                 * 선택되지 않은 카드라면
+                 * 기존 선택을 제거하고 현재 카드 선택
+                 */
+
+                else {
+
+                    cards.forEach(c => {
+                        c.classList.remove("selected");
+                    });
+
+                    card.classList.add("selected");
+
+                }
+
+            });
+
+        });
+    </script>
+
+</body>
+</html>
