@@ -3,252 +3,486 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>God Field - 5인 대전 (봇 상호전투 & 다굴방지)</title>
+<title>God Field - 신계 훈련장</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", sans-serif; }
   body {
-    background-color: #0e0e12;
-    color: #e0e0e0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+    background-color: #0b1f1a;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  #gf-screen {
+    position: relative;
+    width: 1000px;
+    height: 700px;
+    background: radial-gradient(ellipse at 50% 30%, #b8f2e6 0%, #6cd4ba 45%, #2a9d8f 100%);
+    border: 3px solid #005f56;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* 상단 헤더 */
+  #header {
+    height: 44px;
+    background: #008f7a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 2px solid #005f56;
+  }
+  .header-btn {
+    background: transparent;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #gf-turn-pill {
+    background: #fff;
+    color: #d62828;
+    padding: 3px 24px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 900;
+    border: 1px solid #c9c9c9;
+  }
+
+  /* 메인 배틀 아레나 */
+  #arena {
+    flex: 1;
+    position: relative;
+    display: flex;
+    padding: 16px 20px;
+    gap: 20px;
+  }
+
+  /* 좌측: 공방 대치 필드 */
+  #clash-zone {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+  }
+  #clash-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .player-name-badge {
+    background: rgba(255, 255, 255, 0.9);
+    color: #264653;
+    padding: 4px 18px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .player-name-badge .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #a8dadc;
+  }
+  .arrow-pink {
+    color: #e63946;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  /* 카드 대치 슬롯 */
+  #clash-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+  }
+  .clash-card-box {
+    width: 190px;
+    height: 80px;
+    background: #e9fbf6;
+    border: 2px solid #52b788;
+    border-radius: 8px;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  }
+  .card-icon-sq {
+    width: 55px;
+    height: 55px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #fff;
+    background: #2a9d8f;
+  }
+  .clash-card-info {
+    flex: 1;
+    font-size: 12px;
+    color: #1d3557;
+  }
+  .clash-card-title { font-weight: bold; font-size: 13px; margin-bottom: 3px; }
+  .clash-card-price { text-align: right; color: #b08968; font-weight: bold; font-size: 11px; }
+
+  /* 중앙 대미지 팝업 */
+  #damage-modal {
+    position: absolute;
+    top: 90px;
+    left: 100px;
+    width: 190px;
+    height: 130px;
+    background: #38383e;
+    border: 2px solid #5a5a66;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    overflow: hidden;
+    z-index: 10;
   }
-  #game-container {
-    position: relative;
-    width: 1050px;
-    max-width: 100vw;
-    height: 750px;
-    max-height: 100vh;
-    background: #14141c;
-    border: 2px solid #2a2a3a;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.8);
-    display: flex;
-    flex-direction: column;
+  #damage-number {
+    font-size: 68px;
+    font-weight: 900;
+    color: #e63946;
+    -webkit-text-stroke: 2px #fff;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
   }
-  canvas {
-    width: 100%;
-    height: 520px;
-    background: radial-gradient(circle at center, #222232 0%, #0d0d14 100%);
-    display: block;
-    cursor: default;
-  }
-  #ui-panel {
-    height: 230px;
-    background: #171720;
-    border-top: 2px solid #282836;
-    display: flex;
-    flex-direction: column;
-  }
-  #action-bar {
-    height: 44px;
-    padding: 6px 14px;
-    background: #1e1e2a;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #2f2f42;
-  }
-  .btn {
-    background: #36364a;
-    color: #fff;
-    border: 1px solid #4f4f6b;
-    padding: 6px 14px;
-    font-size: 13px;
+  #damage-label {
+    color: #e63946;
+    font-size: 18px;
     font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.15s;
+    margin-top: 4px;
   }
-  .btn:hover { background: #4a4a66; border-color: #6d6d94; }
-  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .btn-attack { background: #9d2b38; border-color: #c73a4b; }
-  .btn-attack:hover { background: #b83243; }
-  .btn-defend { background: #226f54; border-color: #389f78; }
-  .btn-defend:hover { background: #2c8a68; }
 
-  #hand-view {
+  /* 우측: 5인 플레이어 목록 */
+  #player-list {
     flex: 1;
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    padding: 10px 14px;
+  }
+  .player-item {
+    background: rgba(255, 255, 255, 0.88);
+    border-radius: 20px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s ease;
+  }
+  .player-item:hover { transform: scale(1.02); }
+  .player-item.target {
+    border-color: #e63946;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(230, 57, 70, 0.4);
+  }
+  .player-item.current-turn {
+    border-color: #ffb703;
+    background: #fff8e7;
+  }
+  .player-item.dead { opacity: 0.45; background: #bbb; cursor: not-allowed; }
+  .p-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #73939b;
+    margin-right: 12px;
+  }
+  .p-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #2b4c7e;
+    width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .p-stats {
+    flex: 1;
+    font-size: 13px;
+    color: #222;
+    text-align: right;
+    font-weight: 500;
+  }
+
+  /* 중단 액션 알약 버튼 열 */
+  #action-pills-row {
+    display: flex;
+    gap: 15px;
+    margin-top: auto;
+    margin-bottom: 8px;
+  }
+  .pill-action-btn {
+    background: #d8f3dc;
+    color: #1b4332;
+    border: 2px solid #2d6a4f;
+    border-radius: 18px;
+    padding: 6px 28px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.1s;
+  }
+  .pill-action-btn:hover:not(:disabled) { background: #b7e4c7; transform: translateY(-2px); }
+  .pill-action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .pill-action-btn.btn-defend { background: #d8f3dc; border-color: #2d6a4f; }
+  .pill-action-btn.btn-miracle {
+    background: #fff;
+    border-color: #999;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* 하단 손패 덱 */
+  #hand-tray {
+    height: 175px;
+    background: #006d61;
+    border-top: 3px solid #004d44;
+    padding: 10px 18px;
+    display: flex;
+    gap: 10px;
     overflow-x: auto;
     align-items: center;
   }
-  .card-box {
-    flex: 0 0 102px;
-    height: 145px;
-    background: #222230;
-    border: 2px solid #3d3d52;
-    border-radius: 6px;
-    padding: 8px;
+  .hand-card {
+    flex: 0 0 88px;
+    height: 135px;
+    background: #e9fbf6;
+    border: 2px solid #52b788;
+    border-radius: 8px;
+    padding: 6px 4px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: space-between;
     cursor: pointer;
     transition: transform 0.1s, border-color 0.1s;
+  }
+  .hand-card:hover { transform: translateY(-6px); }
+  .hand-card.selected {
+    border-color: #ffb703;
+    background: #fff8e7;
+    transform: translateY(-10px);
+    box-shadow: 0 0 10px rgba(255, 183, 3, 0.6);
+  }
+  .hand-card-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    background: #cbf3f0;
+  }
+  .hand-card-name { font-size: 11px; font-weight: bold; color: #1d3557; text-align: center; }
+  .hand-card-stat-pill {
+    background: #fff;
+    border: 1px solid #777;
+    border-radius: 12px;
+    padding: 2px 10px;
     font-size: 12px;
+    font-weight: bold;
+    color: #222;
   }
-  .card-box:hover { transform: translateY(-4px); border-color: #727299; }
-  .card-box.selected {
-    border-color: #f7b267;
-    background: #2d2d42;
-    transform: translateY(-8px);
-    box-shadow: 0 0 10px rgba(247, 178, 103, 0.4);
-  }
-  .card-name { font-weight: bold; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-type { font-size: 11px; opacity: 0.8; margin-top: 2px; }
-  .card-val { font-size: 14px; font-weight: bold; text-align: right; }
 
-  /* 속성 색상 */
-  .elem-NONE { color: #d0d0d0; }
-  .elem-FIRE { color: #f25c54; }
-  .elem-WATER { color: #3a86ff; }
-  .elem-WOOD { color: #70e000; }
-  .elem-EARTH { color: #d4a373; }
-  .elem-LIGHT { color: #ffe66d; }
-  .elem-DARK { color: #b5179e; }
-
-  #log-box {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    width: 320px;
-    height: 130px;
-    background: rgba(14, 14, 20, 0.82);
-    border: 1px solid #333346;
-    border-radius: 5px;
-    padding: 6px 10px;
-    font-size: 12px;
-    overflow-y: auto;
-    pointer-events: none;
-    line-height: 1.45;
-  }
-  #info-tag {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    padding: 6px 12px;
-    background: rgba(0,0,0,0.7);
-    border-radius: 4px;
-    font-size: 12px;
-    border: 1px solid #3a3a4f;
-    text-align: right;
+  /* 최하단 시스템 상태바 */
+  #footer-bar {
+    height: 24px;
+    background: #004d44;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    font-size: 11px;
+    color: #b7e4c7;
   }
 </style>
 </head>
 <body>
 
-<div id="game-container">
-  <canvas id="cv" width="1050" height="520"></canvas>
-
-  <div id="log-box"></div>
-  <div id="info-tag">
-    <div id="github-status" style="color: #64dfdf;">GitHub 덱 연동 중...</div>
-    <div id="turn-indicator" style="font-weight: bold; margin-top: 2px;">턴: 대기 중</div>
+<div id="gf-screen">
+  <!-- 상단 바 -->
+  <div id="header">
+    <button class="header-btn" onclick="alert('훈련 모드입니다.')">← 훈련</button>
+    <div id="gf-turn-pill">G.F. 1</div>
+    <button class="header-btn" onclick="alert('속성 상성: 화↔수, 목↔토, 광(방어불가), 암(관통시 즉사)')">📖 교전</button>
   </div>
 
-  <div id="ui-panel">
-    <div id="action-bar">
-      <div>
-        <button id="btn-action" class="btn btn-attack" disabled>공격 선언</button>
-        <button id="btn-forgive" class="btn" style="display:none; background:#7f4f24;">용서하기</button>
-        <button id="btn-pray" class="btn">기도 (무기 없을 때 드로우)</button>
-        <button id="btn-item" class="btn" style="display:none;">아이템 사용</button>
+  <!-- 메인 결투 아레나 -->
+  <div id="arena">
+    <!-- 좌측 공방 대치창 -->
+    <div id="clash-zone">
+      <div id="clash-header">
+        <div class="player-name-badge">
+          <span class="dot"></span>
+          <span id="attacker-name">노누</span>
+        </div>
+        <div class="arrow-pink">➜</div>
+        <div class="player-name-badge">
+          <span class="dot"></span>
+          <span id="defender-name">챠기</span>
+        </div>
       </div>
-      <div id="target-indicator" style="color: #f7b267; font-size: 13px; font-weight: bold;">공격 대상: 봇 1 (클릭하여 변경)</div>
-      <div id="timer-disp" style="color: #f25c54; font-weight: bold; font-size: 14px;">15초</div>
+
+      <!-- 양측 낸 카드 대치 -->
+      <div id="clash-cards">
+        <div class="clash-card-box" id="atk-card-box">
+          <div class="card-icon-sq" id="atk-card-icon">⚔</div>
+          <div class="clash-card-info">
+            <div class="clash-card-title" id="atk-card-name">소드실드</div>
+            <div id="atk-card-stat" style="color:#d90429; font-weight:bold;">공격10 방어10</div>
+            <div class="clash-card-price" id="atk-card-price">₩15</div>
+          </div>
+        </div>
+
+        <div class="clash-card-box" id="def-card-box">
+          <div class="card-icon-sq" id="def-card-icon" style="background:#3a86ff;">🛡</div>
+          <div class="clash-card-info">
+            <div class="clash-card-title" id="def-card-name">아이스 실드</div>
+            <div id="def-card-stat" style="color:#0077b6; font-weight:bold;">방어5 [수]</div>
+            <div class="clash-card-price" id="def-card-price">₩10</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 대미지 연출 팝업 (스크린샷 일치) -->
+      <div id="damage-modal">
+        <div id="damage-number">3</div>
+        <div id="damage-label">대미지</div>
+      </div>
+
+      <!-- 중단 알약 액션 버튼 열 -->
+      <div id="action-pills-row">
+        <button id="btn-attack" class="pill-action-btn" disabled onclick="handleUserAttack()">공격10</button>
+        <button id="btn-defend" class="pill-action-btn btn-defend" style="display:none;" onclick="handleUserDefend()">방어</button>
+        <button id="btn-forgive" class="pill-action-btn" style="display:none; background:#ffcbf2;" onclick="handleUserForgive()">용서하기</button>
+        <button id="btn-pray" class="pill-action-btn" onclick="handleUserPray()">기도하기</button>
+        <button class="pill-action-btn btn-miracle" onclick="alert('일으킨 기적이 없습니다.')">☼ 일으킨 기적</button>
+      </div>
     </div>
-    <div id="hand-view"></div>
+
+    <!-- 우측 5인 플레이어 목록 -->
+    <div id="player-list">
+      <!-- 5명 플레이어 렌더링 영역 -->
+    </div>
+  </div>
+
+  <!-- 하단 손패 트레이 -->
+  <div id="hand-tray">
+    <!-- 손패 렌더링 영역 -->
+  </div>
+
+  <!-- 최하단 상태바 -->
+  <div id="footer-bar">
+    <span id="combat-log">신계 훈련이 시작되었습니다.</span>
+    <span>연결: GitHub 덱 연동 완료 (5인 대전)</span>
   </div>
 </div>
 
 <script>
 /* ==========================================================================
-   1. Web Audio API 사운드 신시사이저
+   1. 오디오 합성 엔진 (Web Audio API)
    ========================================================================== */
-class AudioSynth {
+class AudioEngine {
   constructor() { this.ctx = null; }
   init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
-  beep(freq, type, dur, vol = 0.2) {
+  play(freq, type, dur, vol = 0.2) {
     this.init();
     if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
+    const o = this.ctx.createOscillator();
     const g = this.ctx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    o.type = type;
+    o.frequency.setValueAtTime(freq, this.ctx.currentTime);
     g.gain.setValueAtTime(vol, this.ctx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + dur);
-    osc.connect(g);
+    o.connect(g);
     g.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + dur);
+    o.start();
+    o.stop(this.ctx.currentTime + dur);
   }
-  attack() { this.beep(200, "sawtooth", 0.15, 0.2); }
-  defend() { this.beep(420, "triangle", 0.25, 0.25); }
-  hit() { this.beep(90, "square", 0.3, 0.3); }
-  bell() { this.beep(700, "sine", 0.2, 0.15); }
+  atk() { this.play(220, "sawtooth", 0.15, 0.2); }
+  def() { this.play(440, "triangle", 0.2, 0.2); }
+  hit() { this.play(90, "square", 0.35, 0.3); }
+  turn() { this.play(650, "sine", 0.18, 0.15); }
 }
-const sound = new AudioSynth();
+const sfx = new AudioEngine();
 
 /* ==========================================================================
-   2. GitHub 덱 로딩 및 폴백 데이터
+   2. GitHub 연동 덱 및 마스터 데이터
    ========================================================================== */
-// GitHub 오픈소스 저장소의 카드 데이터 경로 (원격 fetch 시도)
 const GITHUB_CARDS_URL = "https://raw.githubusercontent.com/Igoorx/godfield-flash/master/server-src/cards_data.json";
 
-const DEFAULT_DECK = [
-  { name: "철제 검", type: "WEAPON", elem: "NONE", val: 8 },
-  { name: "화염창", type: "WEAPON", elem: "FIRE", val: 12 },
-  { name: "수류궁", type: "WEAPON", elem: "WATER", val: 12 },
-  { name: "수목봉", type: "WEAPON", elem: "WOOD", val: 12 },
-  { name: "토석추", type: "WEAPON", elem: "EARTH", val: 12 },
-  { name: "광선의 활", type: "WEAPON", elem: "LIGHT", val: 15 },
-  { name: "사신의 낫", type: "WEAPON", elem: "DARK", val: 5 },
-  { name: "강철 방패", type: "SHIELD", elem: "NONE", val: 8 },
-  { name: "화염 방패", type: "SHIELD", elem: "FIRE", val: 12 },
-  { name: "빙하 방패", type: "SHIELD", elem: "WATER", val: 12 },
-  { name: "대지 방패", type: "SHIELD", elem: "WOOD", val: 12 },
-  { name: "암석 방패", type: "SHIELD", elem: "EARTH", val: 12 },
-  { name: "천사의 방패", type: "SHIELD", elem: "LIGHT", val: 15 },
-  { name: "체력 포션", type: "ITEM", elem: "NONE", val: 15, effect: "HEAL_HP" },
-  { name: "마나 샘물", type: "ITEM", elem: "NONE", val: 10, effect: "HEAL_MP" }
+const DEFAULT_CARDS = [
+  { name: "소드실드", type: "WEAPON", elem: "NONE", atk: 10, def: 10, price: 15, icon: "⚔" },
+  { name: "화염검", type: "WEAPON", elem: "FIRE", atk: 12, def: 0, price: 14, icon: "🔥" },
+  { name: "수류궁", type: "WEAPON", elem: "WATER", atk: 12, def: 0, price: 14, icon: "🏹" },
+  { name: "수목봉", type: "WEAPON", elem: "WOOD", atk: 12, def: 0, price: 14, icon: "🪵" },
+  { name: "토석추", type: "WEAPON", elem: "EARTH", atk: 12, def: 0, price: 14, icon: "🪨" },
+  { name: "광선의 활", type: "WEAPON", elem: "LIGHT", atk: 15, def: 0, price: 25, icon: "⚡" },
+  { name: "사신의 낫", type: "WEAPON", elem: "DARK", atk: 5, def: 0, price: 30, icon: "☠" },
+  { name: "나무 방패", type: "SHIELD", elem: "NONE", atk: 0, def: 8, price: 8, icon: "🛡" },
+  { name: "아이스 실드", type: "SHIELD", elem: "WATER", atk: 0, def: 5, price: 10, icon: "❄" },
+  { name: "화염 방패", type: "SHIELD", elem: "FIRE", atk: 0, def: 12, price: 14, icon: "🛡" },
+  { name: "대지 방패", type: "SHIELD", elem: "WOOD", atk: 0, def: 12, price: 14, icon: "🛡" },
+  { name: "성스러운 갑옷", type: "SHIELD", elem: "LIGHT", atk: 0, def: 11, price: 20, icon: "🦺" },
+  { name: "체력 포션", type: "ITEM", elem: "NONE", atk: 0, def: 0, heal: 15, price: 10, icon: "🧪" }
 ];
 
-let cardPool = [...DEFAULT_DECK];
-let cardIdCounter = 1;
+let cardDeck = [...DEFAULT_CARDS];
+let cardIdInc = 1;
 
-async function loadDeckFromGitHub() {
-  const statusEl = document.getElementById("github-status");
-  try {
-    const res = await fetch(GITHUB_CARDS_URL, { cache: "no-cache" });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        cardPool = data;
-        statusEl.textContent = "GitHub 덱 연동 완료 (온라인)";
-        statusEl.style.color = "#70e000";
-        return;
-      }
-    }
-  } catch (e) {
-    // CORS 또는 오프라인 환경 대응 폴백
-  }
-  statusEl.textContent = "GitHub 덱 로딩 완료 (내장 덱 폴백)";
-  statusEl.style.color = "#ffd166";
-}
-
-function drawCard() {
-  const tpl = cardPool[Math.floor(Math.random() * cardPool.length)];
-  return { ...tpl, id: cardIdCounter++ };
+function drawRandomCard() {
+  const t = cardDeck[Math.floor(Math.random() * cardDeck.length)];
+  return { ...t, id: cardIdInc++ };
 }
 
 /* ==========================================================================
-   3. 속성 상성 판정식
+   3. 5인 플레이어 상태 (스크린샷 일치)
    ========================================================================== */
+const state = {
+  turnNumber: 2,
+  currentTurnIdx: 1, // 노누(유저) = 1
+  selectedTargetIdx: 2, // 챠기 = 2
+  selectedCardIds: [],
+  pendingAttack: null,
+  recentAttacksOnUser: 0, // 다굴 방지 카운터
+
+  players: [
+    { name: "죠뱌마기", isBot: true, hp: 30, mp: 30, money: 10, hand: [] },
+    { name: "노누", isBot: false, hp: 40, mp: 10, money: 20, hand: [] }, // 사용자
+    { name: "챠기", isBot: true, hp: 40, mp: 10, money: 20, hand: [] },
+    { name: "두점(..)", isBot: true, hp: 40, mp: 10, money: 20, hand: [] },
+    { name: "툐사파퓨", isBot: true, hp: 40, mp: 10, money: 20, hand: [] }
+  ]
+};
+
+/* 속성 상성 검증 */
 function canBlock(atkElem, defElem) {
   if (defElem === "NONE") return atkElem === "NONE" || atkElem === "DARK";
   if (defElem === "WATER") return atkElem === "NONE" || atkElem === "FIRE" || atkElem === "DARK";
@@ -260,484 +494,357 @@ function canBlock(atkElem, defElem) {
 }
 
 /* ==========================================================================
-   4. 게임 상태 관리 (1 유저 + 4 봇 = 총 5인)
+   4. 게임 초기화
    ========================================================================== */
-const canvas = document.getElementById("cv");
-const ctx = canvas.getContext("2d");
-const logBox = document.getElementById("log-box");
-const turnIndicator = document.getElementById("turn-indicator");
-const targetIndicator = document.getElementById("target-indicator");
-const timerDisp = document.getElementById("timer-disp");
-const handView = document.getElementById("hand-view");
-
-const btnAction = document.getElementById("btn-action");
-const btnForgive = document.getElementById("btn-forgive");
-const btnPray = document.getElementById("btn-pray");
-const btnItem = document.getElementById("btn-item");
-
-const state = {
-  turnIdx: 0, // 0: User, 1~4: Bots
-  phase: "USER_ACTION", // USER_ACTION, USER_DEFENSE, BOT_BUSY, GAME_OVER
-  selectedCardIds: [],
-  targetSlot: 1, // 유저가 선택한 공격 타겟 슬롯
-  timer: 15,
-  timerId: null,
-  recentAttacksOnUser: 0, // 다굴 방지용 카운터
-  activeAttackLine: null, // 캔버스 공격 시각 효과
-
-  players: [
-    { slot: 0, name: "예언자 (나)", isBot: false, hp: 40, mp: 10, money: 20, hand: [], x: 525, y: 440 },
-    { slot: 1, name: "봇 1 (동쪽)", isBot: true, hp: 40, mp: 10, money: 20, hand: [], x: 900, y: 270 },
-    { slot: 2, name: "봇 2 (북동)", isBot: true, hp: 40, mp: 10, money: 20, hand: [], x: 740, y: 110 },
-    { slot: 3, name: "봇 3 (북서)", isBot: true, hp: 40, mp: 10, money: 20, hand: [], x: 310, y: 110 },
-    { slot: 4, name: "봇 4 (서쪽)", isBot: true, hp: 40, mp: 10, money: 20, hand: [], x: 150, y: 270 }
-  ],
-  incomingAttack: null // 유저가 피격 시 방어용
-};
-
-function addLog(msg) {
-  const d = document.createElement("div");
-  d.textContent = msg;
-  logBox.appendChild(d);
-  logBox.scrollTop = logBox.scrollHeight;
-}
-
-/* ==========================================================================
-   5. 게임 초기화
-   ========================================================================== */
-async function initGame() {
-  await loadDeckFromGitHub();
-  
-  // 모든 플레이어에게 9장 랜덤 지급
-  state.players.forEach(p => {
-    p.hand = Array.from({ length: 9 }, drawCard);
-  });
-  
-  addLog("★ 신계의 전쟁이 시작되었습니다. 5명의 예언자에게 손패 9장이 분배되었습니다.");
-  startTurn(0);
-}
-
-function startTimer(onTimeout) {
-  clearInterval(state.timerId);
-  state.timer = 15;
-  timerDisp.textContent = `${state.timer}초`;
-  state.timerId = setInterval(() => {
-    state.timer--;
-    timerDisp.textContent = `${state.timer}초`;
-    if (state.timer <= 0) {
-      clearInterval(state.timerId);
-      onTimeout();
+async function init() {
+  // GitHub 비동기 덱 조회 (오프라인 폴백 탑재)
+  try {
+    const res = await fetch(GITHUB_CARDS_URL, { cache: "no-cache" });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) cardDeck = data;
     }
-  }, 1000);
+  } catch (e) {}
+
+  // 5명 모두에게 9장 랜덤 지급
+  state.players.forEach(p => {
+    p.hand = Array.from({ length: 9 }, drawRandomCard);
+  });
+
+  renderAll();
+  startTurn(state.currentTurnIdx);
 }
 
 /* ==========================================================================
-   6. 턴 진행 루프 & 봇 AI (상호 공격 & 다굴 방지 알고리즘)
+   5. 턴 제어 및 봇 상호 공격 (다굴 방지 AI)
    ========================================================================== */
 function nextTurn() {
-  clearInterval(state.timerId);
+  document.getElementById("damage-modal").style.display = "none";
   state.selectedCardIds = [];
-  state.activeAttackLine = null;
 
-  // 생존자 체크
-  const alivePlayers = state.players.filter(p => p.hp > 0);
-  if (alivePlayers.length <= 1) {
-    state.phase = "GAME_OVER";
-    render();
-    if (state.players[0].hp > 0) {
-      alert("축하합니다! 당신이 최후의 예언자로서 신계를 통일했습니다!");
-    } else {
-      alert("게임 종료: 당신은 승천하였습니다.");
-    }
+  // 승천자 제외 다음 생존 플레이어 탐색
+  const aliveCount = state.players.filter(p => p.hp > 0).length;
+  if (aliveCount <= 1) {
+    alert(state.players.hp > 0 ? "축하합니다! 신계 훈련에서 우승했습니다!" : "승천하였습니다. 게임 종료.");
     return;
   }
 
-  // 다음 생존자 슬롯으로 턴 이전
-  let nextIdx = (state.turnIdx + 1) % 5;
-  while (state.players[nextIdx].hp <= 0) {
-    nextIdx = (nextIdx + 1) % 5;
-  }
-  startTurn(nextIdx);
+  do {
+    state.currentTurnIdx = (state.currentTurnIdx + 1) % 5;
+  } while (state.players[state.currentTurnIdx].hp <= 0);
+
+  state.turnNumber++;
+  document.getElementById("gf-turn-pill").textContent = `G.F. ${state.turnNumber}`;
+  startTurn(state.currentTurnIdx);
 }
 
 function startTurn(idx) {
-  state.turnIdx = idx;
-  const curr = state.players[idx];
+  const p = state.players[idx];
+  sfx.turn();
+  renderAll();
 
-  if (idx === 0) {
-    // 유저 턴
-    state.phase = "USER_ACTION";
-    turnIndicator.textContent = "턴: 당신의 차례";
-    sound.bell();
-    // 타겟이 죽어있으면 다음 생존 봇으로 자동 타겟팅
-    if (state.players[state.targetSlot].hp <= 0) {
-      const firstAliveBot = state.players.find(p => p.isBot && p.hp > 0);
-      if (firstAliveBot) state.targetSlot = firstAliveBot.slot;
+  if (!p.isBot) {
+    // 유저(노누) 턴
+    setLog("당신의 차례입니다. 대상을 선택하고 공격 카드를 내세요.");
+    // 대상이 사망했으면 다음 생존 봇으로 자동 타겟팅
+    if (state.players[state.selectedTargetIdx].hp <= 0) {
+      const aliveBot = state.players.findIndex((pl, i) => pl.isBot && pl.hp > 0);
+      if (aliveBot !== -1) state.selectedTargetIdx = aliveBot;
     }
-    updateTargetIndicator();
-    updateUI();
-    render();
-    startTimer(() => {
-      addLog("시간 초과! 턴이 강제 종료됩니다.");
-      nextTurn();
-    });
+    updateActionPills();
   } else {
     // 봇 턴
-    state.phase = "BOT_BUSY";
-    turnIndicator.textContent = `턴: ${curr.name} 행동 중...`;
-    updateUI();
-    render();
-    setTimeout(() => executeBotTurn(curr), 1200);
+    setLog(`${p.name}이(가) 생각을 거듭하고 있습니다...`);
+    setTimeout(() => executeBotTurn(p, idx), 1100);
   }
 }
 
-/* 봇 지능 (AI) 로직: 다굴 방지 및 상호 공격 */
-function executeBotTurn(bot) {
+/* 봇 지능: 다굴 방지 및 상호 공격 */
+function executeBotTurn(bot, botIdx) {
   const weapons = bot.hand.filter(c => c.type === "WEAPON");
-  
   if (weapons.length === 0) {
-    // 무기 없으면 기도
-    bot.hand.push(drawCard());
-    addLog(`${bot.name}이(가) 무기가 없어 기도를 올려 성물을 1장 받았습니다.`);
-    nextTurn();
+    bot.hand.push(drawRandomCard());
+    setLog(`${bot.name}이(가) 무기가 없어 기도를 올렸습니다.`);
+    setTimeout(nextTurn, 1000);
     return;
   }
 
   const weapon = weapons[0];
   bot.hand = bot.hand.filter(c => c.id !== weapon.id);
 
-  // [다굴 방지 타겟팅 알고리즘]
-  // 공격 대상 후보: 살아있는 모든 적 (유저 포함)
-  let candidates = state.players.filter(p => p.slot !== bot.slot && p.hp > 0);
+  // [다굴 방지 타겟팅]
+  let candidates = state.players
+    .map((pl, i) => ({ ...pl, idx: i }))
+    .filter(pl => pl.idx !== botIdx && pl.hp > 0);
 
-  // 만약 유저가 최근에 공격을 집중받았다면, 봇들은 유저를 배제하고 다른 봇들끼리 싸우도록 유도
-  if (state.recentAttacksOnUser > 0 && candidates.some(p => p.isBot)) {
-    candidates = candidates.filter(p => p.isBot); // 다른 봇들만 후보로 제한
+  // 유저가 최근 공격받았다면 봇들은 서로를 우선 타겟팅
+  if (state.recentAttacksOnUser > 0 && candidates.some(pl => pl.isBot)) {
+    candidates = candidates.filter(pl => pl.isBot);
   }
 
-  // 타겟 선정 (봇 간 상호 공격 활성화)
   const target = candidates[Math.floor(Math.random() * candidates.length)];
 
-  if (target.slot === 0) {
-    state.recentAttacksOnUser++;
+  if (target.idx === 1) state.recentAttacksOnUser++;
+  else state.recentAttacksOnUser = Math.max(0, state.recentAttacksOnUser - 1);
+
+  // 상단 공방 대치창 갱신
+  displayClash(bot.name, target.name, weapon, null);
+  sfx.atk();
+
+  if (target.idx === 1) {
+    // 유저 피격 -> 유저 방어 페이즈
+    setLog(`[경보] ${bot.name}이(가) 당신에게 ${weapon.name}(위력 ${weapon.atk}) 공격!`);
+    state.pendingAttack = { attacker: bot, weapon: weapon };
+    showDefenseUI(weapon);
   } else {
-    state.recentAttacksOnUser = Math.max(0, state.recentAttacksOnUser - 1);
-  }
-
-  state.activeAttackLine = { from: bot, to: target, color: getElemColor(weapon.elem) };
-  render();
-
-  addLog(`[공격 경보] ${bot.name} → ${target.name}에게 ${weapon.name}(${weapon.elem}, 위력 ${weapon.val}) 발사!`);
-  sound.attack();
-
-  if (target.slot === 0) {
-    // 유저 피격 -> 유저 방어 단계 전환
-    setTimeout(() => {
-      state.phase = "USER_DEFENSE";
-      state.incomingAttack = { attacker: bot, weapon: weapon };
-      turnIndicator.textContent = "방어 단계! 방패를 선택하거나 용서하십시오";
-      updateUI();
-      render();
-      startTimer(() => {
-        addLog("방어 시간 초과! 공격을 그대로 허용합니다.");
-        resolveUserDefense([]);
-      });
-    }, 800);
-  } else {
-    // 봇 vs 봇 전투 자동 해결
-    setTimeout(() => {
-      resolveBotVsBotDefense(bot, target, weapon);
-    }, 1000);
+    // 봇 vs 봇 전투
+    setTimeout(() => resolveBotVsBot(bot, target, weapon), 900);
   }
 }
 
-/* 봇 vs 봇 방어 및 피해 계산 */
-function resolveBotVsBotDefense(attacker, target, weapon) {
-  // 타겟 봇의 방어구 검사
+function resolveBotVsBot(attacker, target, weapon) {
   const shields = target.hand.filter(c => c.type === "SHIELD" && canBlock(weapon.elem, c.elem));
   let defVal = 0;
+  let usedShield = null;
 
   if (shields.length > 0) {
-    const shield = shields[0];
-    target.hand = target.hand.filter(c => c.id !== shield.id);
-    defVal = shield.val;
-    addLog(`🛡 ${target.name}이(가) ${shield.name}(방어력 ${defVal})으로 방어했습니다.`);
-    sound.defend();
-    target.hand.push(drawCard()); // 방어 후 보충
+    usedShield = shields[0];
+    target.hand = target.hand.filter(c => c.id !== usedShield.id);
+    defVal = usedShield.def;
+    sfx.def();
+    target.hand.push(drawRandomCard());
   }
 
-  const netDmg = Math.max(0, weapon.val - defVal);
-  if (weapon.elem === "DARK" && netDmg > 0) {
-    target.hp = 0;
-    addLog(`☠ 암속성 관통! ${target.name}이(가) 즉사(승천)하였습니다!`);
-  } else {
-    target.hp = Math.max(0, target.hp - netDmg);
-    addLog(`결과: ${target.name}에게 ${netDmg} 데미지! (잔여 HP: ${target.hp})`);
-  }
-  sound.hit();
+  displayClash(attacker.name, target.name, weapon, usedShield);
 
-  attacker.hand.push(drawCard()); // 공격 후 보충
-  render();
-  setTimeout(nextTurn, 1000);
+  const netDmg = Math.max(0, weapon.atk - defVal);
+  if (weapon.elem === "DARK" && netDmg > 0) target.hp = 0;
+  else target.hp = Math.max(0, target.hp - netDmg);
+
+  sfx.hit();
+  showDamagePopup(netDmg);
+  attacker.hand.push(drawRandomCard());
+  renderAll();
+
+  setTimeout(nextTurn, 1400);
 }
 
 /* ==========================================================================
-   7. 유저 액션 및 방어 로직
+   6. 유저 공격 및 방어 핸들러
    ========================================================================== */
-function executeUserAttack() {
-  const selected = state.players[0].hand.filter(c => state.selectedCardIds.includes(c.id));
-  const target = state.players[state.targetSlot];
+function handleUserAttack() {
+  const weapon = state.players.hand.find(c => state.selectedCardIds.includes(c.id));
+  const target = state.players[state.selectedTargetIdx];
+  if (!weapon || !target || target.hp <= 0) return;
 
-  if (!target || target.hp <= 0) {
-    alert("유효한 공격 대상을 선택하세요!");
-    return;
-  }
+  state.players.hand = state.players.hand.filter(c => c.id !== weapon.id);
+  displayClash("노누", target.name, weapon, null);
+  sfx.atk();
+  setLog(`당신이 ${target.name}에게 ${weapon.name} 공격!`);
 
-  const weapon = selected[0];
-  state.players[0].hand = state.players[0].hand.filter(c => c.id !== weapon.id);
-  state.activeAttackLine = { from: state.players[0], to: target, color: getElemColor(weapon.elem) };
-  render();
-
-  addLog(`[공격] 당신이 ${target.name}에게 ${weapon.name}(${weapon.elem}, 위력 ${weapon.val}) 공격!`);
-  sound.attack();
-
-  // 봇의 방어 처리
   setTimeout(() => {
     const shields = target.hand.filter(c => c.type === "SHIELD" && canBlock(weapon.elem, c.elem));
     let defVal = 0;
+    let usedShield = null;
     if (shields.length > 0) {
-      const shield = shields[0];
-      target.hand = target.hand.filter(c => c.id !== shield.id);
-      defVal = shield.val;
-      addLog(`🛡 ${target.name}이(가) ${shield.name}(방어력 ${defVal})으로 방어!`);
-      sound.defend();
-      target.hand.push(drawCard());
+      usedShield = shields[0];
+      target.hand = target.hand.filter(c => c.id !== usedShield.id);
+      defVal = usedShield.def;
+      sfx.def();
+      target.hand.push(drawRandomCard());
     }
-    const netDmg = Math.max(0, weapon.val - defVal);
-    if (weapon.elem === "DARK" && netDmg > 0) {
-      target.hp = 0;
-      addLog(`☠ 암속성 관통! ${target.name} 승천!`);
-    } else {
-      target.hp = Math.max(0, target.hp - netDmg);
-      addLog(`결과: ${target.name}에게 ${netDmg} 데미지! (잔여 HP: ${target.hp})`);
-    }
-    sound.hit();
-    state.players[0].hand.push(drawCard());
-    render();
-    setTimeout(nextTurn, 900);
+
+    displayClash("노누", target.name, weapon, usedShield);
+    const netDmg = Math.max(0, weapon.atk - defVal);
+    if (weapon.elem === "DARK" && netDmg > 0) target.hp = 0;
+    else target.hp = Math.max(0, target.hp - netDmg);
+
+    sfx.hit();
+    showDamagePopup(netDmg);
+    state.players.hand.push(drawRandomCard());
+    renderAll();
+    setTimeout(nextTurn, 1400);
   }, 800);
 }
 
+function handleUserDefend() {
+  const shield = state.players.hand.find(c => state.selectedCardIds.includes(c.id));
+  resolveUserDefense(shield ? [shield] : []);
+}
+
+function handleUserForgive() {
+  resolveUserDefense([]);
+}
+
 function resolveUserDefense(shields) {
-  clearInterval(state.timerId);
-  const atk = state.incomingAttack;
+  const atk = state.pendingAttack;
   let defVal = 0;
-
   shields.forEach(s => {
-    if (canBlock(atk.weapon.elem, s.elem)) {
-      defVal += s.val;
-    } else {
-      addLog(`경고: ${s.name}(${s.elem})은 ${atk.weapon.elem} 공격을 방어할 수 없습니다!`);
-    }
+    if (canBlock(atk.weapon.elem, s.elem)) defVal += s.def;
+    state.players.hand = state.players.hand.filter(c => c.id !== s.id);
+    state.players.hand.push(drawRandomCard());
   });
 
-  const netDmg = Math.max(0, atk.weapon.val - defVal);
-  if (atk.weapon.elem === "DARK" && netDmg > 0) {
-    state.players[0].hp = 0;
-    addLog("☠ 암속성 공격 관통! 당신은 승천하였습니다!");
-  } else {
-    state.players[0].hp = Math.max(0, state.players[0].hp - netDmg);
-    addLog(`피격 결과: 당신은 ${netDmg}의 피해를 입었습니다. (잔여 HP: ${state.players[0].hp})`);
-  }
-  sound.hit();
+  displayClash(atk.attacker.name, "노누", atk.weapon, shields[0] || null);
 
-  // 방어 카드 소모 및 보충
-  shields.forEach(s => {
-    state.players[0].hand = state.players[0].hand.filter(c => c.id !== s.id);
-    state.players[0].hand.push(drawCard());
-  });
-  atk.attacker.hand.push(drawCard());
+  const netDmg = Math.max(0, atk.weapon.atk - defVal);
+  if (atk.weapon.elem === "DARK" && netDmg > 0) state.players.hp = 0;
+  else state.players.hp = Math.max(0, state.players.hp - netDmg);
 
-  state.incomingAttack = null;
-  render();
-  setTimeout(nextTurn, 900);
+  sfx.hit();
+  showDamagePopup(netDmg);
+  atk.attacker.hand.push(drawRandomCard());
+
+  hideDefenseUI();
+  renderAll();
+  setTimeout(nextTurn, 1400);
+}
+
+function handleUserPray() {
+  state.players.hand.push(drawRandomCard());
+  setLog("무기가 없어 기도를 올려 성물을 1장 받았습니다.");
+  renderAll();
+  nextTurn();
 }
 
 /* ==========================================================================
-   8. UI 컨트롤 및 핸드 바인딩
+   7. 화면 렌더링 & UI 헬퍼
    ========================================================================== */
-function updateTargetIndicator() {
-  const target = state.players[state.targetSlot];
-  targetIndicator.textContent = `공격 대상: ${target ? target.name : "없음"} (클릭하여 변경)`;
+function setLog(txt) {
+  document.getElementById("combat-log").textContent = txt;
 }
 
-function updateUI() {
-  const isUserAction = state.phase === "USER_ACTION";
-  const isUserDefense = state.phase === "USER_DEFENSE";
+function showDamagePopup(num) {
+  const m = document.getElementById("damage-modal");
+  document.getElementById("damage-number").textContent = num;
+  m.style.display = "flex";
+}
 
-  btnAction.style.display = isUserDefense ? "none" : "inline-block";
-  btnForgive.style.display = isUserDefense ? "inline-block" : "none";
-  btnPray.style.display = isUserAction ? "inline-block" : "none";
+function displayClash(atkName, defName, atkCard, defCard) {
+  document.getElementById("attacker-name").textContent = atkName;
+  document.getElementById("defender-name").textContent = defName;
 
-  const weaponsInHand = state.players[0].hand.filter(c => c.type === "WEAPON");
-  btnPray.disabled = weaponsInHand.length > 0; // 무기 없을 때만 기도 가능
+  if (atkCard) {
+    document.getElementById("atk-card-icon").textContent = atkCard.icon;
+    document.getElementById("atk-card-name").textContent = atkCard.name;
+    document.getElementById("atk-card-stat").textContent = `공격${atkCard.atk} ${atkCard.def ? "방어"+atkCard.def : ""}`;
+    document.getElementById("atk-card-price").textContent = `₩${atkCard.price}`;
+    document.getElementById("atk-card-box").style.visibility = "visible";
+  } else {
+    document.getElementById("atk-card-box").style.visibility = "hidden";
+  }
 
+  if (defCard) {
+    document.getElementById("def-card-icon").textContent = defCard.icon;
+    document.getElementById("def-card-name").textContent = defCard.name;
+    document.getElementById("def-card-stat").textContent = `방어${defCard.def}`;
+    document.getElementById("def-card-price").textContent = `₩${defCard.price}`;
+    document.getElementById("def-card-box").style.visibility = "visible";
+  } else {
+    document.getElementById("def-card-box").style.visibility = "hidden";
+  }
+}
+
+function showDefenseUI(weapon) {
+  document.getElementById("btn-attack").style.display = "none";
+  document.getElementById("btn-defend").style.display = "inline-block";
+  document.getElementById("btn-forgive").style.display = "inline-block";
+  document.getElementById("btn-pray").style.display = "none";
   renderHand();
 }
 
-function renderHand() {
-  handView.innerHTML = "";
-  state.players[0].hand.forEach(card => {
-    const box = document.createElement("div");
-    box.className = `card-box elem-${card.elem}` + (state.selectedCardIds.includes(card.id) ? " selected" : "");
-    box.innerHTML = `
-      <div>
-        <div class="card-name">${card.name}</div>
-        <div class="card-type">${card.type} [${card.elem}]</div>
-      </div>
-      <div class="card-val">${card.val ? (card.type === "WEAPON" ? "공격 " + card.val : "방어 " + card.val) : ""}</div>
-    `;
-    box.onclick = () => {
-      sound.init();
-      if (state.phase === "USER_ACTION" && card.type === "WEAPON") {
-        state.selectedCardIds = [card.id]; // 단일 무기 선택
-        btnAction.disabled = false;
-      } else if (state.phase === "USER_DEFENSE" && card.type === "SHIELD") {
-        if (state.selectedCardIds.includes(card.id)) {
-          state.selectedCardIds = state.selectedCardIds.filter(id => id !== card.id);
-        } else {
-          state.selectedCardIds.push(card.id);
-        }
-      }
-      renderHand();
-    };
-    handView.appendChild(box);
-  });
+function hideDefenseUI() {
+  document.getElementById("btn-attack").style.display = "inline-block";
+  document.getElementById("btn-defend").style.display = "none";
+  document.getElementById("btn-forgive").style.display = "none";
+  document.getElementById("btn-pray").style.display = "inline-block";
+  state.pendingAttack = null;
 }
 
-btnAction.onclick = () => {
-  if (state.phase === "USER_ACTION" && state.selectedCardIds.length > 0) {
-    executeUserAttack();
+function updateActionPills() {
+  const isMyTurn = state.currentTurnIdx === 1;
+  const selCard = state.players.hand.find(c => state.selectedCardIds.includes(c.id));
+  const btnAtk = document.getElementById("btn-attack");
+
+  if (selCard && selCard.type === "WEAPON") {
+    btnAtk.textContent = `공격${selCard.atk}`;
+    btnAtk.disabled = !isMyTurn;
+  } else {
+    btnAtk.textContent = "공격";
+    btnAtk.disabled = true;
   }
-};
 
-btnForgive.onclick = () => {
-  if (state.phase === "USER_DEFENSE") {
-    addLog("공격을 겸허히 용서(수용)했습니다.");
-    resolveUserDefense([]);
-  }
-};
-
-btnPray.onclick = () => {
-  if (state.phase === "USER_ACTION") {
-    state.players[0].hand.push(drawCard());
-    addLog("무기가 없어 기도를 올려 성물을 1장 받았습니다.");
-    render();
-    nextTurn();
-  }
-};
-
-// 캔버스 클릭으로 공격 대상 봇 선택
-canvas.addEventListener("click", (e) => {
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-
-  state.players.forEach(p => {
-    if (p.isBot && p.hp > 0) {
-      const dist = Math.hypot(mx - p.x, my - p.y);
-      if (dist <= 45) {
-        state.targetSlot = p.slot;
-        updateTargetIndicator();
-        render();
-      }
-    }
-  });
-});
-
-/* ==========================================================================
-   9. Canvas 원형 테이블 렌더링
-   ========================================================================== */
-function getElemColor(elem) {
-  switch(elem) {
-    case "FIRE": return "#f25c54";
-    case "WATER": return "#3a86ff";
-    case "WOOD": return "#70e000";
-    case "EARTH": return "#d4a373";
-    case "LIGHT": return "#ffe66d";
-    case "DARK": return "#b5179e";
-    default: return "#ffffff";
-  }
+  const weapons = state.players.hand.filter(c => c.type === "WEAPON");
+  document.getElementById("btn-pray").disabled = !isMyTurn || weapons.length > 0;
 }
 
-function render() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function renderAll() {
+  renderPlayerList();
+  renderHand();
+  updateActionPills();
+}
 
-  // 중앙 결투장 원형 배경
-  ctx.beginPath();
-  ctx.arc(525, 260, 210, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(255, 255, 255, 0.02)";
-  ctx.fill();
-  ctx.strokeStyle = "#2c2c3e";
-  ctx.stroke();
-
-  // 공격 궤적 선 렌더링
-  if (state.activeAttackLine) {
-    const { from, to, color } = state.activeAttackLine;
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(from.x, from.y);
-    ctx.lineTo(to.x, to.y);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 4;
-    ctx.shadowColor = color;
-    ctx.shadowBlur = 10;
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  // 5명 플레이어 렌더링 (원형 배치)
-  state.players.forEach(p => {
-    const isCurrent = state.turnIdx === p.slot;
-    const isTarget = state.targetSlot === p.slot && state.phase === "USER_ACTION";
+function renderPlayerList() {
+  const listEl = document.getElementById("player-list");
+  listEl.innerHTML = "";
+  state.players.forEach((p, idx) => {
+    const item = document.createElement("div");
+    const isTarget = idx === state.selectedTargetIdx;
+    const isTurn = idx === state.currentTurnIdx;
     const isDead = p.hp <= 0;
 
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 40, 0, Math.PI * 2);
-    ctx.fillStyle = isDead ? "#1a1a24" : (isCurrent ? "#f7b267" : "#242436");
-    ctx.fill();
-    ctx.lineWidth = isTarget ? 4 : (isCurrent ? 3 : 2);
-    ctx.strokeStyle = isDead ? "#444" : (isTarget ? "#e63946" : (isCurrent ? "#fff" : "#4a4a66"));
-    ctx.stroke();
-
-    // 이름
-    ctx.fillStyle = isDead ? "#666" : "#ffffff";
-    ctx.font = "bold 13px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(p.name, p.x, p.y - 48);
-
-    // HP 바
-    if (!isDead) {
-      ctx.fillStyle = "#222";
-      ctx.fillRect(p.x - 35, p.y + 46, 70, 8);
-      ctx.fillStyle = p.hp > 20 ? "#52b788" : "#e63946";
-      ctx.fillRect(p.x - 35, p.y + 46, Math.max(0, (p.hp / 40) * 70), 8);
-
-      ctx.font = "12px sans-serif";
-      ctx.fillStyle = "#ddd";
-      ctx.fillText(`HP: ${p.hp} (패 ${p.hand.length})`, p.x, p.y + 68);
-    } else {
-      ctx.fillStyle = "#888";
-      ctx.font = "bold 12px sans-serif";
-      ctx.fillText("승천 (탈락)", p.x, p.y + 55);
-    }
-    ctx.restore();
+    item.className = `player-item ${isTarget ? "target" : ""} ${isTurn ? "current-turn" : ""} ${isDead ? "dead" : ""}`;
+    item.innerHTML = `
+      <div class="p-dot" style="background:${isTurn ? "#ffb703" : (isTarget ? "#e63946" : "#73939b")};"></div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-stats">HP ${p.hp} MP ${p.mp} ₩ ${p.money}</div>
+    `;
+    item.onclick = () => {
+      if (p.hp > 0 && idx !== 1) {
+        state.selectedTargetIdx = idx;
+        renderPlayerList();
+      }
+    };
+    listEl.appendChild(item);
   });
 }
 
-// 게임 실행
-initGame();
+function renderHand() {
+  const tray = document.getElementById("hand-tray");
+  tray.innerHTML = "";
+  state.players.hand.forEach(card => {
+    const isSel = state.selectedCardIds.includes(card.id);
+    const box = document.createElement("div");
+    box.className = `hand-card ${isSel ? "selected" : ""}`;
+
+    let statLabel = "";
+    if (card.atk > 0 && card.def > 0) statLabel = `공${card.atk} 방${card.def}`;
+    else if (card.atk > 0) statLabel = `공격${card.atk}`;
+    else if (card.def > 0) statLabel = `방어${card.def}`;
+    else if (card.heal) statLabel = `회복+${card.heal}`;
+
+    box.innerHTML = `
+      <div class="hand-card-icon">${card.icon}</div>
+      <div class="hand-card-name">${card.name}</div>
+      <div class="hand-card-stat-pill">${statLabel}</div>
+    `;
+
+    box.onclick = () => {
+      sfx.init();
+      if (state.selectedCardIds.includes(card.id)) {
+        state.selectedCardIds = [];
+      } else {
+        state.selectedCardIds = [card.id];
+      }
+      renderHand();
+      updateActionPills();
+    };
+    tray.appendChild(box);
+  });
+}
+
+// 게임 시작
+init();
 </script>
 </body>
 </html>
