@@ -141,7 +141,7 @@
 
     <!-- 백그라운드 캡처 전용 완벽 숨김 래퍼 (화면 저 멀리 배치하여 사용자에게 절대 보이지 않음) -->
     <div style="position: absolute; top: -9999px; left: -9999px; width: 1480px; height: 1309px; z-index: -9999; overflow: hidden;">
-        <div id="hidden-capture-container" class="bg-[#e5e7eb] flex-col p-[15px_30px]" style="width: 1980px; height: 720px; display: none; box-sizing: border-box;"></div>
+        <div id="hidden-capture-container" class="bg-[#e5e7eb] flex-col p-[15px_30px]" style="width: 1480px; height: 1309px; display: none; box-sizing: border-box;"></div>
     </div>
 
     <!-- [MOBILE] 상단 네비게이션 헤더 -->
@@ -618,10 +618,10 @@
 
                 // 6. html2canvas로 보이지 않는 영역 캡처! (스마트폰 크기 무시)
                 const canvas = await html2canvas(hiddenContainer, {
-                    width: 1980,
-                    height: 720,
-                    windowWidth: 1980,
-                    windowHeight: 720,
+                    width: 1480,
+                    height: 1309,
+                    windowWidth: 1480,
+                    windowHeight: 1309,
                     scale: 1, 
                     backgroundColor: '#e5e7eb', 
                     logging: false,
@@ -630,18 +630,18 @@
 
                 // 안전망 캔버스
                 const finalCanvas = document.createElement('canvas');
-                finalCanvas.width = 1980;
-                finalCanvas.height = 720;
+                finalCanvas.width = 1480;
+                finalCanvas.height = 1309;
                 const ctx = finalCanvas.getContext('2d');
                 ctx.fillStyle = "#e5e7eb";
-                ctx.fillRect(0, 0, 1980, 720);
-                ctx.drawImage(canvas, 0, 0, 1980, 720);
+                ctx.fillRect(0, 0, 1480, 1309);
+                ctx.drawImage(canvas, 0, 0, 1480, 1309);
 
                 const image = finalCanvas.toDataURL("image/png");
                 const link = document.createElement('a');
 
                 const titleStr = document.getElementById('calendar-title').textContent.replace('.', '_');
-                link.download = `다이어리_${titleStr}_1980x720.png`;
+                link.download = `다이어리_${titleStr}_1480x1309.png`;
                 link.href = image;
                 link.click();
 
