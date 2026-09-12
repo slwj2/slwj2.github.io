@@ -65,7 +65,7 @@
             /* 격자선을 모두 일정하고 뚜렷한 색상으로 통일합니다 */
             border-bottom: 1px solid #bbbbbb;
             border-right: 1px solid #bbbbbb;
-            min-height: 120px; /* 텍스트 잘림 방지를 위해 최소 높이를 조금 더 늘립니다 */
+            min-height: 140px; /* 큰 이미지와 텍스트를 위해 높이를 충분히 늘립니다 (120px -> 140px) */
             position: relative;
             background-color: white;
             transition: background-color 0.2s;
@@ -361,7 +361,7 @@
                             
                             <!-- Content Area (Text & Image) - html2canvas 버그 해결을 위해 flex 대신 block 요소 사용 -->
                             <div class="w-full mt-1 pointer-events-none text-center">
-                                ${dayData.image ? `<img src="${dayData.image}" style="max-width: 90%; max-height: 60px; display: inline-block; margin-bottom: 4px; object-fit: contain;">` : ''}
+                                ${dayData.image ? `<img src="${dayData.image}" style="max-width: 95%; max-height: 100px; display: inline-block; margin-bottom: 2px; object-fit: contain;">` : ''}
                                 ${formattedText ? `<div class="text-base font-handwriting leading-tight break-words" style="color: ${dayData.color};">${formattedText}</div>` : ''}
                             </div>
                             
@@ -436,7 +436,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_SIZE = 300; // Resize to ensure base64 string isn't too huge
+                    const MAX_SIZE = 500; // 고화질 유지를 위해 리사이징 한도를 높입니다 (기존 300 -> 500)
                     let width = img.width;
                     let height = img.height;
 
