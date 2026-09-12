@@ -12,7 +12,7 @@
 
     <style>
         /* =========================================
-           기본 설정
+           기본 초기화
            ========================================= */
 
         * {
@@ -21,17 +21,16 @@
 
         html,
         body {
-            margin: 0;
             width: 100%;
             height: 100%;
 
-            /* OBS 배경 투명 */
-            background: transparent;
+            margin: 0;
+            padding: 0;
 
-            /* 스크롤 제거 */
             overflow: hidden;
 
-            /* 글꼴 */
+            background: transparent;
+
             font-family:
                 "Pretendard",
                 "Noto Sans KR",
@@ -41,7 +40,7 @@
 
 
         /* =========================================
-           화면 중앙 정렬
+           OBS 전체 영역
            ========================================= */
 
         .overlay {
@@ -53,31 +52,63 @@
             justify-content: center;
             align-items: center;
 
-            padding: 30px;
+            /*
+             * 화면 크기에 따라 여백도 자동 조절
+             *
+             * 최소 16px
+             * 화면 너비의 2%
+             * 최대 40px
+             */
+            padding: clamp(
+                16px,
+                2vw,
+                40px
+            );
 
-            /* 완전 투명 */
             background: transparent;
         }
 
 
         /* =========================================
-           후원 알림 전체 영역
+           후원 콘텐츠
            
-           배경 / 테두리 / 그림자 없음
+           ★ 배경 없음
+           ★ 테두리 없음
+           ★ 그림자 없음
            ========================================= */
 
         .donation-content {
-            width: min(700px, 90vw);
+            /*
+             * 화면 너비에 맞춰 자동 조절
+             */
+            width: min(
+                90vw,
+                900px
+            );
+
+            /*
+             * 화면 높이가 작은 경우에도
+             * 너무 커지지 않도록 제한
+             */
+            max-height: 90vh;
 
             text-align: center;
 
+            /*
+             * 초기 상태
+             */
             opacity: 0;
 
             visibility: hidden;
 
             transform:
-                translateY(20px)
+                translateY(2vh)
                 scale(0.96);
+
+            /*
+             * 긴 내용이 화면을 넘어가지 않도록
+             */
+            overflow: hidden;
         }
 
 
@@ -89,50 +120,74 @@
             visibility: visible;
 
             animation:
-                donation-in 0.45s ease-out forwards;
+                donation-in
+                0.45s
+                ease-out
+                forwards;
         }
 
 
         /* =========================================
-           사라지는 상태
+           숨김 상태
            ========================================= */
 
         .donation-content.hide {
             visibility: visible;
 
             animation:
-                donation-out 0.5s ease-in forwards;
+                donation-out
+                0.5s
+                ease-in
+                forwards;
         }
 
 
         /* =========================================
            후원 감사 문구
-           
-           별도의 박스 없음
-           배경 없음
            ========================================= */
 
         .donation-title {
             margin: 0;
 
-            color: #ffffff;
+            /*
+             * 반응형 글자 크기
+             *
+             * 최소 20px
+             * 화면 너비 기준 2.2vw
+             * 최대 38px
+             */
+            font-size: clamp(
+                20px,
+                2.2vw,
+                38px
+            );
 
-            font-size: 30px;
+            /*
+             * 화면 높이가 낮은 경우
+             * 글자가 지나치게 커지는 것을 방지
+             */
+            line-height: 1.4;
 
             font-weight: 800;
 
-            line-height: 1.4;
+            color: #ffffff;
 
             text-align: center;
 
+            /*
+             * 긴 닉네임이나 문장 대응
+             */
             word-break: keep-all;
+
+            overflow-wrap: anywhere;
 
             /*
              * 방송 화면에서 잘 보이도록
-             * 검은색 그림자를 적용합니다.
+             * 검은색 그림자
              */
             text-shadow:
-                0 2px 5px rgba(0, 0, 0, 0.75);
+                0 2px 5px
+                rgba(0, 0, 0, 0.75);
         }
 
 
@@ -148,45 +203,88 @@
 
 
         /* =========================================
-           치즈 금액
+           후원 금액
            ========================================= */
 
         .amount {
             color: #ff5c8a;
 
             font-weight: 900;
+
+            /*
+             * 금액이 줄바꿈되지 않도록
+             */
+            white-space: nowrap;
         }
 
 
         /* =========================================
-           후원자가 작성한 채팅
+           후원 메시지 박스
            
-           이 박스만 표시됩니다.
+           ★ 화면에 보이는 유일한 박스
            ========================================= */
 
         .donation-message {
-            margin-top: 18px;
+            /*
+             * 위쪽 간격도 반응형
+             */
+            margin-top: clamp(
+                12px,
+                1.5vw,
+                24px
+            );
 
-            padding: 18px 22px;
+            /*
+             * 내부 여백 반응형
+             */
+            padding:
+                clamp(12px, 1.5vw, 22px)
+                clamp(16px, 2.5vw, 35px);
 
-            /* 채팅 박스 */
+            /*
+             * 채팅 박스만 회색
+             */
             background: #f5f5f5;
 
-            border-radius: 10px;
+            border-radius: clamp(
+                8px,
+                0.8vw,
+                14px
+            );
 
-            color: #333333;
-
-            font-size: 22px;
-
-            font-weight: 600;
+            /*
+             * 반응형 글자 크기
+             */
+            font-size: clamp(
+                16px,
+                1.6vw,
+                28px
+            );
 
             line-height: 1.5;
 
+            font-weight: 600;
+
+            color: #333333;
+
             text-align: center;
 
+            /*
+             * 긴 메시지 처리
+             */
             word-break: keep-all;
 
-            overflow-wrap: break-word;
+            overflow-wrap: anywhere;
+
+            /*
+             * 너무 긴 메시지가
+             * 화면을 벗어나지 않도록
+             */
+            max-width: 100%;
+
+            max-height: 35vh;
+
+            overflow: hidden;
         }
 
 
@@ -200,7 +298,7 @@
                 opacity: 0;
 
                 transform:
-                    translateY(20px)
+                    translateY(2vh)
                     scale(0.96);
             }
 
@@ -232,8 +330,72 @@
                 opacity: 0;
 
                 transform:
-                    translateY(-15px)
+                    translateY(-1.5vh)
                     scale(0.97);
+            }
+        }
+
+
+        /* =========================================
+           세로 화면 대응
+           
+           스마트폰 / 세로 OBS 등에 대응
+           ========================================= */
+
+        @media (orientation: portrait) {
+
+            .donation-content {
+                width: 90vw;
+            }
+
+            .donation-title {
+                font-size: clamp(
+                    18px,
+                    4.5vw,
+                    30px
+                );
+            }
+
+            .donation-message {
+                font-size: clamp(
+                    15px,
+                    3.8vw,
+                    24px
+                );
+
+                max-height: 40vh;
+            }
+        }
+
+
+        /* =========================================
+           아주 작은 화면 대응
+           ========================================= */
+
+        @media (max-width: 400px) {
+
+            .overlay {
+                padding: 12px;
+            }
+
+            .donation-content {
+                width: 94vw;
+            }
+
+            .donation-title {
+                font-size: 18px;
+            }
+
+            .donation-message {
+                margin-top: 10px;
+
+                padding:
+                    10px
+                    14px;
+
+                font-size: 15px;
+
+                border-radius: 7px;
             }
         }
     </style>
@@ -243,16 +405,17 @@
 <body>
 
     <!-- =========================================
-         OBS 오버레이
+         OBS 투명 영역
          ========================================= -->
 
     <div class="overlay">
 
         <!--
-            바깥 흰색 박스 없음
+            투명한 콘텐츠 영역
 
-            이 영역은 단순히 내용만 묶어주는
-            투명한 컨테이너입니다.
+            흰색 배경 없음
+            테두리 없음
+            그림자 없음
         -->
         <div
             id="donationContent"
@@ -261,8 +424,6 @@
 
             <!-- =================================
                  후원 감사 문구
-                 
-                 박스 없음
                  ================================= -->
 
             <div
@@ -292,9 +453,9 @@
 
 
             <!-- =================================
-                 후원 메시지
+                 후원자가 작성한 채팅
                  
-                 유일한 네모 박스
+                 ★ 유일한 박스
                  ================================= -->
 
             <div
@@ -347,6 +508,15 @@
 
         /* =========================================
            후원 알림 표시 함수
+           
+           nickname:
+           후원자 닉네임
+
+           amount:
+           후원 금액
+
+           message:
+           후원자가 입력한 메시지
            ========================================= */
 
         function showDonation(
@@ -355,7 +525,10 @@
             message
         ) {
 
-            /* 기존 타이머 제거 */
+            /* -------------------------------------
+               기존 타이머 제거
+               ------------------------------------- */
+
             if (hideTimer !== null) {
 
                 clearTimeout(hideTimer);
@@ -372,22 +545,24 @@
             }
 
 
-            /* 닉네임 변경 */
+            /* -------------------------------------
+               후원 데이터 적용
+               ------------------------------------- */
+
             nicknameElement.textContent =
                 nickname;
 
-
-            /* 후원 금액 변경 */
             amountElement.textContent =
                 amount;
 
-
-            /* 후원 메시지 변경 */
             messageElement.textContent =
                 message;
 
 
-            /* 기존 애니메이션 제거 */
+            /* -------------------------------------
+               기존 애니메이션 제거
+               ------------------------------------- */
+
             donationContent.classList.remove(
                 "show"
             );
@@ -398,21 +573,26 @@
 
 
             /*
-             * 애니메이션 재실행을 위한
-             * 강제 리플로우
+             * 브라우저 리플로우
+             *
+             * 애니메이션을 다시 실행하기 위해
+             * 현재 상태를 강제로 적용합니다.
              */
             void donationContent.offsetWidth;
 
 
-            /* 등장 */
+            /* -------------------------------------
+               등장
+               ------------------------------------- */
+
             donationContent.classList.add(
                 "show"
             );
 
 
-            /* =====================================
+            /* -------------------------------------
                5초 후 사라지기 시작
-               ===================================== */
+               ------------------------------------- */
 
             hideTimer = setTimeout(() => {
 
@@ -427,9 +607,9 @@
             }, 5000);
 
 
-            /* =====================================
+            /* -------------------------------------
                5.5초 후 완전히 숨김
-               ===================================== */
+               ------------------------------------- */
 
             removeTimer = setTimeout(() => {
 
@@ -439,7 +619,11 @@
 
                 donationContent.style.visibility =
                     "hidden";
-
+                showDonation(
+                    "홍길동",
+                    "1,000원",
+                    "오늘도 방송 잘보고있어요 😊"
+                );
             }, 5500);
         }
 
