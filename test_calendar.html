@@ -38,7 +38,7 @@
         body {
             background-color: #e5e7eb; /* Soft gray background for the app */
         }
-        
+
         /* The main diary paper style */
         .diary-paper {
             background-color: #FAF8F5;
@@ -53,19 +53,21 @@
             overflow: hidden;
             background-color: white;
         }
-        
+
         .calendar-header-cell {
             border-bottom: 2px solid #A94442;
-            border-right: 1px solid #A94442;
+            /* 헤더의 오른쪽 테두리도 아래 격자선과 동일한 색상으로 통일하여 깔끔하게 변경 */
+            border-right: 1px solid #d1d5db; 
             background-color: #FDF4F5;
         }
         .calendar-header-cell:last-child { border-right: none; }
-        
+
         .calendar-cell {
-            /* 격자선을 모두 일정하고 뚜렷한 색상으로 통일합니다 */
-            border-bottom: 1px solid #bbbbbb;
-            border-right: 1px solid #bbbbbb;
-            min-height: 140px; /* 큰 이미지와 텍스트를 위해 높이를 충분히 늘립니다 (120px -> 140px) */
+            /* 캘린더 내부 격자선을 모두 일정하고 뚜렷하게 회색으로 통일합니다 */
+            border-bottom: 1px solid #d1d5db;
+            border-right: 1px solid #d1d5db;
+            box-sizing: border-box; 
+            min-height: 140px; 
             position: relative;
             background-color: white;
             transition: background-color 0.2s;
@@ -73,7 +75,7 @@
         .calendar-cell:nth-child(7n) { border-right: none; }
         /* 마지막 줄은 바닥 테두리를 제거하여 캘린더 외곽선과 겹치지 않게 합니다 */
         .calendar-cell.last-row { border-bottom: none; }
-        
+
         /* Spring binding styles */
         .spring-wrapper {
             position: absolute;
@@ -111,16 +113,89 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
+
         /* Hide element during screenshot */
         .no-print { display: block; }
         .is-printing .no-print { display: none !important; }
         .is-printing .diary-paper { box-shadow: none; border: 1px solid #eee; }
+
+        /* 1980x720 고해상도 캡처를 위한 전용 스타일 (완벽하게 크기 강제) */
+        .capture-active {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 1980px !important;
+            height: 720px !important;
+            min-height: 720px !important;
+            max-height: 720px !important;
+            z-index: -9999 !important;
+            background-color: #e5e7eb !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 15px 30px !important;
+            box-sizing: border-box !important;
+            transform: none !important;
+            border-radius: 0 !important;
+        }
+        
+        .capture-active .diary-paper {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 25px 30px 15px 30px !important;
+            box-shadow: none !important;
+        }
+
+        .capture-active .calendar-grid {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 0 !important; 
+        }
+
+        .capture-active #calendar-days {
+            flex: 1 !important;
+            display: grid !important;
+            grid-template-rows: repeat(var(--row-count, 5), minmax(0, 1fr)) !important;
+            min-height: 0 !important;
+        }
+
+        .capture-active .calendar-cell {
+            min-height: 0 !important;
+            height: auto !important; 
+            padding: 4px !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        .capture-active .calendar-cell img {
+            max-height: 40px !important; /* 720p 뷰포트에 맞춰 자동 축소 */
+            margin: 0 auto 2px auto !important;
+        }
+        
+        .capture-active .calendar-cell .text-base {
+            font-size: 1.1rem !important;
+            line-height: 1.2 !important;
+        }
+        
+        .capture-active .mt-6 {
+            margin-top: 15px !important;
+            padding: 10px 15px !important;
+        }
+        
+        .capture-active #global-memo-render {
+            min-height: 2.5rem !important;
+            font-size: 1.2rem !important;
+            padding: 0 !important;
+            line-height: 1.4 !important;
+        }
     </style>
 </head>
 <body class="font-sans text-diary-text min-h-screen p-4 md:p-8 flex flex-col items-center">
 
-    <div class="w-full max-w-5xl flex justify-between items-center mb-12 bg-white p-4 rounded-2xl shadow-sm">
+    <div class="w-full max-w-5xl flex justify-between items-center mb-12 bg-white p-4 rounded-2xl shadow-sm no-print">
         <h1 class="text-2xl font-bold text-gray-700 flex items-center gap-2">
             <i class="ph ph-calendar-heart text-pink-500 text-3xl"></i>
             나만의 다이어리 메이커
@@ -145,7 +220,7 @@
     <!-- The Printable Area -->
     <div id="capture-area" class="w-full max-w-5xl">
         <div class="diary-paper rounded-2xl p-6 md:p-10 pt-16 border-2 border-diary-line/20">
-            
+
             <!-- Springs -->
             <div class="spring-wrapper" id="springs-container">
                 <!-- Springs generated by JS -->
@@ -155,8 +230,6 @@
             <div class="flex justify-between items-end mb-6 text-diary-line px-2">
                 <div class="font-handwriting text-5xl tracking-wide flex items-center gap-2">
                     Monthly Schedule
-                    <!-- Decorative element, simulating stickers -->
-                    <span class="text-2xl ml-2"></span>
                 </div>
                 <div class="font-sans text-4xl font-bold tracking-wider" id="calendar-title">
                     2026.09
@@ -196,25 +269,25 @@
     </div>
 
     <!-- Edit Modal (Hidden by default) -->
-    <div id="edit-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div id="edit-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100">
             <div class="bg-pink-100 p-4 border-b border-pink-200 flex justify-between items-center">
                 <h3 class="font-bold text-xl text-gray-800 flex items-center gap-2">
                     <i class="ph-fill ph-pencil-simple text-pink-500"></i>
-                    <span id="modal-date-title">2026년 9월 1일</span> 일정
+                    <span id="modal-date-title"></span> 일정
                 </h3>
                 <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 transition-colors">
                     <i class="ph ph-x text-2xl"></i>
                 </button>
             </div>
-            
+
             <div class="p-6 space-y-5">
                 <!-- Text Input -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">일정 내용</label>
                     <textarea id="modal-text" rows="3" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300 font-handwriting text-xl resize-none" placeholder="일정을 적어주세요! (예: 20:00 합방!)"></textarea>
                 </div>
-                
+
                 <!-- Color Picker -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">글자 색상</label>
@@ -233,7 +306,7 @@
                             <span class="text-sm text-gray-500">이미지 선택</span>
                             <input type="file" id="modal-image-upload" class="hidden" accept="image/*" onchange="handleImagePreview(event)">
                         </label>
-                        
+
                         <!-- Preview container -->
                         <div id="modal-image-preview-container" class="hidden relative w-20 h-20 border border-gray-200 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
                             <img id="modal-image-preview" src="" alt="preview" class="max-w-full max-h-full object-contain">
@@ -244,7 +317,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="p-4 bg-gray-50 flex justify-end gap-2 border-t border-gray-100">
                 <button onclick="closeModal()" class="px-4 py-2 rounded-lg font-bold text-gray-600 hover:bg-gray-200 transition-colors">취소</button>
                 <button onclick="saveDayData()" class="px-6 py-2 rounded-lg font-bold text-white bg-pink-500 hover:bg-pink-600 shadow-md transition-colors">저장하기</button>
@@ -255,9 +328,7 @@
     <script>
         // State
         let currentDate = new Date();
-        // Set initial date to match user's reference image if desired, or use current real date.
-        // Let's use the current date for a general tool.
-        
+
         // Data Store: Key = "YYYY-MM-DD", Value = { text: string, color: string, image: dataURL }
         let calendarData = {};
         let editingDateStr = null;
@@ -267,12 +338,6 @@
         function init() {
             generateSprings();
             renderCalendar();
-            
-            // Load global memo if exists in memory (optional, but good practice if we expand)
-            const globalMemoEl = document.getElementById('global-memo');
-            globalMemoEl.addEventListener('input', function() {
-                // Keep it in sync if needed later
-            });
         }
 
         // Generate the visual springs at the top
@@ -291,7 +356,7 @@
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
-            
+
             // Update Title
             const titleStr = `${year}.${String(month + 1).padStart(2, '0')}`;
             document.getElementById('calendar-title').textContent = titleStr;
@@ -299,12 +364,12 @@
             const firstDayIndex = new Date(year, month, 1).getDay();
             const lastDay = new Date(year, month + 1, 0).getDate();
             const prevLastDay = new Date(year, month, 0).getDate();
-            
+
             const daysContainer = document.getElementById('calendar-days');
             daysContainer.innerHTML = '';
 
             let daysHtml = '';
-            
+
             // Calculate total cells needed (rows * 7 cols). Usually 5 or 6 rows.
             const totalCells = Math.ceil((firstDayIndex + lastDay) / 7) * 7;
 
@@ -312,7 +377,7 @@
                 let dayNumber;
                 let isCurrentMonth = true;
                 let dateStr = '';
-                
+
                 // Prev month days
                 if (i <= firstDayIndex) {
                     dayNumber = prevLastDay - firstDayIndex + i;
@@ -331,7 +396,7 @@
 
                 // Determine column index (0=Sun, 6=Sat)
                 const colIndex = (i - 1) % 7;
-                
+
                 // Styling based on day type
                 let textClass = 'text-gray-400 text-sm'; // Default for non-current month
                 if (isCurrentMonth) {
@@ -340,7 +405,6 @@
                     else textClass = 'text-diary-text font-bold'; // Weekday
                 }
 
-                // Cell styling - html2canvas 오류 방지를 위해 복잡한 flex 클래스 제거
                 let cellClasses = 'calendar-cell p-1.5 cursor-pointer hover:bg-pink-50 group';
                 // 마지막 줄 확인
                 if (i > totalCells - 7) {
@@ -349,7 +413,7 @@
 
                 // Get data for this day if it exists
                 const dayData = calendarData[dateStr] || { text: '', color: '#333333', image: null };
-                
+
                 // Format text with line breaks for HTML
                 const formattedText = dayData.text ? dayData.text.replace(/\n/g, '<br>') : '';
 
@@ -359,10 +423,10 @@
                         <div class="${cellClasses}" onclick="openModal('${dateStr}')" data-date="${dateStr}">
                             <div class="${textClass} text-lg font-sans ml-1">${dayNumber}</div>
                             
-                            <!-- Content Area (Text & Image) - html2canvas 버그 해결을 위해 flex 대신 block 요소 사용 -->
-                            <div class="w-full mt-1 pointer-events-none text-center">
-                                ${dayData.image ? `<img src="${dayData.image}" style="max-width: 95%; max-height: 100px; display: inline-block; margin-bottom: 2px; object-fit: contain;">` : ''}
-                                ${formattedText ? `<div class="text-base font-handwriting leading-tight break-words" style="color: ${dayData.color};">${formattedText}</div>` : ''}
+                            <!-- Content Area (Text & Image) - 블록 레이아웃 적용으로 html2canvas 글자 잘림/겹침 버그 완벽 해결 -->
+                            <div class="w-full mt-1 pointer-events-none text-center" style="display: block;">
+                                ${dayData.image ? `<div style="display: block; width: 100%; text-align: center; margin-bottom: 2px;"><img src="${dayData.image}" style="max-width: 90%; max-height: 80px; object-fit: contain; display: inline-block;"></div>` : ''}
+                                ${formattedText ? `<div style="display: block; width: 100%; text-align: center; color: ${dayData.color};" class="text-base font-handwriting leading-tight break-words">${formattedText}</div>` : ''}
                             </div>
                             
                             <!-- Hover indicator -->
@@ -380,8 +444,12 @@
                     `;
                 }
             }
-            
+
             daysContainer.innerHTML = daysHtml;
+            
+            // 캡처 시 완벽한 세로 비율 분배를 위해 행 개수(row-count) 동적 설정
+            const rowCount = totalCells / 7;
+            daysContainer.style.setProperty('--row-count', rowCount);
         }
 
         // Navigation
@@ -396,23 +464,23 @@
         }
 
         // --- Modal & Data Logic ---
-        
+
         function openModal(dateStr) {
             editingDateStr = dateStr;
             const data = calendarData[dateStr] || { text: '', color: '#333333', image: null };
-            
+
             // Format title: "2026년 9월 15일"
             const [y, m, d] = dateStr.split('-');
             document.getElementById('modal-date-title').textContent = `${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
-            
+
             // Populate inputs
             document.getElementById('modal-text').value = data.text;
             document.getElementById('modal-color').value = data.color;
-            
+
             // Handle image preview
             pendingImageDataUrl = data.image;
             updateImagePreviewUI();
-            
+
             // Show modal
             document.getElementById('edit-modal').classList.remove('hidden');
             setTimeout(() => {
@@ -451,7 +519,7 @@
                             height = MAX_SIZE;
                         }
                     }
-                    
+
                     canvas.width = width;
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
@@ -478,7 +546,7 @@
         function updateImagePreviewUI() {
             const previewContainer = document.getElementById('modal-image-preview-container');
             const previewImg = document.getElementById('modal-image-preview');
-            
+
             if (pendingImageDataUrl) {
                 previewImg.src = pendingImageDataUrl;
                 previewContainer.classList.remove('hidden');
@@ -490,72 +558,83 @@
 
         function saveDayData() {
             if (!editingDateStr) return;
-            
+
             const text = document.getElementById('modal-text').value.trim();
             const color = document.getElementById('modal-color').value;
-            
+
             // Save to state
             calendarData[editingDateStr] = {
                 text: text,
                 color: color,
                 image: pendingImageDataUrl
             };
-            
+
             // Clean up empty entries to save memory (optional)
             if (!text && !pendingImageDataUrl) {
                 delete calendarData[editingDateStr];
             }
-            
+
             closeModal();
             renderCalendar(); // Re-render to show changes
         }
 
         // --- Export to PNG Logic ---
-        
+
         async function downloadCalendar() {
             const captureArea = document.getElementById('capture-area');
             const textarea = document.getElementById('global-memo');
             const renderDiv = document.getElementById('global-memo-render');
             const originalBtnHtml = document.querySelector('button[onclick="downloadCalendar()"]').innerHTML;
             const btn = document.querySelector('button[onclick="downloadCalendar()"]');
-            
+
             try {
                 // UI feedback
                 btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin text-xl"></i> 저장 중...';
                 btn.disabled = true;
 
-                // Pre-process for capture
-                document.body.classList.add('is-printing');
-                
-                // Swap textarea with a div to ensure text renders perfectly in canvas
+                // 1. 메모장 텍스트 렌더링용 div로 치환
                 renderDiv.textContent = textarea.value || textarea.placeholder;
                 if(!textarea.value) renderDiv.classList.add('text-pink-300'); // placeholder color
                 else renderDiv.classList.remove('text-pink-300');
-                
+
                 textarea.style.display = 'none';
                 renderDiv.classList.remove('hidden');
 
-                // Wait a tiny bit for UI to settle
-                await new Promise(r => setTimeout(r, 100));
+                // 2. 1980x720 캡처 모드 강제 활성화
+                document.body.classList.add('is-printing');
+                captureArea.classList.add('capture-active');
 
-                // Capture
+                // 브라우저가 CSS 변경 사항을 완벽히 렌더링할 수 있도록 충분히 대기
+                await new Promise(r => setTimeout(r, 300));
+
+                // 3. html2canvas로 정확하게 캡처
                 const canvas = await html2canvas(captureArea, {
-                    scale: 2, // High resolution
-                    backgroundColor: '#e5e7eb', // Match body bg so rounded corners look good
+                    width: 1980,
+                    height: 720,
+                    scale: 1, // 정확히 1980x720 픽셀 출력을 위해 1배율 고정
+                    backgroundColor: '#e5e7eb', 
                     logging: false,
-                    useCORS: true // Attempt to load external images if any
+                    useCORS: true 
                 });
 
-                // Create download link
-                const image = canvas.toDataURL("image/png");
+                // 4. 안전을 위해 1980x720 빈 캔버스에 한 번 더 정확하게 복사 (잘림 방지)
+                const finalCanvas = document.createElement('canvas');
+                finalCanvas.width = 1980;
+                finalCanvas.height = 720;
+                const ctx = finalCanvas.getContext('2d');
+                ctx.fillStyle = "#e5e7eb";
+                ctx.fillRect(0, 0, 1980, 720);
+                ctx.drawImage(canvas, 0, 0, 1980, 720);
+
+                // 5. 다운로드 실행
+                const image = finalCanvas.toDataURL("image/png");
                 const link = document.createElement('a');
-                
-                // Filename based on current viewed month
+
                 const titleStr = document.getElementById('calendar-title').textContent.replace('.', '_');
-                link.download = `다이어리_${titleStr}.png`;
+                link.download = `다이어리_${titleStr}_1980x720.png`;
                 link.href = image;
                 link.click();
-                
+
             } catch (error) {
                 console.error("Capture failed:", error);
                 alert("이미지 저장 중 오류가 발생했습니다.");
@@ -564,7 +643,8 @@
                 textarea.style.display = 'block';
                 renderDiv.classList.add('hidden');
                 document.body.classList.remove('is-printing');
-                
+                captureArea.classList.remove('capture-active');
+
                 btn.innerHTML = originalBtnHtml;
                 btn.disabled = false;
             }
