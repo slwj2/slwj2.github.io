@@ -66,6 +66,7 @@
             border-right: 1px solid rgba(169, 68, 66, 0.2);
             box-sizing: border-box; 
             min-height: 100px;
+            height: auto; /* 내용이 많으면 자연스럽게 늘어나게 설정 */
             position: relative;
             background-color: white;
             transition: background-color 0.2s;
@@ -122,14 +123,14 @@
         }
         #hidden-capture-container .diary-paper {
             width: 1400px !important; 
-            height: 1229px !important; 
+            height: 1229px !important; /* 위아래 40px 패딩 고려하여 정확한 높이 지정 */
             display: flex !important;
             flex-direction: column !important;
             flex: none !important;
             margin: 0 !important; 
             padding: 60px 50px 50px 50px !important;
             border-radius: 24px !important; 
-            border: 2px solid #EDD9D9 !important; 
+            border: 2px solid #EDD9D9 !important; /* 헥스코드 강제 변환 */
             background-color: #FAF8F5 !important;
             box-shadow: none !important; 
         }
@@ -176,31 +177,32 @@
         #hidden-capture-container .calendar-cell {
             border-bottom: 1px solid #EDD9D9 !important; 
             border-right: 1px solid #EDD9D9 !important; 
-            padding: 16px !important;
+            padding: 8px !important; /* 여백을 좁혀 글자 들어갈 공간 확보 */
             height: 100% !important;
             display: flex !important; 
             flex-direction: column !important;
             background-color: white !important;
+            overflow: hidden !important; /* 자동 크기 조절 로직을 위한 숨김 처리 */
         }
         
         #hidden-capture-container .day-number {
-            font-size: 32px !important;
-            margin-bottom: 8px !important;
+            font-size: 26px !important;
+            margin-bottom: 2px !important;
             font-weight: 700 !important;
         }
         
-        /* 캡처 시 내부 콘텐츠 레이아웃 버그 수정 */
+        /* 캡처 시 내부 콘텐츠 레이아웃 버그 및 잘림 수정 */
         #hidden-capture-container .day-content {
-            gap: 8px !important;
+            gap: 2px !important;
             flex: 1 !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
             justify-content: flex-start !important;
-            overflow: visible !important; /* 강제 잘림 방지 */
+            overflow: visible !important; 
         }
         #hidden-capture-container .day-img { 
-            max-height: 90px !important; /* 이미지가 너무 커서 글자를 밀어내지 않도록 조정 */
+            max-height: 85px !important; 
             max-width: 95% !important;
             width: auto !important;
             height: auto !important;
@@ -208,13 +210,15 @@
             display: block !important;
         }
         #hidden-capture-container .schedule-text { 
-            font-size: 32px !important; /* 다중 줄 바꿈 시 잘리지 않도록 32px로 조정 (요청 반영) */
-            line-height: 1.3 !important; 
+            /* 기본 사이즈를 32px로 주되, JS에서 넘치면 자동으로 줄입니다 */
+            font-size: 32px !important; 
+            line-height: 1.1 !important; 
             width: 100% !important;
             text-align: center !important;
             font-family: 'Nanum Pen Script', cursive !important; 
-            display: block !important; /* html2canvas 줄바꿈 버그 해결의 핵심 */
-            word-break: keep-all !important;
+            display: block !important; 
+            word-break: break-all !important; /* 강제 줄바꿈으로 가로 넘침 방지 */
+            white-space: pre-wrap !important;
         }
         
         #hidden-capture-container .desktop-memo { 
@@ -550,19 +554,20 @@
                     else textClass = 'text-diary-text font-bold'; 
                 }
 
-                let cellClasses = 'calendar-cell p-1 cursor-pointer hover:bg-pink-50 group flex flex-col';
+                let cellClasses = 'calendar-cell p-1.5 cursor-pointer hover:bg-pink-50 group flex flex-col';
                 if (i > totalCells - 7) cellClasses += ' last-row';
 
                 const dayData = calendarData[dateStr] || { text: '', color: '#333333', image: null };
                 const formattedText = dayData.text ? dayData.text.replace(/\n/g, '<br>') : '';
 
+                // 웹사이트 화면에서는 높이 제한을 없애서 자유롭게 반응형으로 늘어나게 합니다. (overflow-hidden 제거)
                 if (isCurrentMonth) {
                     daysHtml += `
                         <div class="${cellClasses}" onclick="openModal('${dateStr}')">
                             <div class="${textClass} text-sm md:text-lg font-sans ml-1 day-number">${dayNumber}</div>
-                            <div class="w-full mt-1 flex-1 flex flex-col items-center justify-start gap-1 pointer-events-none day-content overflow-hidden">
+                            <div class="w-full mt-1 flex-1 flex flex-col items-center justify-start gap-1 pointer-events-none day-content">
                                 ${dayData.image ? `<img src="${dayData.image}" class="day-img max-w-[95%] max-h-[60px] md:max-h-[80px] object-contain">` : ''}
-                                ${formattedText ? `<div style="color: ${dayData.color};" class="font-handwriting text-base md:text-xl leading-tight break-words text-center w-full schedule-text">${formattedText}</div>` : ''}
+                                ${formattedText ? `<div style="color: ${dayData.color};" class="font-handwriting text-lg md:text-2xl leading-tight break-all text-center w-full schedule-text">${formattedText}</div>` : ''}
                             </div>
                         </div>
                     `;
@@ -685,6 +690,7 @@
             
             try {
                 await document.fonts.ready;
+                // 숨겨진 컨테이너를 브라우저 렌더링 트리에 포함시켜 높이 측정이 가능하게 만듦
                 hiddenContainer.style.display = 'flex';
 
                 const clone = liveArea.cloneNode(true);
@@ -710,7 +716,27 @@
                 hiddenContainer.innerHTML = '';
                 hiddenContainer.appendChild(clone);
 
-                await new Promise(r => setTimeout(r, 600));
+                // 브라우저가 화면을 계산할 약간의 시간을 줌
+                await new Promise(r => setTimeout(r, 100));
+
+                // 핵심: 캡처 전 텍스트 반응형 자동 스케일링 (Auto-Scaling)
+                // 내용이 넘치면 글자 크기를 부드럽게 줄여서 잘림을 방지합니다.
+                const cloneCells = clone.querySelectorAll('.calendar-cell');
+                cloneCells.forEach(cell => {
+                    const textEl = cell.querySelector('.schedule-text');
+                    if (textEl) {
+                        let size = 32;
+                        textEl.style.setProperty('font-size', size + 'px', 'important');
+                        
+                        // 내용 전체 높이(scrollHeight)가 칸 높이(clientHeight)를 넘어가면 축소 시작
+                        while (cell.scrollHeight > cell.clientHeight && size > 14) {
+                            size -= 1;
+                            textEl.style.setProperty('font-size', size + 'px', 'important');
+                        }
+                    }
+                });
+
+                await new Promise(r => setTimeout(r, 100)); // 스케일링 후 안정화 대기
 
                 const canvas = await html2canvas(hiddenContainer, {
                     width: 1480,
