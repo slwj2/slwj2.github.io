@@ -3750,11 +3750,8 @@
                     캡처용 스타일
                 */
 
-                clone.style.width =
-                    '1400px';
-
-                clone.style.height =
-                    '1229px';
+                clone.style.width = '1400px';
+                clone.style.height = '1229px';
 
                 clone.style.margin =
                     '0';
@@ -3805,6 +3802,27 @@
                     clone.querySelector(
                         '.desktop-memo'
                     );
+/*
+    캡처용 .memo-title 배경 투명 처리
+*/
+
+                const memoTitle =
+                    clone.querySelector(
+                        '.memo-title'
+                    );
+
+               if (
+                    memoTitle
+               ) {
+
+                    memoTitle.style.background =
+                        'transparent';
+
+                    memoTitle.style.backgroundColor =
+                        'transparent';
+
+               }
+
 
                 if (
                     memo
@@ -3846,40 +3864,17 @@
                     html2canvas
                 */
 
-                const canvas =
-                    await html2canvas(
-                        hiddenContainer,
-                        {
-
-                            width:
-                                1480,
-
-                            height:
-                                1309,
-
-                            windowWidth:
-                                1480,
-
-                            windowHeight:
-                                1309,
-
-                            scale:
-                                1,
-
-                            backgroundColor:
-                                null,
-
-                            useCORS:
-                                true,
-
-                            allowTaint:
-                                false,
-
-                            logging:
-                                false
-
-                        }
-                    );
+                const canvas = await html2canvas(hiddenContainer, {
+    width: 1400,
+    height: 1229,
+    windowWidth: 1400,
+    windowHeight: 1229,
+    scale: 1,
+    backgroundColor: null,
+    useCORS: true,
+    allowTaint: false,
+    logging: false
+});
 
                 const image =
                     canvas.toDataURL(
