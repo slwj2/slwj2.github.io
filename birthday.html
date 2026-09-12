@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>생일 축하합니다 🎂</title>
 
     <style>
@@ -13,149 +13,87 @@
 
         html,
         body {
+            margin: 0;
             width: 100%;
             height: 100%;
-            margin: 0;
             overflow: hidden;
-            background: #090b16;
             font-family:
                 Pretendard,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
+                "Noto Sans KR",
+                Arial,
                 sans-serif;
+            background: #080b14;
+            color: #ffffff;
         }
 
         body {
             display: flex;
-            justify-content: center;
             align-items: center;
-            color: white;
-        }
-
-        #app {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
+            justify-content: center;
         }
 
         canvas {
-            position: absolute;
+            position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
             display: block;
         }
 
-        #setup {
-            position: absolute;
-            inset: 0;
+        .setup {
+            position: relative;
             z-index: 10;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            padding: 24px;
-
-            background:
-                radial-gradient(
-                    circle at 50% 20%,
-                    rgba(255, 105, 180, 0.15),
-                    transparent 35%
-                ),
-                #090b16;
-
-            transition:
-                opacity 0.7s ease,
-                transform 0.7s ease;
-        }
-
-        #setup.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(1.08);
-        }
-
-        .panel {
-            width: min(520px, 100%);
-            padding: 34px;
-
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: min(92vw, 520px);
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 28px;
-
-            background: rgba(20, 23, 40, 0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-
+            background: rgba(18, 22, 36, 0.92);
+            backdrop-filter: blur(18px);
             box-shadow:
-                0 30px 80px rgba(0, 0, 0, 0.45),
+                0 25px 80px rgba(0, 0, 0, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
 
-        .title {
-            margin: 0;
+        .setup.hidden {
+            display: none;
+        }
+
+        h1 {
+            margin: 0 0 8px;
             text-align: center;
-            font-size: clamp(30px, 7vw, 46px);
-            font-weight: 900;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #ff8fb3,
-                    #ffd3df,
-                    #ffffff
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 32px;
         }
 
         .subtitle {
-            margin: 10px 0 30px;
+            margin-bottom: 26px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.58);
+            color: #aeb6ca;
             font-size: 14px;
         }
 
-        .field {
-            margin-bottom: 22px;
-        }
-
-        .field-label {
+        label {
             display: block;
-            margin-bottom: 9px;
-            color: rgba(255, 255, 255, 0.8);
+            margin: 17px 0 8px;
+            color: #cbd2e3;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
-        input[type="text"],
-        input[type="number"] {
+        input {
             width: 100%;
-            height: 52px;
-            padding: 0 16px;
-
+            height: 48px;
+            padding: 0 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 14px;
-
             outline: none;
-
-            background: rgba(255, 255, 255, 0.06);
-            color: white;
-
+            background: #111626;
+            color: #fff;
             font-size: 16px;
-
-            transition:
-                border-color 0.2s,
-                background 0.2s;
         }
 
         input:focus {
-            border-color: rgba(255, 143, 179, 0.7);
-            background: rgba(255, 255, 255, 0.09);
+            border-color: #ff8fba;
+            box-shadow: 0 0 0 3px rgba(255, 143, 186, 0.1);
         }
 
         .cakes {
@@ -165,230 +103,116 @@
         }
 
         .cake {
-            min-height: 82px;
-
-            border: 1px solid rgba(255, 255, 255, 0.09);
+            min-height: 72px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 15px;
-
-            background: rgba(255, 255, 255, 0.04);
-            color: white;
-
+            background: #111626;
+            color: #dce1ef;
             cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s ease;
+        }
 
-            transition:
-                transform 0.2s ease,
-                border-color 0.2s ease,
-                background 0.2s ease;
+        .cake span {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 25px;
         }
 
         .cake:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+            background: #191e31;
         }
 
         .cake.selected {
-            border-color: #ff8fb3;
-            background: rgba(255, 143, 179, 0.14);
-            box-shadow:
-                0 0 25px rgba(255, 143, 179, 0.15);
+            border-color: #ff8fb9;
+            background: rgba(255, 143, 185, 0.13);
+            box-shadow: 0 0 20px rgba(255, 143, 185, 0.1);
         }
 
-        .cake-icon {
-            display: block;
-            font-size: 27px;
-            margin-bottom: 6px;
-        }
-
-        .cake-name {
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .age-info {
-            margin-top: 9px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.42);
-        }
-
-        #startButton {
+        .start {
             width: 100%;
-            height: 58px;
-            margin-top: 8px;
-
+            height: 52px;
+            margin-top: 25px;
             border: 0;
-            border-radius: 17px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #ff6f9f,
-                    #ff9fbd
-                );
-
-            color: white;
-
-            font-size: 17px;
-            font-weight: 900;
-
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ff79ae, #b978ff);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
-
-            box-shadow:
-                0 10px 30px rgba(255, 111, 159, 0.25);
-
-            transition:
-                transform 0.2s ease,
-                filter 0.2s ease;
+            box-shadow: 0 10px 30px rgba(220, 100, 180, 0.25);
+            transition: 0.2s ease;
         }
 
-        #startButton:hover {
+        .start:hover {
             transform: translateY(-2px);
             filter: brightness(1.08);
         }
 
-        #startButton:active {
-            transform: scale(0.98);
-        }
-
-        #hint {
-            margin-top: 14px;
-            text-align: center;
-            min-height: 18px;
-
-            color: #ff9fbd;
-            font-size: 12px;
-        }
-
-        #birthdayUI {
-            position: absolute;
-            inset: 0;
+        .scene-ui {
+            position: fixed;
             z-index: 5;
-
+            inset: 0;
             pointer-events: none;
         }
 
-        #birthdayText {
+        .birthday-title {
             position: absolute;
             top: 7%;
-
             width: 100%;
-            padding: 0 20px;
-
             text-align: center;
-
-            font-size: clamp(30px, 7vw, 72px);
+            font-size: clamp(28px, 6vw, 62px);
             font-weight: 900;
-
-            color: white;
-
+            letter-spacing: -2px;
             text-shadow:
-                0 4px 30px rgba(255, 111, 159, 0.45);
-
-            opacity: 0;
-            transform: translateY(-20px);
-
-            transition:
-                opacity 1s ease,
-                transform 1s ease;
+                0 0 10px rgba(255, 255, 255, 0.4),
+                0 0 30px rgba(255, 130, 190, 0.35);
         }
 
-        #birthdayText.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #subText {
+        .birthday-subtitle {
             position: absolute;
-            top: calc(7% + clamp(48px, 9vw, 85px));
-
+            top: calc(7% + clamp(40px, 7vw, 75px));
             width: 100%;
-            padding: 0 20px;
-
             text-align: center;
-
-            color: rgba(255, 255, 255, 0.72);
-            font-size: clamp(13px, 3vw, 20px);
-
-            opacity: 0;
-            transition: opacity 1.2s ease 0.3s;
+            color: #cbd1df;
+            font-size: 14px;
         }
 
-        #subText.show {
-            opacity: 1;
-        }
-
-        #musicButton {
-            position: absolute;
+        .music-button {
+            position: fixed;
+            z-index: 20;
             right: 18px;
-            bottom: 18px;
-
-            width: 46px;
-            height: 46px;
-
-            border: 1px solid rgba(255, 255, 255, 0.13);
+            top: 18px;
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 50%;
-
-            background: rgba(20, 23, 40, 0.75);
-            color: white;
-
-            font-size: 18px;
-
-            pointer-events: auto;
+            background: rgba(20, 24, 40, 0.75);
+            color: #fff;
             cursor: pointer;
-
             backdrop-filter: blur(10px);
+            pointer-events: auto;
         }
 
-        #finish {
-            position: absolute;
-            inset: 0;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            pointer-events: none;
-            opacity: 0;
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(255, 143, 179, 0.08),
-                    transparent 60%
-                );
-
-            transition: opacity 1s ease;
-        }
-
-        #finish.show {
-            opacity: 1;
-        }
-
-        #finishMessage {
-            margin-top: 40vh;
-
+        .hint {
+            position: fixed;
+            z-index: 5;
+            bottom: 5%;
+            width: 100%;
             text-align: center;
-
-            font-size: clamp(24px, 6vw, 54px);
-            font-weight: 900;
-
-            color: white;
-
-            text-shadow:
-                0 0 35px rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+            pointer-events: none;
         }
 
         @media (max-width: 500px) {
-            .panel {
-                padding: 25px 20px;
-                border-radius: 23px;
+            .setup {
+                padding: 23px;
             }
 
             .cakes {
-                gap: 6px;
-            }
-
-            .cake {
-                min-height: 74px;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -396,1886 +220,2183 @@
 
 <body>
 
-<div id="app">
-
     <canvas id="canvas"></canvas>
 
-    <section id="setup">
+    <div class="setup" id="setup">
+        <h1>🎂 생일 축하하기</h1>
 
-        <div class="panel">
+        <div class="subtitle">
+            이름과 케이크를 선택하고 생일을 시작해보세요.
+        </div>
 
-            <h1 class="title">🎂 생일 축하합니다</h1>
+        <label for="name">이름</label>
+        <input
+            id="name"
+            type="text"
+            maxlength="20"
+            placeholder="예: 홍길동"
+        >
 
-            <p class="subtitle">
-                오늘의 주인공을 위한 특별한 생일 케이크
-            </p>
+        <label>케이크</label>
 
-            <div class="field">
-
-                <label class="field-label">
-                    이름
-                </label>
-
-                <input
-                    id="nameInput"
-                    type="text"
-                    maxlength="20"
-                    placeholder="이름을 입력해주세요"
-                    autocomplete="off"
-                >
-
-            </div>
-
-            <div class="field">
-
-                <label class="field-label">
-                    케이크 선택
-                </label>
-
-                <div class="cakes">
-
-                    <button
-                        class="cake selected"
-                        data-cake="strawberry"
-                    >
-                        <span class="cake-icon">🍓</span>
-                        <span class="cake-name">딸기</span>
-                    </button>
-
-                    <button
-                        class="cake"
-                        data-cake="cream"
-                    >
-                        <span class="cake-icon">🤍</span>
-                        <span class="cake-name">생크림</span>
-                    </button>
-
-                    <button
-                        class="cake"
-                        data-cake="chocolate"
-                    >
-                        <span class="cake-icon">🍫</span>
-                        <span class="cake-name">초콜릿</span>
-                    </button>
-
-                    <button
-                        class="cake"
-                        data-cake="cheese"
-                    >
-                        <span class="cake-icon">🧀</span>
-                        <span class="cake-name">치즈</span>
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="field">
-
-                <label class="field-label">
-                    나이 / 초 개수
-                </label>
-
-                <input
-                    id="ageInput"
-                    type="number"
-                    min="1"
-                    max="100"
-                    value="20"
-                    inputmode="numeric"
-                >
-
-                <div class="age-info">
-                    긴 초 1개 = 10살 · 짧은 초 1개 = 1살
-                </div>
-
-            </div>
-
-            <button id="startButton">
-                🎉 생일 축하 시작하기
+        <div class="cakes">
+            <button class="cake selected" data-cake="strawberry">
+                <span>🍓</span>
+                딸기
             </button>
 
-            <div id="hint"></div>
+            <button class="cake" data-cake="cream">
+                <span>🍰</span>
+                생크림
+            </button>
 
+            <button class="cake" data-cake="chocolate">
+                <span>🍫</span>
+                초콜릿
+            </button>
+
+            <button class="cake" data-cake="cheese">
+                <span>🧀</span>
+                치즈
+            </button>
         </div>
 
-    </section>
+        <label for="age">
+            나이 / 초 개수
+        </label>
 
-    <section id="birthdayUI">
+        <input
+            id="age"
+            type="number"
+            min="1"
+            max="100"
+            value="10"
+            placeholder="나이를 입력하세요"
+        >
 
-        <div id="birthdayText">
-            생일 축하합니다!
-        </div>
-
-        <div id="subText">
-            초를 하나씩 클릭해서 꺼주세요 🕯️
-        </div>
-
-        <button id="musicButton">
-            🔊
+        <button class="start" id="startButton">
+            🎉 생일 시작하기
         </button>
+    </div>
 
-    </section>
+    <div class="scene-ui" id="sceneUI" style="display:none;">
+        <div class="birthday-title" id="birthdayTitle"></div>
 
-    <section id="finish">
-
-        <div id="finishMessage">
-            ✨ 오늘도 행복한 하루 보내세요! ✨
+        <div class="birthday-subtitle">
+            촛불을 클릭해서 꺼주세요 🕯️
         </div>
 
-    </section>
+        <div class="hint">
+            ✨ 촛불을 모두 끄면 축하가 시작됩니다 ✨
+        </div>
+    </div>
 
-</div>
+    <button
+        class="music-button"
+        id="musicButton"
+        style="display:none;"
+    >
+        🔊
+    </button>
 
+    <script>
+        "use strict";
 
-<script>
-"use strict";
+        /* ============================================================
+           Canvas 기본 설정
+        ============================================================ */
 
-/* =========================================================
-   기본 Canvas 설정
-   ========================================================= */
+        const canvas = document.getElementById("canvas");
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d", {
-    alpha: false,
-    desynchronized: true
-});
-
-let width = 0;
-let height = 0;
-let dpr = 1;
-
-
-/* =========================================================
-   화면 크기 조절
-   ========================================================= */
-
-function resizeCanvas() {
-
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    width = window.innerWidth;
-    height = window.innerHeight;
-
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
-}
-
-window.addEventListener("resize", resizeCanvas);
-
-resizeCanvas();
-
-
-/* =========================================================
-   DOM
-   ========================================================= */
-
-const setup = document.getElementById("setup");
-const nameInput = document.getElementById("nameInput");
-const ageInput = document.getElementById("ageInput");
-const startButton = document.getElementById("startButton");
-const hint = document.getElementById("hint");
-
-const birthdayText = document.getElementById("birthdayText");
-const subText = document.getElementById("subText");
-
-const finish = document.getElementById("finish");
-const musicButton = document.getElementById("musicButton");
-
-const cakeButtons =
-    document.querySelectorAll(".cake");
-
-
-/* =========================================================
-   상태
-   ========================================================= */
-
-let selectedCake = "strawberry";
-
-let playerName = "";
-
-let age = 20;
-
-let candles = [];
-
-let particles = [];
-
-let confetti = [];
-
-let started = false;
-
-let allExtinguished = false;
-
-
-/* =========================================================
-   케이크 선택
-   ========================================================= */
-
-cakeButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        cakeButtons.forEach(item => {
-            item.classList.remove("selected");
+        const ctx = canvas.getContext("2d", {
+            alpha: false,
+            desynchronized: true
         });
 
-        button.classList.add("selected");
+        let width = 0;
+        let height = 0;
+        let dpr = 1;
 
-        selectedCake =
-            button.dataset.cake;
-    });
-});
+        function resizeCanvas() {
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
 
+            width = window.innerWidth;
+            height = window.innerHeight;
 
-/* =========================================================
-   나이를 긴 초 + 짧은 초로 변환
-   ========================================================= */
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
 
-function createCandles(value) {
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
 
-    const longCount =
-        Math.floor(value / 10);
-
-    const shortCount =
-        value % 10;
-
-    const result = [];
-
-    for (let i = 0; i < longCount; i++) {
-
-        result.push({
-            long: true,
-            extinguished: false,
-            flame: Math.random() * Math.PI * 2,
-            flicker: Math.random() * 100
-        });
-    }
-
-    for (let i = 0; i < shortCount; i++) {
-
-        result.push({
-            long: false,
-            extinguished: false,
-            flame: Math.random() * Math.PI * 2,
-            flicker: Math.random() * 100
-        });
-    }
-
-    return result;
-}
-
-
-/* =========================================================
-   케이크 색상
-   ========================================================= */
-
-function getCakeColors() {
-
-    switch (selectedCake) {
-
-        case "cream":
-            return {
-                top: "#fff5f5",
-                middle: "#fffafa",
-                bottom: "#f0d8d8",
-                decoration: "#ffb8c8"
-            };
-
-        case "chocolate":
-            return {
-                top: "#7a4028",
-                middle: "#63321f",
-                bottom: "#472217",
-                decoration: "#d99061"
-            };
-
-        case "cheese":
-            return {
-                top: "#ffd86b",
-                middle: "#f4bd45",
-                bottom: "#d99a2e",
-                decoration: "#fff0a8"
-            };
-
-        case "strawberry":
-        default:
-            return {
-                top: "#fff0f5",
-                middle: "#ffb0c7",
-                bottom: "#ef718f",
-                decoration: "#ff557d"
-            };
-    }
-}
-
-
-/* =========================================================
-   별 그리기
-   ========================================================= */
-
-function drawStar(x, y, radius, alpha = 1) {
-
-    ctx.save();
-
-    ctx.globalAlpha = alpha;
-
-    ctx.beginPath();
-
-    for (let i = 0; i < 10; i++) {
-
-        const angle =
-            -Math.PI / 2 +
-            i * Math.PI / 5;
-
-        const r =
-            i % 2 === 0
-                ? radius
-                : radius * 0.42;
-
-        const px =
-            x + Math.cos(angle) * r;
-
-        const py =
-            y + Math.sin(angle) * r;
-
-        if (i === 0) {
-            ctx.moveTo(px, py);
-        } else {
-            ctx.lineTo(px, py);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
-    }
 
-    ctx.closePath();
+        window.addEventListener("resize", resizeCanvas);
 
-    ctx.fillStyle = "#ffffff";
+        resizeCanvas();
 
-    ctx.fill();
 
-    ctx.restore();
-}
+        /* ============================================================
+           UI
+        ============================================================ */
 
+        const setup = document.getElementById("setup");
+        const sceneUI = document.getElementById("sceneUI");
+        const birthdayTitle = document.getElementById("birthdayTitle");
 
-/* =========================================================
-   배경 별
-   ========================================================= */
+        const nameInput = document.getElementById("name");
+        const ageInput = document.getElementById("age");
 
-const stars = [];
+        const startButton = document.getElementById("startButton");
+        const musicButton = document.getElementById("musicButton");
 
-for (let i = 0; i < 80; i++) {
+        let selectedCake = "strawberry";
+        let birthdayName = "친구";
 
-    stars.push({
-        x: Math.random(),
-        y: Math.random(),
-        size: Math.random() * 2 + 0.4,
-        phase: Math.random() * Math.PI * 2
-    });
-}
+        document.querySelectorAll(".cake").forEach(button => {
+            button.addEventListener("click", () => {
 
+                document.querySelectorAll(".cake").forEach(item => {
+                    item.classList.remove("selected");
+                });
 
-/* =========================================================
-   배경
-   ========================================================= */
+                button.classList.add("selected");
 
-function drawBackground(time) {
-
-    const gradient =
-        ctx.createRadialGradient(
-            width * 0.5,
-            height * 0.38,
-            0,
-            width * 0.5,
-            height * 0.5,
-            Math.max(width, height)
-        );
-
-    gradient.addColorStop(
-        0,
-        "#171b35"
-    );
+                selectedCake = button.dataset.cake;
+            });
+        });
 
-    gradient.addColorStop(
-        0.55,
-        "#0c1021"
-    );
 
-    gradient.addColorStop(
-        1,
-        "#05060d"
-    );
+        /* ============================================================
+           케이크 / 촛불 데이터
+        ============================================================ */
 
-    ctx.fillStyle = gradient;
+        let candles = [];
 
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
+        let cakeHoles = [];
 
+        function createCandles(age) {
 
-    stars.forEach(star => {
+            candles = [];
 
-        const alpha =
-            0.25 +
-            Math.sin(
-                time * 0.001 +
-                star.phase
-            ) * 0.2;
+            const longCount = Math.floor(age / 10);
+            const shortCount = age % 10;
 
-        drawStar(
-            star.x * width,
-            star.y * height,
-            star.size,
-            alpha
-        );
-    });
-}
+            for (let i = 0; i < longCount; i++) {
+                candles.push({
+                    type: "long",
+                    blown: false,
+                    flame: Math.random() * Math.PI * 2
+                });
+            }
 
+            for (let i = 0; i < shortCount; i++) {
+                candles.push({
+                    type: "short",
+                    blown: false,
+                    flame: Math.random() * Math.PI * 2
+                });
+            }
+        }
 
-/* =========================================================
-   케이크 위치
-   ========================================================= */
 
-function getCakePosition() {
+        function createCheeseHoles() {
 
-    const cakeWidth =
-        Math.min(
-            430,
-            width * 0.72
-        );
+            cakeHoles = [];
 
-    const cakeHeight =
-        Math.min(
-            180,
-            height * 0.25
-        );
+            for (let i = 0; i < 16; i++) {
 
-    const x =
-        width / 2 -
-        cakeWidth / 2;
+                cakeHoles.push({
+                    x: Math.random(),
+                    y: Math.random(),
+                    r: 2 + Math.random() * 4
+                });
+            }
+        }
 
-    const y =
-        height * 0.62;
 
-    return {
-        x,
-        y,
-        width: cakeWidth,
-        height: cakeHeight
-    };
-}
+        createCheeseHoles();
 
 
-/* =========================================================
-   둥근 사각형
-   ========================================================= */
+        /* ============================================================
+           파티클
+        ============================================================ */
 
-function roundRect(
-    x,
-    y,
-    w,
-    h,
-    r
-) {
+        let particles = [];
 
-    ctx.beginPath();
+        let confetti = [];
 
-    ctx.roundRect(
-        x,
-        y,
-        w,
-        h,
-        r
-    );
+        function createParticle(x, y, amount = 20) {
 
-    ctx.fill();
-}
+            for (let i = 0; i < amount; i++) {
 
+                const angle = Math.random() * Math.PI * 2;
 
-/* =========================================================
-   케이크
-   ========================================================= */
+                const speed = 1 + Math.random() * 5;
 
-function drawCake() {
+                particles.push({
+                    x,
+                    y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 1,
+                    size: 1 + Math.random() * 3
+                });
+            }
+        }
 
-    const cake =
-        getCakePosition();
 
-    const colors =
-        getCakeColors();
+        function createConfetti(amount = 100) {
 
-    const x =
-        cake.x;
+            for (let i = 0; i < amount; i++) {
 
-    const y =
-        cake.y;
+                confetti.push({
+                    x: Math.random() * width,
+                    y: -Math.random() * height,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: 1 + Math.random() * 4,
+                    rotation: Math.random() * Math.PI,
+                    rotationSpeed:
+                        (Math.random() - 0.5) * 0.15,
+                    size: 4 + Math.random() * 7,
+                    life: 1
+                });
+            }
+        }
 
-    const w =
-        cake.width;
 
-    const h =
-        cake.height;
+        /* ============================================================
+           케이크 색상
+        ============================================================ */
 
+        const cakeColors = {
 
-    /* 그림자 */
+            strawberry: {
+                top: "#fff2f7",
+                bottom: "#ff91b9",
+                cream: "#fff8fb"
+            },
 
-    ctx.save();
+            cream: {
+                top: "#fff8e9",
+                bottom: "#e8d4aa",
+                cream: "#ffffff"
+            },
 
-    ctx.globalAlpha = 0.45;
+            chocolate: {
+                top: "#8a5138",
+                bottom: "#4d2418",
+                cream: "#f0d4bd"
+            },
 
-    ctx.filter = "blur(20px)";
+            cheese: {
+                top: "#ffe987",
+                bottom: "#d89b24",
+                cream: "#fff1a8"
+            }
+        };
 
-    ctx.fillStyle = "#000000";
 
-    ctx.beginPath();
+        /* ============================================================
+           케이크 위치
+        ============================================================ */
 
-    ctx.ellipse(
-        width / 2,
-        y + h + 18,
-        w * 0.48,
-        22,
-        0,
-        0,
-        Math.PI * 2
-    );
+        function getCakeData() {
 
-    ctx.fill();
+            const cakeWidth = Math.min(width * 0.68, 580);
 
-    ctx.restore();
+            const cakeHeight = Math.min(height * 0.32, 260);
 
+            const x = width / 2;
 
-    /* 아래층 */
+            const bottom = height * 0.76;
 
-    ctx.fillStyle =
-        colors.bottom;
+            return {
+                x,
+                width: cakeWidth,
+                height: cakeHeight,
+                bottom
+            };
+        }
 
-    roundRect(
-        x,
-        y + h * 0.36,
-        w,
-        h * 0.64,
-        25
-    );
 
+        /* ============================================================
+           촛불 위치 계산
+        ============================================================ */
 
-    /* 가운데층 */
+        function getCandlePositions() {
 
-    ctx.fillStyle =
-        colors.middle;
+            const cake = getCakeData();
 
-    roundRect(
-        x + w * 0.04,
-        y + h * 0.17,
-        w * 0.92,
-        h * 0.42,
-        22
-    );
+            const total = candles.length;
 
+            const positions = [];
 
-    /* 위층 */
+            const maxPerRow =
+                Math.max(
+                    5,
+                    Math.min(12, Math.ceil(Math.sqrt(total * 2)))
+                );
 
-    ctx.fillStyle =
-        colors.top;
+            for (let i = 0; i < total; i++) {
 
-    roundRect(
-        x + w * 0.08,
-        y,
-        w * 0.84,
-        h * 0.35,
-        20
-    );
+                const row = Math.floor(i / maxPerRow);
 
+                const index = i % maxPerRow;
 
-    /* 크림 장식 */
+                const rowCount = Math.min(
+                    maxPerRow,
+                    total - row * maxPerRow
+                );
 
-    ctx.fillStyle =
-        colors.decoration;
+                const spacing =
+                    cake.width * 0.72 /
+                    Math.max(rowCount - 1, 1);
 
-    for (let i = 0; i < 7; i++) {
+                const centerOffset =
+                    (rowCount - 1) * spacing / 2;
 
-        const dx =
-            x +
-            w * 0.14 +
-            i * w * 0.12;
+                positions.push({
+                    x:
+                        cake.x -
+                        centerOffset +
+                        index * spacing,
 
-        ctx.beginPath();
+                    y:
+                        cake.bottom -
+                        cake.height * 0.72 -
+                        row * 52
+                });
+            }
 
-        ctx.arc(
-            dx,
-            y + h * 0.34,
-            10,
-            0,
-            Math.PI * 2
-        );
+            return positions;
+        }
 
-        ctx.fill();
-    }
 
+        /* ============================================================
+           케이크 그리기
+        ============================================================ */
 
-    /* 딸기 장식 */
+        function drawCake() {
 
-    if (selectedCake === "strawberry") {
+            const cake = getCakeData();
 
-        for (let i = 0; i < 6; i++) {
+            const colors = cakeColors[selectedCake];
 
-            const sx =
-                x +
-                w * 0.17 +
-                (i % 3) * w * 0.33;
+            const left =
+                cake.x - cake.width / 2;
 
-            const sy =
-                y +
-                h * 0.22 +
-                Math.floor(i / 3) * h * 0.37;
+            const top =
+                cake.bottom - cake.height;
 
-            ctx.fillStyle =
-                "#ff426d";
+            /* 그림자 */
 
-            ctx.beginPath();
+            ctx.save();
 
-            ctx.arc(
-                sx,
-                sy,
-                11,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-            ctx.fillStyle =
-                "#4fc36b";
+            ctx.fillStyle = "rgba(0,0,0,0.25)";
 
             ctx.beginPath();
 
             ctx.ellipse(
-                sx,
-                sy - 10,
-                7,
-                4,
-                -0.3,
+                cake.x,
+                cake.bottom + 12,
+                cake.width * 0.46,
+                20,
+                0,
                 0,
                 Math.PI * 2
             );
 
             ctx.fill();
-        }
-    }
+
+            ctx.restore();
 
 
-    /* 초콜릿 조각 */
+            /* 케이크 본체 */
 
-    if (selectedCake === "chocolate") {
+            const gradient =
+                ctx.createLinearGradient(
+                    0,
+                    top,
+                    0,
+                    cake.bottom
+                );
 
-        ctx.fillStyle =
-            "#f0a477";
-
-        for (let i = 0; i < 5; i++) {
-
-            ctx.beginPath();
-
-            ctx.roundRect(
-                x + w * 0.16 + i * w * 0.15,
-                y + h * 0.51,
-                25,
-                10,
-                4
-            );
-
-            ctx.fill();
-        }
-    }
-
-
-    /* 치즈 구멍 */
-
-    if (selectedCake === "cheese") {
-
-        ctx.fillStyle =
-            "rgba(170, 100, 20, 0.35)";
-
-        for (let i = 0; i < 8; i++) {
-
-            ctx.beginPath();
-
-            ctx.arc(
-                x + Math.random() * w * 0.75 + w * 0.12,
-                y + h * 0.2 + Math.random() * h * 0.6,
-                5 + Math.random() * 5,
+            gradient.addColorStop(
                 0,
-                Math.PI * 2
+                colors.top
             );
 
-            ctx.fill();
-        }
-    }
-}
-
-
-/* =========================================================
-   초 배치
-   ========================================================= */
-
-function getCandlePositions() {
-
-    const cake =
-        getCakePosition();
-
-    const total =
-        candles.length;
-
-    const positions = [];
-
-    const usableWidth =
-        cake.width * 0.72;
-
-    const startX =
-        width / 2 -
-        usableWidth / 2;
-
-    for (let i = 0; i < total; i++) {
-
-        const spacing =
-            total === 1
-                ? 0
-                : usableWidth / (total - 1);
-
-        positions.push({
-            x:
-                total === 1
-                    ? width / 2
-                    : startX + spacing * i,
-
-            baseY:
-                cake.y - 3,
-
-            height:
-                candles[i].long
-                    ? 86
-                    : 50,
-
-            width:
-                candles[i].long
-                    ? 13
-                    : 10
-        });
-    }
-
-    return positions;
-}
-
-
-/* =========================================================
-   초 그리기
-   ========================================================= */
-
-function drawCandle(
-    candle,
-    position,
-    index,
-    time
-) {
-
-    const x =
-        position.x;
-
-    const bottom =
-        position.baseY;
-
-    const h =
-        position.height;
-
-    const w =
-        position.width;
-
-    const top =
-        bottom - h;
-
-
-    /* 초 몸체 */
-
-    const gradient =
-        ctx.createLinearGradient(
-            x - w / 2,
-            0,
-            x + w / 2,
-            0
-        );
-
-    gradient.addColorStop(
-        0,
-        "#f0a4bd"
-    );
-
-    gradient.addColorStop(
-        0.5,
-        "#fff0f5"
-    );
-
-    gradient.addColorStop(
-        1,
-        "#d96991"
-    );
-
-    ctx.fillStyle =
-        gradient;
-
-    ctx.beginPath();
-
-    ctx.roundRect(
-        x - w / 2,
-        top,
-        w,
-        h,
-        5
-    );
-
-    ctx.fill();
-
-
-    /* 초 무늬 */
-
-    ctx.strokeStyle =
-        "rgba(255,255,255,0.4)";
-
-    ctx.lineWidth = 2;
-
-    for (
-        let sy = top + 5;
-        sy < bottom;
-        sy += 13
-    ) {
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            x - w / 2,
-            sy
-        );
-
-        ctx.lineTo(
-            x + w / 2,
-            sy + 7
-        );
-
-        ctx.stroke();
-    }
-
-
-    /* 불꽃 */
-
-    if (!candle.extinguished) {
-
-        const flicker =
-            Math.sin(
-                time * 0.015 +
-                candle.flicker
-            );
-
-        const flameHeight =
-            17 +
-            flicker * 3;
-
-        const flameY =
-            top - 5;
-
-        ctx.save();
-
-        ctx.shadowBlur = 25;
-
-        ctx.shadowColor =
-            "#ff9f43";
-
-        const flameGradient =
-            ctx.createRadialGradient(
-                x,
-                flameY,
+            gradient.addColorStop(
                 1,
-                x,
-                flameY,
-                flameHeight
+                colors.bottom
             );
 
-        flameGradient.addColorStop(
-            0,
-            "#fff7b0"
-        );
+            ctx.fillStyle = gradient;
 
-        flameGradient.addColorStop(
-            0.45,
-            "#ffb347"
-        );
+            roundRect(
+                ctx,
+                left,
+                top + 35,
+                cake.width,
+                cake.height * 0.65,
+                22
+            );
 
-        flameGradient.addColorStop(
-            1,
-            "rgba(255,90,40,0)"
-        );
-
-        ctx.fillStyle =
-            flameGradient;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            x,
-            flameY - flameHeight
-        );
-
-        ctx.bezierCurveTo(
-            x - 10,
-            flameY - 4,
-            x - 7,
-            flameY + 4,
-            x,
-            flameY + 7
-        );
-
-        ctx.bezierCurveTo(
-            x + 7,
-            flameY + 4,
-            x + 10,
-            flameY - 4,
-            x,
-            flameY - flameHeight
-        );
-
-        ctx.fill();
-
-        ctx.restore();
+            ctx.fill();
 
 
-        /* 불꽃 중심 */
+            /* 크림 */
 
-        ctx.fillStyle =
-            "#fffbd0";
+            ctx.fillStyle = colors.cream;
 
-        ctx.beginPath();
+            ctx.beginPath();
 
-        ctx.ellipse(
-            x,
-            flameY,
-            3,
-            7,
-            0,
-            0,
-            Math.PI * 2
-        );
+            ctx.ellipse(
+                cake.x,
+                top + 35,
+                cake.width / 2,
+                32,
+                0,
+                0,
+                Math.PI * 2
+            );
 
-        ctx.fill();
-    }
-}
+            ctx.fill();
 
 
-/* =========================================================
-   파티클
-   ========================================================= */
+            /* 크림 물결 */
 
-function spawnParticles(
-    x,
-    y,
-    count = 18
-) {
+            ctx.beginPath();
 
-    for (let i = 0; i < count; i++) {
+            for (let i = 0; i <= 30; i++) {
 
-        const angle =
-            Math.random() *
-            Math.PI * 2;
+                const px =
+                    left +
+                    (cake.width / 30) * i;
 
-        const speed =
-            Math.random() * 3 + 1;
+                const py =
+                    top + 60 +
+                    Math.sin(i * 0.9) * 5;
 
-        particles.push({
+                if (i === 0) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
 
-            x,
+            ctx.lineTo(
+                left + cake.width,
+                top + 95
+            );
 
-            y,
+            ctx.lineTo(
+                left,
+                top + 95
+            );
 
-            vx:
-                Math.cos(angle) *
-                speed,
+            ctx.closePath();
 
-            vy:
-                Math.sin(angle) *
-                speed,
-
-            life: 1,
-
-            size:
-                Math.random() * 3 + 1
-        });
-    }
-}
+            ctx.fill();
 
 
-/* =========================================================
-   파티클 업데이트
-   ========================================================= */
+            /* 케이크 장식 */
 
-function updateParticles() {
+            if (selectedCake === "strawberry") {
 
-    for (
-        let i = particles.length - 1;
-        i >= 0;
-        i--
-    ) {
+                for (let i = 0; i < 6; i++) {
 
-        const p =
-            particles[i];
+                    const px =
+                        left +
+                        45 +
+                        i *
+                        ((cake.width - 90) / 5);
 
-        p.x += p.vx;
+                    const py =
+                        top + 20 +
+                        Math.sin(i * 2) * 7;
 
-        p.y += p.vy;
+                    ctx.fillStyle = "#ff527e";
 
-        p.vy += 0.04;
+                    ctx.beginPath();
 
-        p.life -= 0.025;
+                    ctx.arc(
+                        px,
+                        py,
+                        9,
+                        0,
+                        Math.PI * 2
+                    );
 
-        if (p.life <= 0) {
-            particles.splice(i, 1);
+                    ctx.fill();
+
+                    ctx.fillStyle = "#64b95c";
+
+                    ctx.beginPath();
+
+                    ctx.ellipse(
+                        px,
+                        py - 8,
+                        4,
+                        8,
+                        -0.5,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+                }
+            }
+
+
+            if (selectedCake === "chocolate") {
+
+                ctx.fillStyle =
+                    "rgba(255,255,255,0.12)";
+
+                for (let i = 0; i < 7; i++) {
+
+                    ctx.fillRect(
+                        left + 30 + i * 70,
+                        top + 75,
+                        35,
+                        5
+                    );
+                }
+            }
+
+
+            if (selectedCake === "cheese") {
+
+                for (const hole of cakeHoles) {
+
+                    const px =
+                        left +
+                        hole.x *
+                        cake.width;
+
+                    const py =
+                        top +
+                        45 +
+                        hole.y *
+                        cake.height *
+                        0.45;
+
+                    ctx.fillStyle =
+                        "rgba(130,85,10,0.28)";
+
+                    ctx.beginPath();
+
+                    ctx.arc(
+                        px,
+                        py,
+                        hole.r,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+                }
+            }
         }
-    }
-}
 
 
-/* =========================================================
-   파티클 렌더링
-   ========================================================= */
-
-function drawParticles() {
-
-    particles.forEach(p => {
-
-        ctx.globalAlpha =
-            Math.max(0, p.life);
-
-        ctx.fillStyle =
-            "#ffd7e4";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            p.x,
-            p.y,
-            p.size,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-    });
-
-    ctx.globalAlpha = 1;
-}
-
-
-/* =========================================================
-   폭죽
-   ========================================================= */
-
-function spawnConfetti() {
-
-    for (let i = 0; i < 100; i++) {
-
-        confetti.push({
-
-            x:
-                width / 2 +
-                (Math.random() - 0.5) *
-                width,
-
-            y:
-                -20 -
-                Math.random() * height * 0.5,
-
-            vx:
-                (Math.random() - 0.5) *
-                3,
-
-            vy:
-                Math.random() *
-                2 + 1,
-
-            rotation:
-                Math.random() *
-                Math.PI,
-
-            rotationSpeed:
-                (Math.random() - 0.5) *
-                0.15,
-
-            size:
-                Math.random() *
-                7 + 3,
-
-            life: 1,
-
-            hue:
-                Math.random() * 360
-        });
-    }
-}
-
-
-/* =========================================================
-   폭죽 렌더링
-   ========================================================= */
-
-function drawConfetti() {
-
-    for (
-        let i = confetti.length - 1;
-        i >= 0;
-        i--
-    ) {
-
-        const c =
-            confetti[i];
-
-        c.x += c.vx;
-
-        c.y += c.vy;
-
-        c.vy += 0.025;
-
-        c.rotation +=
-            c.rotationSpeed;
-
-        c.life -= 0.002;
-
-        if (
-            c.y > height + 30 ||
-            c.life <= 0
+        function roundRect(
+            context,
+            x,
+            y,
+            w,
+            h,
+            r
         ) {
 
-            confetti.splice(i, 1);
+            context.beginPath();
 
-            continue;
+            context.moveTo(x + r, y);
+
+            context.arcTo(
+                x + w,
+                y,
+                x + w,
+                y + h,
+                r
+            );
+
+            context.arcTo(
+                x + w,
+                y + h,
+                x,
+                y + h,
+                r
+            );
+
+            context.arcTo(
+                x,
+                y + h,
+                x,
+                y,
+                r
+            );
+
+            context.arcTo(
+                x,
+                y,
+                x + w,
+                y,
+                r
+            );
+
+            context.closePath();
         }
 
-        ctx.save();
 
-        ctx.translate(
-            c.x,
-            c.y
-        );
+        /* ============================================================
+           촛불 그리기
+        ============================================================ */
 
-        ctx.rotate(
-            c.rotation
-        );
+        function drawCandles(time) {
 
-        ctx.globalAlpha =
-            Math.max(0, c.life);
+            const positions =
+                getCandlePositions();
 
-        ctx.fillStyle =
-            `hsl(${c.hue}, 90%, 70%)`;
+            for (let i = 0; i < candles.length; i++) {
 
-        ctx.fillRect(
-            -c.size / 2,
-            -c.size / 2,
-            c.size,
-            c.size * 0.45
-        );
+                const candle = candles[i];
 
-        ctx.restore();
-    }
+                const position = positions[i];
 
-    ctx.globalAlpha = 1;
-}
+                const candleHeight =
+                    candle.type === "long"
+                        ? 76
+                        : 42;
 
+                const candleWidth = 14;
 
-/* =========================================================
-   Web Audio 생일 BGM
-   외부 음원 파일 없이 코드로 생성
-   ========================================================= */
+                const x =
+                    position.x -
+                    candleWidth / 2;
 
-let audioContext = null;
-
-let masterGain = null;
-
-let musicTimer = null;
-
-let musicPlaying = false;
+                const y =
+                    position.y -
+                    candleHeight;
 
 
-/* 멜로디 */
+                /* 촛불 몸체 */
 
-const melody = [
+                const gradient =
+                    ctx.createLinearGradient(
+                        x,
+                        y,
+                        x + candleWidth,
+                        y
+                    );
 
-    [261.63, 0.28],
-    [261.63, 0.28],
-    [293.66, 0.55],
+                gradient.addColorStop(
+                    0,
+                    "#e9a2c1"
+                );
 
-    [261.63, 0.55],
-    [349.23, 0.55],
-    [329.63, 1.0],
+                gradient.addColorStop(
+                    0.5,
+                    "#fff4fa"
+                );
 
-    [261.63, 0.28],
-    [261.63, 0.28],
-    [293.66, 0.55],
+                gradient.addColorStop(
+                    1,
+                    "#d77ca5"
+                );
 
-    [261.63, 0.55],
-    [392.00, 0.55],
-    [349.23, 1.0]
-];
+                ctx.fillStyle = gradient;
+
+                roundRect(
+                    ctx,
+                    x,
+                    y,
+                    candleWidth,
+                    candleHeight,
+                    6
+                );
+
+                ctx.fill();
 
 
-/* =========================================================
-   AudioContext 시작
-   ========================================================= */
+                /* 심지 */
 
-function initAudio() {
+                ctx.strokeStyle =
+                    "#34251f";
 
-    if (!audioContext) {
+                ctx.lineWidth = 2;
 
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
+                ctx.beginPath();
 
-        masterGain =
-            audioContext.createGain();
+                ctx.moveTo(
+                    position.x,
+                    y
+                );
+
+                ctx.lineTo(
+                    position.x,
+                    y - 8
+                );
+
+                ctx.stroke();
+
+
+                /* 불꽃 */
+
+                if (!candle.blown) {
+
+                    const flicker =
+                        Math.sin(
+                            time * 0.018 +
+                            candle.flame
+                        ) * 2;
+
+                    const flameX =
+                        position.x + flicker;
+
+                    const flameY =
+                        y - 15;
+
+                    const flameGradient =
+                        ctx.createRadialGradient(
+                            flameX,
+                            flameY,
+                            1,
+                            flameX,
+                            flameY,
+                            15
+                        );
+
+                    flameGradient.addColorStop(
+                        0,
+                        "rgba(255,255,255,1)"
+                    );
+
+                    flameGradient.addColorStop(
+                        0.2,
+                        "rgba(255,230,120,0.95)"
+                    );
+
+                    flameGradient.addColorStop(
+                        0.55,
+                        "rgba(255,145,45,0.65)"
+                    );
+
+                    flameGradient.addColorStop(
+                        1,
+                        "rgba(255,100,20,0)"
+                    );
+
+                    ctx.fillStyle =
+                        flameGradient;
+
+                    ctx.beginPath();
+
+                    ctx.arc(
+                        flameX,
+                        flameY,
+                        15,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+
+
+                    ctx.fillStyle =
+                        "#fff6b0";
+
+                    ctx.beginPath();
+
+                    ctx.ellipse(
+                        flameX,
+                        flameY,
+                        5,
+                        10,
+                        0,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+                }
+            }
+        }
+
+
+        /* ============================================================
+           배경
+        ============================================================ */
+
+        function drawBackground(time) {
+
+            const gradient =
+                ctx.createRadialGradient(
+                    width / 2,
+                    height * 0.55,
+                    20,
+                    width / 2,
+                    height * 0.55,
+                    Math.max(width, height)
+                );
+
+            gradient.addColorStop(
+                0,
+                "#222642"
+            );
+
+            gradient.addColorStop(
+                0.5,
+                "#111526"
+            );
+
+            gradient.addColorStop(
+                1,
+                "#070910"
+            );
+
+            ctx.fillStyle = gradient;
+
+            ctx.fillRect(
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            /* 작은 별 */
+
+            ctx.fillStyle =
+                "rgba(255,255,255,0.45)";
+
+            for (let i = 0; i < 55; i++) {
+
+                const x =
+                    (i * 137.31) %
+                    width;
+
+                const y =
+                    (i * 79.17) %
+                    (height * 0.65);
+
+                const alpha =
+                    0.25 +
+                    Math.sin(
+                        time * 0.001 + i
+                    ) * 0.2;
+
+                ctx.globalAlpha =
+                    Math.max(alpha, 0.05);
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    x,
+                    y,
+                    1.2,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+            }
+
+            ctx.globalAlpha = 1;
+        }
+
+
+        /* ============================================================
+           파티클
+        ============================================================ */
+
+        function updateParticles() {
+
+            for (
+                let i = particles.length - 1;
+                i >= 0;
+                i--
+            ) {
+
+                const p = particles[i];
+
+                p.x += p.vx;
+
+                p.y += p.vy;
+
+                p.vy += 0.06;
+
+                p.life -= 0.025;
+
+                if (p.life <= 0) {
+
+                    particles.splice(i, 1);
+
+                    continue;
+                }
+
+                ctx.globalAlpha =
+                    p.life;
+
+                ctx.fillStyle =
+                    "#ffd9eb";
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    p.x,
+                    p.y,
+                    p.size,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+            }
+
+            ctx.globalAlpha = 1;
+        }
+
+
+        /* ============================================================
+           컨페티
+        ============================================================ */
+
+        function updateConfetti() {
+
+            for (
+                let i = confetti.length - 1;
+                i >= 0;
+                i--
+            ) {
+
+                const c = confetti[i];
+
+                c.x += c.vx;
+
+                c.y += c.vy;
+
+                c.vy += 0.025;
+
+                c.rotation +=
+                    c.rotationSpeed;
+
+                if (c.y > height + 30) {
+
+                    confetti.splice(i, 1);
+
+                    continue;
+                }
+
+                ctx.save();
+
+                ctx.translate(
+                    c.x,
+                    c.y
+                );
+
+                ctx.rotate(
+                    c.rotation
+                );
+
+                ctx.globalAlpha =
+                    c.life;
+
+                ctx.fillStyle =
+                    `hsl(${(i * 47) % 360}, 85%, 70%)`;
+
+                ctx.fillRect(
+                    -c.size / 2,
+                    -c.size / 2,
+                    c.size,
+                    c.size * 0.55
+                );
+
+                ctx.restore();
+            }
+
+            ctx.globalAlpha = 1;
+        }
+
+
+        /* ============================================================
+           Web Audio
+           
+           오르골 / 피아노 사운드 엔진
+           ============================================================ */
+
+        let audioContext = null;
+
+        let masterGain = null;
+
+        let musicGain = null;
+
+        let effectGain = null;
+
+        let musicPlaying = false;
+
+        let musicTimer = null;
+
+        let musicStartTime = 0;
+
 
         /*
-         * 브라우저가 허용하는 범위에서
-         * 오디오 자체의 출력량을 설정합니다.
+         * 브라우저는 Windows/Android 등의
+         * 실제 시스템 마스터 볼륨을 읽을 수 없습니다.
          *
-         * 실제 시스템 마스터 볼륨은
-         * 브라우저 보안상 직접 읽을 수 없습니다.
+         * 따라서 여기서는 Web Audio 내부 음량을
+         * 안전한 수준으로 설정하고,
+         * 최종 음량은 OS/휴대폰의 볼륨을 따릅니다.
          */
 
-        masterGain.gain.value = 0.45;
-
-        masterGain.connect(
-            audioContext.destination
-        );
-    }
-
-    if (
-        audioContext.state ===
-        "suspended"
-    ) {
-
-        audioContext.resume();
-    }
-}
+        const APP_VOLUME = 0.42;
 
 
-/* =========================================================
-   음 하나 재생
-   ========================================================= */
+        /* ============================================================
+           음계
+        ============================================================ */
 
-function playTone(
-    frequency,
-    duration,
-    startTime
-) {
+        const NOTE = {
 
-    if (!audioContext) {
-        return;
-    }
+            C4: 261.63,
 
-    const oscillator =
-        audioContext.createOscillator();
+            D4: 293.66,
 
-    const gain =
-        audioContext.createGain();
+            E4: 329.63,
 
-    oscillator.type =
-        "sine";
+            F4: 349.23,
 
-    oscillator.frequency.value =
-        frequency;
+            G4: 392.00,
 
-    gain.gain.setValueAtTime(
-        0.0001,
-        startTime
-    );
+            A4: 440.00,
 
-    gain.gain.exponentialRampToValueAtTime(
-        0.18,
-        startTime + 0.025
-    );
+            Bb4: 466.16,
 
-    gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        startTime + duration
-    );
+            B4: 493.88,
 
-    oscillator.connect(gain);
+            C5: 523.25,
 
-    gain.connect(masterGain);
+            D5: 587.33,
 
-    oscillator.start(startTime);
+            E5: 659.25,
 
-    oscillator.stop(
-        startTime + duration + 0.03
-    );
-}
+            F5: 698.46,
+
+            G5: 783.99
+        };
 
 
-/* =========================================================
-   BGM 재생
-   ========================================================= */
+        /* ============================================================
+           Happy Birthday 멜로디
+        ============================================================ */
 
-function startMusic() {
+        const birthdayMelody = [
 
-    initAudio();
+            [NOTE.G4, 0.32],
+            [NOTE.G4, 0.32],
+            [NOTE.A4, 0.58],
+            [NOTE.G4, 0.58],
+            [NOTE.C5, 0.58],
+            [NOTE.B4, 0.90],
 
-    musicPlaying = true;
+            [NOTE.G4, 0.32],
+            [NOTE.G4, 0.32],
+            [NOTE.A4, 0.58],
+            [NOTE.G4, 0.58],
+            [NOTE.D5, 0.58],
+            [NOTE.C5, 0.90],
 
-    musicButton.textContent =
-        "🔊";
+            [NOTE.G4, 0.32],
+            [NOTE.G4, 0.32],
+            [NOTE.G5, 0.58],
+            [NOTE.E5, 0.58],
+            [NOTE.C5, 0.58],
+            [NOTE.B4, 0.58],
+            [NOTE.A4, 0.90],
 
-    let index = 0;
+            [NOTE.F5, 0.32],
+            [NOTE.F5, 0.32],
+            [NOTE.E5, 0.58],
+            [NOTE.C5, 0.58],
+            [NOTE.D5, 0.58],
+            [NOTE.C5, 1.05]
+        ];
 
-    function schedule() {
 
-        if (!musicPlaying) {
-            return;
+        /* ============================================================
+           코드 진행
+        ============================================================ */
+
+        const chords = [
+
+            [NOTE.C4, NOTE.E4, NOTE.G4],
+
+            [NOTE.G4, NOTE.B4, NOTE.D5],
+
+            [NOTE.C4, NOTE.E4, NOTE.G4],
+
+            [NOTE.F4, NOTE.A4, NOTE.C5]
+        ];
+
+
+        /* ============================================================
+           Audio 초기화
+        ============================================================ */
+
+        function initAudio() {
+
+            if (audioContext) {
+
+                if (
+                    audioContext.state ===
+                    "suspended"
+                ) {
+                    audioContext.resume();
+                }
+
+                return;
+            }
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+
+            masterGain =
+                audioContext.createGain();
+
+            musicGain =
+                audioContext.createGain();
+
+            effectGain =
+                audioContext.createGain();
+
+
+            masterGain.gain.value =
+                APP_VOLUME;
+
+            musicGain.gain.value =
+                0.58;
+
+            effectGain.gain.value =
+                0.75;
+
+
+            musicGain.connect(
+                masterGain
+            );
+
+            effectGain.connect(
+                masterGain
+            );
+
+            masterGain.connect(
+                audioContext.destination
+            );
         }
 
-        const now =
-            audioContext.currentTime;
 
-        let offset = 0;
+        /* ============================================================
+           ADSR Envelope
+           
+           Attack
+           Decay
+           Sustain
+           Release
+        ============================================================ */
 
-        for (
-            let i = 0;
-            i < melody.length;
-            i++
+        function applyADSR(
+            gainNode,
+            startTime,
+            duration,
+            peak = 0.12,
+            attack = 0.015,
+            decay = 0.18,
+            sustain = 0.42,
+            release = 0.45
         ) {
 
-            const note =
-                melody[i];
+            const gain =
+                gainNode.gain;
 
-            playTone(
-                note[0],
-                note[1],
-                now + offset
+            const attackEnd =
+                startTime + attack;
+
+            const decayEnd =
+                attackEnd + decay;
+
+            const releaseStart =
+                Math.max(
+                    decayEnd,
+                    startTime +
+                    duration -
+                    release
+                );
+
+            const releaseEnd =
+                releaseStart +
+                release;
+
+
+            gain.cancelScheduledValues(
+                startTime
             );
 
-            offset +=
-                note[1] + 0.07;
-        }
-
-        musicTimer =
-            setTimeout(
-                schedule,
-                offset * 1000 + 300
+            gain.setValueAtTime(
+                0.0001,
+                startTime
             );
-    }
 
-    schedule();
-}
+            /* Attack */
 
+            gain.linearRampToValueAtTime(
+                peak,
+                attackEnd
+            );
 
-/* =========================================================
-   BGM 중지
-   ========================================================= */
+            /* Decay */
 
-function stopMusic() {
+            gain.linearRampToValueAtTime(
+                peak * sustain,
+                decayEnd
+            );
 
-    musicPlaying = false;
+            /* Sustain */
 
-    clearTimeout(
-        musicTimer
-    );
+            gain.setValueAtTime(
+                peak * sustain,
+                releaseStart
+            );
 
-    musicButton.textContent =
-        "🔇";
-}
+            /* Release */
 
-
-/* =========================================================
-   음악 버튼
-   ========================================================= */
-
-musicButton.addEventListener(
-    "click",
-    () => {
-
-        if (musicPlaying) {
-
-            stopMusic();
-
-        } else {
-
-            startMusic();
+            gain.exponentialRampToValueAtTime(
+                0.0001,
+                releaseEnd
+            );
         }
-    }
-);
 
 
-/* =========================================================
-   초 끄기
-   ========================================================= */
+        /* ============================================================
+           피아노 / 오르골 한 음
+        ============================================================ */
 
-function extinguishCandle(index) {
+        function playPianoNote(
+            frequency,
+            startTime,
+            duration,
+            volume = 0.12
+        ) {
 
-    if (
-        !candles[index] ||
-        candles[index].extinguished
-    ) {
-        return;
-    }
-
-    candles[index].extinguished =
-        true;
-
-    const positions =
-        getCandlePositions();
-
-    const position =
-        positions[index];
-
-    spawnParticles(
-        position.x,
-        position.baseY -
-        position.height,
-        24
-    );
-
-    playExtinguishSound();
-
-    checkAllExtinguished();
-}
+            if (!audioContext) {
+                return;
+            }
 
 
-/* =========================================================
-   초 끄는 소리
-   ========================================================= */
+            /* --------------------------------------------------------
+               기본음
+            -------------------------------------------------------- */
 
-function playExtinguishSound() {
+            const fundamental =
+                audioContext.createOscillator();
 
-    if (!audioContext) {
-        return;
-    }
+            fundamental.type =
+                "triangle";
 
-    const now =
-        audioContext.currentTime;
-
-    const oscillator =
-        audioContext.createOscillator();
-
-    const gain =
-        audioContext.createGain();
-
-    oscillator.type =
-        "sine";
-
-    oscillator.frequency.setValueAtTime(
-        650,
-        now
-    );
-
-    oscillator.frequency.exponentialRampToValueAtTime(
-        160,
-        now + 0.18
-    );
-
-    gain.gain.setValueAtTime(
-        0.0001,
-        now
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.12,
-        now + 0.015
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        now + 0.2
-    );
-
-    oscillator.connect(gain);
-
-    gain.connect(masterGain);
-
-    oscillator.start(now);
-
-    oscillator.stop(
-        now + 0.22
-    );
-}
-
-
-/* =========================================================
-   모든 초를 껐는지 확인
-   ========================================================= */
-
-function checkAllExtinguished() {
-
-    const remaining =
-        candles.some(
-            candle =>
-                !candle.extinguished
-        );
-
-    if (!remaining) {
-
-        allExtinguished = true;
-
-        setTimeout(
-            finishBirthday,
-            500
-        );
-    }
-}
-
-
-/* =========================================================
-   생일 축하 완료
-   ========================================================= */
-
-function finishBirthday() {
-
-    finish.classList.add("show");
-
-    spawnConfetti();
-
-    for (let i = 0; i < 5; i++) {
-
-        setTimeout(
-            spawnConfetti,
-            i * 500
-        );
-    }
-
-    playCelebrationSound();
-}
-
-
-/* =========================================================
-   축하 효과음
-   ========================================================= */
-
-function playCelebrationSound() {
-
-    if (!audioContext) {
-        return;
-    }
-
-    const now =
-        audioContext.currentTime;
-
-    const notes = [
-        523.25,
-        659.25,
-        783.99,
-        1046.50
-    ];
-
-    notes.forEach(
-        (frequency, index) => {
-
-            playTone(
+            fundamental.frequency.setValueAtTime(
                 frequency,
-                0.45,
-                now + index * 0.12
-            );
-        }
-    );
-}
-
-
-/* =========================================================
-   터치 / 마우스 좌표
-   ========================================================= */
-
-function getPointerPosition(event) {
-
-    const rect =
-        canvas.getBoundingClientRect();
-
-    let clientX;
-    let clientY;
-
-    if (
-        event.touches &&
-        event.touches.length
-    ) {
-
-        clientX =
-            event.touches[0].clientX;
-
-        clientY =
-            event.touches[0].clientY;
-
-    } else {
-
-        clientX =
-            event.clientX;
-
-        clientY =
-            event.clientY;
-    }
-
-    return {
-        x:
-            clientX - rect.left,
-
-        y:
-            clientY - rect.top
-    };
-}
-
-
-/* =========================================================
-   초 클릭 판정
-   ========================================================= */
-
-function handlePointer(event) {
-
-    if (!started) {
-        return;
-    }
-
-    const pointer =
-        getPointerPosition(event);
-
-    const positions =
-        getCandlePositions();
-
-    for (
-        let i = 0;
-        i < positions.length;
-        i++
-    ) {
-
-        const candle =
-            candles[i];
-
-        if (
-            candle.extinguished
-        ) {
-            continue;
-        }
-
-        const p =
-            positions[i];
-
-        const top =
-            p.baseY -
-            p.height -
-            25;
-
-        const bottom =
-            p.baseY + 10;
-
-        const left =
-            p.x -
-            22;
-
-        const right =
-            p.x +
-            22;
-
-        if (
-            pointer.x >= left &&
-            pointer.x <= right &&
-            pointer.y >= top &&
-            pointer.y <= bottom
-        ) {
-
-            extinguishCandle(i);
-
-            event.preventDefault();
-
-            return;
-        }
-    }
-}
-
-
-canvas.addEventListener(
-    "click",
-    handlePointer
-);
-
-canvas.addEventListener(
-    "touchstart",
-    handlePointer,
-    {
-        passive: false
-    }
-);
-
-
-/* =========================================================
-   생일 시작
-   ========================================================= */
-
-startButton.addEventListener(
-    "click",
-    () => {
-
-        playerName =
-            nameInput.value.trim();
-
-        if (!playerName) {
-
-            hint.textContent =
-                "이름을 먼저 입력해주세요.";
-
-            nameInput.focus();
-
-            return;
-        }
-
-        age =
-            Number(
-                ageInput.value
+                startTime
             );
 
-        if (
-            !Number.isInteger(age) ||
-            age < 1 ||
-            age > 100
-        ) {
 
-            hint.textContent =
-                "나이는 1~100 사이로 입력해주세요.";
+            /* --------------------------------------------------------
+               배음 2
+            -------------------------------------------------------- */
 
-            ageInput.focus();
+            const harmonic2 =
+                audioContext.createOscillator();
 
-            return;
+            harmonic2.type =
+                "sine";
+
+            harmonic2.frequency.setValueAtTime(
+                frequency * 2,
+                startTime
+            );
+
+
+            /* --------------------------------------------------------
+               배음 3
+            -------------------------------------------------------- */
+
+            const harmonic3 =
+                audioContext.createOscillator();
+
+            harmonic3.type =
+                "sine";
+
+            harmonic3.frequency.setValueAtTime(
+                frequency * 3,
+                startTime
+            );
+
+
+            /* --------------------------------------------------------
+               배음 4
+            -------------------------------------------------------- */
+
+            const harmonic4 =
+                audioContext.createOscillator();
+
+            harmonic4.type =
+                "sine";
+
+            harmonic4.frequency.setValueAtTime(
+                frequency * 4,
+                startTime
+            );
+
+
+            /* --------------------------------------------------------
+               각각의 음량
+            -------------------------------------------------------- */
+
+            const fundamentalGain =
+                audioContext.createGain();
+
+            const harmonic2Gain =
+                audioContext.createGain();
+
+            const harmonic3Gain =
+                audioContext.createGain();
+
+            const harmonic4Gain =
+                audioContext.createGain();
+
+
+            fundamentalGain.gain.value =
+                0.72;
+
+            harmonic2Gain.gain.value =
+                0.19;
+
+            harmonic3Gain.gain.value =
+                0.07;
+
+            harmonic4Gain.gain.value =
+                0.025;
+
+
+            /* --------------------------------------------------------
+               피아노 전체 ADSR
+            -------------------------------------------------------- */
+
+            const noteGain =
+                audioContext.createGain();
+
+            applyADSR(
+                noteGain,
+                startTime,
+                duration,
+                volume,
+                0.012,
+                0.12,
+                0.32,
+                0.55
+            );
+
+
+            fundamental.connect(
+                fundamentalGain
+            );
+
+            harmonic2.connect(
+                harmonic2Gain
+            );
+
+            harmonic3.connect(
+                harmonic3Gain
+            );
+
+            harmonic4.connect(
+                harmonic4Gain
+            );
+
+
+            fundamentalGain.connect(
+                noteGain
+            );
+
+            harmonic2Gain.connect(
+                noteGain
+            );
+
+            harmonic3Gain.connect(
+                noteGain
+            );
+
+            harmonic4Gain.connect(
+                noteGain
+            );
+
+
+            noteGain.connect(
+                musicGain
+            );
+
+
+            fundamental.start(
+                startTime
+            );
+
+            harmonic2.start(
+                startTime
+            );
+
+            harmonic3.start(
+                startTime
+            );
+
+            harmonic4.start(
+                startTime
+            );
+
+
+            const stopTime =
+                startTime +
+                duration +
+                0.7;
+
+
+            fundamental.stop(
+                stopTime
+            );
+
+            harmonic2.stop(
+                stopTime
+            );
+
+            harmonic3.stop(
+                stopTime
+            );
+
+            harmonic4.stop(
+                stopTime
+            );
         }
 
-        hint.textContent = "";
 
-        candles =
-            createCandles(age);
+        /* ============================================================
+           오르골 종소리
+           
+           높은 배음이 아주 짧게 반짝이는 구조
+        ============================================================ */
 
-        started = true;
+        function playBell(
+            frequency,
+            startTime,
+            volume = 0.035
+        ) {
 
-        birthdayText.textContent =
-            `${playerName}님, 생일 축하합니다!`;
+            if (!audioContext) {
+                return;
+            }
 
-        setup.classList.add("hidden");
 
-        setTimeout(
+            const bell =
+                audioContext.createOscillator();
+
+            bell.type =
+                "sine";
+
+            bell.frequency.setValueAtTime(
+                frequency * 2,
+                startTime
+            );
+
+
+            const bell2 =
+                audioContext.createOscillator();
+
+            bell2.type =
+                "sine";
+
+            bell2.frequency.setValueAtTime(
+                frequency * 3,
+                startTime
+            );
+
+
+            const bellGain =
+                audioContext.createGain();
+
+
+            bellGain.gain.setValueAtTime(
+                0.0001,
+                startTime
+            );
+
+            bellGain.gain.exponentialRampToValueAtTime(
+                volume,
+                startTime + 0.008
+            );
+
+            bellGain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                startTime + 1.15
+            );
+
+
+            bell.connect(
+                bellGain
+            );
+
+            bell2.connect(
+                bellGain
+            );
+
+            bellGain.connect(
+                musicGain
+            );
+
+
+            bell.start(
+                startTime
+            );
+
+            bell2.start(
+                startTime
+            );
+
+
+            bell.stop(
+                startTime + 1.2
+            );
+
+            bell2.stop(
+                startTime + 1.2
+            );
+        }
+
+
+        /* ============================================================
+           베이스
+        ============================================================ */
+
+        function playBass(
+            frequency,
+            startTime,
+            duration
+        ) {
+
+            if (!audioContext) {
+                return;
+            }
+
+
+            const oscillator =
+                audioContext.createOscillator();
+
+            oscillator.type =
+                "sine";
+
+            oscillator.frequency.setValueAtTime(
+                frequency,
+                startTime
+            );
+
+
+            const gain =
+                audioContext.createGain();
+
+
+            applyADSR(
+                gain,
+                startTime,
+                duration,
+                0.055,
+                0.025,
+                0.18,
+                0.22,
+                0.5
+            );
+
+
+            oscillator.connect(
+                gain
+            );
+
+            gain.connect(
+                musicGain
+            );
+
+
+            oscillator.start(
+                startTime
+            );
+
+            oscillator.stop(
+                startTime +
+                duration +
+                0.7
+            );
+        }
+
+
+        /* ============================================================
+           곡 한 번 스케줄
+        ============================================================ */
+
+        function scheduleBirthdaySong() {
+
+            if (!audioContext) {
+                return;
+            }
+
+
+            const now =
+                audioContext.currentTime + 0.08;
+
+            let cursor = now;
+
+
+            const beatLength = 0.31;
+
+
+            birthdayMelody.forEach(
+                ([frequency, duration], index) => {
+
+                    const noteDuration =
+                        duration * 1.02;
+
+                    /* 메인 피아노 */
+
+                    playPianoNote(
+                        frequency,
+                        cursor,
+                        noteDuration,
+                        0.115
+                    );
+
+
+                    /* 반짝이는 종소리 */
+
+                    playBell(
+                        frequency,
+                        cursor,
+                        0.022
+                    );
+
+
+                    /*
+                     * 특정 음에서는
+                     * 살짝 아래쪽에 보조음을 추가하여
+                     * 오르골의 울림을 만듭니다.
+                     */
+
+                    if (index % 3 === 0) {
+
+                        playPianoNote(
+                            frequency / 2,
+                            cursor,
+                            noteDuration * 0.9,
+                            0.025
+                        );
+                    }
+
+
+                    cursor +=
+                        duration +
+                        beatLength * 0.06;
+                }
+            );
+
+
+            /* --------------------------------------------------------
+               베이스
+            -------------------------------------------------------- */
+
+            const phraseLength =
+                3.9;
+
+            const bassNotes = [
+
+                NOTE.C4 / 2,
+                NOTE.G4 / 2,
+                NOTE.C4 / 2,
+                NOTE.F4 / 2
+            ];
+
+
+            for (let i = 0; i < 4; i++) {
+
+                playBass(
+                    bassNotes[i],
+                    now + i * phraseLength,
+                    phraseLength * 0.82
+                );
+            }
+
+
+            return cursor - now;
+        }
+
+
+        /* ============================================================
+           음악 시작
+        ============================================================ */
+
+        function startMusic() {
+
+            initAudio();
+
+            if (musicPlaying) {
+                return;
+            }
+
+            musicPlaying = true;
+
+            musicButton.textContent =
+                "🔊";
+
+
+            function loop() {
+
+                if (!musicPlaying) {
+                    return;
+                }
+
+                const duration =
+                    scheduleBirthdaySong();
+
+
+                musicTimer =
+                    setTimeout(
+                        loop,
+                        Math.max(
+                            1000,
+                            duration * 1000 - 100
+                        )
+                    );
+            }
+
+
+            loop();
+        }
+
+
+        /* ============================================================
+           음악 정지
+        ============================================================ */
+
+        function stopMusic() {
+
+            musicPlaying = false;
+
+            if (musicTimer) {
+
+                clearTimeout(
+                    musicTimer
+                );
+
+                musicTimer = null;
+            }
+
+            musicButton.textContent =
+                "🔇";
+        }
+
+
+        /* ============================================================
+           음악 버튼
+        ============================================================ */
+
+        musicButton.addEventListener(
+            "click",
             () => {
 
-                birthdayText.classList.add(
-                    "show"
-                );
-
-                subText.classList.add(
-                    "show"
-                );
-
-            },
-            450
+                if (musicPlaying) {
+                    stopMusic();
+                } else {
+                    startMusic();
+                }
+            }
         );
 
-        /*
-         * 버튼 클릭은 브라우저에서
-         * 오디오 재생이 허용되는 사용자 동작이므로
-         * 여기서 AudioContext를 시작합니다.
-         */
 
-        initAudio();
+        /* ============================================================
+           촛불 끄기 효과음
+        ============================================================ */
 
-        startMusic();
-    }
-);
+        function playExtinguishSound() {
+
+            if (!audioContext) {
+                return;
+            }
 
 
-/* =========================================================
-   애니메이션
-   ========================================================= */
+            const now =
+                audioContext.currentTime;
 
-function render(time) {
 
-    drawBackground(time);
+            const oscillator =
+                audioContext.createOscillator();
 
-    if (started) {
+            oscillator.type =
+                "triangle";
 
-        drawCake();
+            oscillator.frequency.setValueAtTime(
+                520,
+                now
+            );
 
-        const positions =
-            getCandlePositions();
+            oscillator.frequency.exponentialRampToValueAtTime(
+                150,
+                now + 0.18
+            );
 
-        candles.forEach(
-            (candle, index) => {
 
-                drawCandle(
-                    candle,
-                    positions[index],
-                    index,
-                    time
+            const gain =
+                audioContext.createGain();
+
+
+            gain.gain.setValueAtTime(
+                0.0001,
+                now
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.16,
+                now + 0.01
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                now + 0.22
+            );
+
+
+            oscillator.connect(
+                gain
+            );
+
+            gain.connect(
+                effectGain
+            );
+
+
+            oscillator.start(
+                now
+            );
+
+            oscillator.stop(
+                now + 0.25
+            );
+        }
+
+
+        /* ============================================================
+           전체 촛불 완료 효과음
+        ============================================================ */
+
+        function playCelebrationSound() {
+
+            if (!audioContext) {
+                return;
+            }
+
+
+            const now =
+                audioContext.currentTime;
+
+
+            const notes = [
+
+                NOTE.C5,
+                NOTE.E5,
+                NOTE.G5,
+                NOTE.C5 * 2
+            ];
+
+
+            notes.forEach(
+                (frequency, index) => {
+
+                    playBell(
+                        frequency,
+                        now + index * 0.13,
+                        0.07
+                    );
+                }
+            );
+        }
+
+
+        /* ============================================================
+           촛불 클릭 판정
+        ============================================================ */
+
+        function handlePointer(
+            clientX,
+            clientY
+        ) {
+
+            if (!musicPlaying &&
+                audioContext) {
+
+                audioContext.resume();
+            }
+
+
+            const rect =
+                canvas.getBoundingClientRect();
+
+            const x =
+                clientX - rect.left;
+
+            const y =
+                clientY - rect.top;
+
+
+            const positions =
+                getCandlePositions();
+
+
+            for (
+                let i = 0;
+                i < candles.length;
+                i++
+            ) {
+
+                const candle =
+                    candles[i];
+
+                if (candle.blown) {
+                    continue;
+                }
+
+
+                const position =
+                    positions[i];
+
+
+                const candleHeight =
+                    candle.type === "long"
+                        ? 76
+                        : 42;
+
+
+                const candleWidth = 28;
+
+
+                if (
+                    x >=
+                    position.x -
+                    candleWidth / 2 &&
+
+                    x <=
+                    position.x +
+                    candleWidth / 2 &&
+
+                    y >=
+                    position.y -
+                    candleHeight -
+                    25 &&
+
+                    y <=
+                    position.y + 10
+                ) {
+
+                    candle.blown = true;
+
+
+                    createParticle(
+                        position.x,
+                        position.y -
+                        candleHeight,
+                        25
+                    );
+
+
+                    playExtinguishSound();
+
+
+                    const remaining =
+                        candles.filter(
+                            item =>
+                                !item.blown
+                        ).length;
+
+
+                    if (remaining === 0) {
+
+                        setTimeout(
+                            () => {
+
+                                createConfetti(
+                                    150
+                                );
+
+                                playCelebrationSound();
+
+                            },
+                            350
+                        );
+                    }
+
+
+                    break;
+                }
+            }
+        }
+
+
+        canvas.addEventListener(
+            "click",
+            event => {
+
+                handlePointer(
+                    event.clientX,
+                    event.clientY
                 );
             }
         );
 
-        updateParticles();
 
-        drawParticles();
+        canvas.addEventListener(
+            "touchstart",
+            event => {
 
-        drawConfetti();
-    }
+                if (
+                    event.touches &&
+                    event.touches.length
+                ) {
 
-    requestAnimationFrame(
-        render
-    );
-}
+                    const touch =
+                        event.touches[0];
+
+                    handlePointer(
+                        touch.clientX,
+                        touch.clientY
+                    );
+                }
+
+                event.preventDefault();
+
+            },
+            {
+                passive: false
+            }
+        );
 
 
-/* =========================================================
-   애니메이션 시작
-   ========================================================= */
+        /* ============================================================
+           시작 버튼
+        ============================================================ */
 
-requestAnimationFrame(
-    render
-);
+        startButton.addEventListener(
+            "click",
+            () => {
+
+                birthdayName =
+                    nameInput.value.trim();
 
 
-/* =========================================================
-   Enter 키로 시작
-   ========================================================= */
+                if (!birthdayName) {
 
-nameInput.addEventListener(
-    "keydown",
-    event => {
+                    nameInput.focus();
 
-        if (
-            event.key === "Enter"
-        ) {
+                    return;
+                }
 
-            startButton.click();
+
+                let age =
+                    Number(
+                        ageInput.value
+                    );
+
+
+                if (
+                    !Number.isFinite(age) ||
+                    age < 1
+                ) {
+
+                    age = 1;
+                }
+
+
+                age =
+                    Math.min(
+                        Math.floor(age),
+                        100
+                    );
+
+
+                createCandles(age);
+
+
+                birthdayTitle.textContent =
+                    `🎂 ${birthdayName}님, 생일 축하합니다!`;
+
+
+                setup.classList.add(
+                    "hidden"
+                );
+
+
+                sceneUI.style.display =
+                    "block";
+
+
+                musicButton.style.display =
+                    "block";
+
+
+                initAudio();
+
+                startMusic();
+            }
+        );
+
+
+        /* ============================================================
+           렌더링
+        ============================================================ */
+
+        function render(time) {
+
+            drawBackground(time);
+
+            if (
+                setup.classList.contains(
+                    "hidden"
+                )
+            ) {
+
+                drawCake();
+
+                drawCandles(time);
+
+                updateParticles();
+
+                updateConfetti();
+            }
+
+
+            requestAnimationFrame(
+                render
+            );
         }
-    }
-);
 
-ageInput.addEventListener(
-    "keydown",
-    event => {
 
-        if (
-            event.key === "Enter"
-        ) {
-
-            startButton.click();
-        }
-    }
-);
-
-</script>
-
+        requestAnimationFrame(
+            render
+        );
+    </script>
 </body>
 </html>
