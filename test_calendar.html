@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>귀여운 다이어리 캘린더</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for cute handwriting style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <!-- html2canvas for saving as image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Phosphor Icons for UI elements -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'handwriting': ['"Nanum Pen Script"', 'cursive'],
+                        'sans': ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        'diary-bg': '#FAF8F5',
+                        'diary-line': '#A94442',
+                        'diary-sun': '#D9534F',
+                        'diary-sat': '#5BC0DE',
+                        'diary-text': '#333333',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #e5e7eb; /* Soft gray background for the app */
+        }
+        
+        /* The main diary paper style */
+        .diary-paper {
+            background-color: #FAF8F5;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1), inset 0 0 20px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        /* Styling for the calendar grid to match the image */
+        .calendar-grid {
+            border: 2px solid #A94442;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .calendar-header-cell {
+            border-bottom: 2px solid #A94442;
+            border-right: 1px solid #A94442;
+            background-color: #FDF4F5;
+        }
+        .calendar-header-cell:last-child { border-right: none; }
+        
+        .calendar-cell {
+            border-bottom: 1px solid #e5e5e5;
+            border-right: 1px solid #A94442;
+            min-height: 100px; /* Base height for cells */
+            position: relative;
+            transition: background-color 0.2s;
+        }
+        .calendar-cell:nth-child(7n) { border-right: none; }
+        /* Add bottom border to last row elements to close the grid if needed, handled in JS */
+        
+        /* Spring binding styles */
+        .spring-wrapper {
+            position: absolute;
+            top: -24px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            padding: 0 20px;
+            z-index: 10;
+        }
+        .spring {
+            width: 14px;
+            height: 40px;
+            background: linear-gradient(to right, #d4d4d4 0%, #ffffff 40%, #a3a3a3 100%);
+            border-radius: 7px;
+            box-shadow: 2px 3px 5px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .spring::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 1px;
+            width: 12px;
+            height: 12px;
+            background-color: #222;
+            border-radius: 50%;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.8);
+            z-index: -1;
+        }
+
+        /* Custom Scrollbar for textareas */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Hide element during screenshot */
+        .no-print { display: block; }
+        .is-printing .no-print { display: none !important; }
+        .is-printing .diary-paper { box-shadow: none; border: 1px solid #eee; }
+    </style>
+</head>
+<body class="font-sans text-diary-text min-h-screen p-4 md:p-8 flex flex-col items-center">
+
+    <div class="w-full max-w-5xl flex justify-between items-center mb-12 bg-white p-4 rounded-2xl shadow-sm">
+        <h1 class="text-2xl font-bold text-gray-700 flex items-center gap-2">
+            <i class="ph ph-calendar-heart text-pink-500 text-3xl"></i>
+            나만의 다이어리 메이커
+        </h1>
+        <div class="flex gap-3">
+            <button onclick="changeMonth(-1)" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+                <i class="ph ph-caret-left text-xl"></i>
+            </button>
+            <button onclick="goToToday()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold transition-colors">
+                오늘
+            </button>
+            <button onclick="changeMonth(1)" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+                <i class="ph ph-caret-right text-xl"></i>
+            </button>
+            <button onclick="downloadCalendar()" class="ml-4 px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-bold shadow-md transition-transform active:scale-95 flex items-center gap-2">
+                <i class="ph ph-download-simple text-xl"></i>
+                이미지로 저장
+            </button>
+        </div>
+    </div>
+
+    <!-- The Printable Area -->
+    <div id="capture-area" class="w-full max-w-5xl">
+        <div class="diary-paper rounded-2xl p-6 md:p-10 pt-16 border-2 border-diary-line/20">
+            
+            <!-- Springs -->
+            <div class="spring-wrapper" id="springs-container">
+                <!-- Springs generated by JS -->
+            </div>
+
+            <!-- Diary Header -->
+            <div class="flex justify-between items-end mb-6 text-diary-line px-2">
+                <div class="font-handwriting text-5xl tracking-wide flex items-center gap-2">
+                    Monthly Schedule
+                    <!-- Decorative element, simulating stickers -->
+                    <span class="text-2xl ml-2"></span>
+                </div>
+                <div class="font-sans text-4xl font-bold tracking-wider" id="calendar-title">
+                    2026.09
+                </div>
+            </div>
+
+            <!-- Calendar Container -->
+            <div class="calendar-grid flex flex-col">
+                <!-- Days of Week Header -->
+                <div class="grid grid-cols-7 text-center font-bold text-lg font-handwriting tracking-widest text-diary-line">
+                    <div class="calendar-header-cell py-2 text-diary-sun">Sun</div>
+                    <div class="calendar-header-cell py-2">Mon</div>
+                    <div class="calendar-header-cell py-2">Tue</div>
+                    <div class="calendar-header-cell py-2">Wed</div>
+                    <div class="calendar-header-cell py-2">Thu</div>
+                    <div class="calendar-header-cell py-2">Fri</div>
+                    <div class="calendar-header-cell py-2 text-diary-sat">Sat</div>
+                </div>
+
+                <!-- Calendar Days Grid (Populated by JS) -->
+                <div id="calendar-days" class="grid grid-cols-7 bg-white">
+                    <!-- Day cells go here -->
+                </div>
+            </div>
+
+            <!-- Bottom Memo Area -->
+            <div class="mt-6 border-2 border-diary-line rounded-xl p-4 relative bg-pink-50/50 flex flex-col">
+                <span class="absolute -top-3 left-4 bg-diary-bg px-2 font-handwriting text-2xl text-diary-line font-bold">
+                    Memo
+                </span>
+                <textarea id="global-memo" class="w-full h-24 bg-transparent resize-none outline-none mt-2 font-handwriting text-xl leading-relaxed text-diary-line placeholder-pink-300" placeholder="여기에 중요한 메모나 공지를 적어보세요..."></textarea>
+                <!-- Hidden div used for rendering textarea content during html2canvas capture to preserve formatting -->
+                <div id="global-memo-render" class="hidden w-full min-h-[6rem] mt-2 font-handwriting text-xl leading-relaxed text-diary-line whitespace-pre-wrap break-words"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Edit Modal (Hidden by default) -->
+    <div id="edit-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100">
+            <div class="bg-pink-100 p-4 border-b border-pink-200 flex justify-between items-center">
+                <h3 class="font-bold text-xl text-gray-800 flex items-center gap-2">
+                    <i class="ph-fill ph-pencil-simple text-pink-500"></i>
+                    <span id="modal-date-title">2026년 9월 1일</span> 일정
+                </h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 transition-colors">
+                    <i class="ph ph-x text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 space-y-5">
+                <!-- Text Input -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">일정 내용</label>
+                    <textarea id="modal-text" rows="3" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300 font-handwriting text-xl resize-none" placeholder="일정을 적어주세요! (예: 20:00 합방!)"></textarea>
+                </div>
+                
+                <!-- Color Picker -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">글자 색상</label>
+                    <div class="flex gap-2">
+                        <input type="color" id="modal-color" class="h-10 w-14 rounded cursor-pointer border border-gray-200 p-0" value="#333333">
+                        <div class="flex-1 text-sm text-gray-500 flex items-center">색상을 선택하여 포인트를 주세요!</div>
+                    </div>
+                </div>
+
+                <!-- Image Upload -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">이미지/스티커 첨부</label>
+                    <div class="flex items-center gap-4">
+                        <label class="flex-1 flex flex-col items-center justify-center py-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-pink-300 transition-colors">
+                            <i class="ph ph-image text-2xl text-gray-400 mb-1"></i>
+                            <span class="text-sm text-gray-500">이미지 선택</span>
+                            <input type="file" id="modal-image-upload" class="hidden" accept="image/*" onchange="handleImagePreview(event)">
+                        </label>
+                        
+                        <!-- Preview container -->
+                        <div id="modal-image-preview-container" class="hidden relative w-20 h-20 border border-gray-200 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
+                            <img id="modal-image-preview" src="" alt="preview" class="max-w-full max-h-full object-contain">
+                            <button onclick="clearImage()" class="absolute top-0 right-0 bg-red-500 text-white rounded-bl-lg p-1 hover:bg-red-600">
+                                <i class="ph ph-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 bg-gray-50 flex justify-end gap-2 border-t border-gray-100">
+                <button onclick="closeModal()" class="px-4 py-2 rounded-lg font-bold text-gray-600 hover:bg-gray-200 transition-colors">취소</button>
+                <button onclick="saveDayData()" class="px-6 py-2 rounded-lg font-bold text-white bg-pink-500 hover:bg-pink-600 shadow-md transition-colors">저장하기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentDate = new Date();
+        // Set initial date to match user's reference image if desired, or use current real date.
+        // Let's use the current date for a general tool.
+        
+        // Data Store: Key = "YYYY-MM-DD", Value = { text: string, color: string, image: dataURL }
+        let calendarData = {};
+        let editingDateStr = null;
+        let pendingImageDataUrl = null;
+
+        // Initialize App
+        function init() {
+            generateSprings();
+            renderCalendar();
+            
+            // Load global memo if exists in memory (optional, but good practice if we expand)
+            const globalMemoEl = document.getElementById('global-memo');
+            globalMemoEl.addEventListener('input', function() {
+                // Keep it in sync if needed later
+            });
+        }
+
+        // Generate the visual springs at the top
+        function generateSprings() {
+            const container = document.getElementById('springs-container');
+            container.innerHTML = '';
+            // Generate 15 springs
+            for(let i = 0; i < 15; i++) {
+                const spring = document.createElement('div');
+                spring.className = 'spring';
+                container.appendChild(spring);
+            }
+        }
+
+        // Main Calendar Rendering Logic
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Update Title
+            const titleStr = `${year}.${String(month + 1).padStart(2, '0')}`;
+            document.getElementById('calendar-title').textContent = titleStr;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            const prevLastDay = new Date(year, month, 0).getDate();
+            
+            const daysContainer = document.getElementById('calendar-days');
+            daysContainer.innerHTML = '';
+
+            let daysHtml = '';
+            
+            // Calculate total cells needed (rows * 7 cols). Usually 5 or 6 rows.
+            const totalCells = Math.ceil((firstDayIndex + lastDay) / 7) * 7;
+
+            for (let i = 1; i <= totalCells; i++) {
+                let dayNumber;
+                let isCurrentMonth = true;
+                let dateStr = '';
+                
+                // Prev month days
+                if (i <= firstDayIndex) {
+                    dayNumber = prevLastDay - firstDayIndex + i;
+                    isCurrentMonth = false;
+                } 
+                // Current month days
+                else if (i <= firstDayIndex + lastDay) {
+                    dayNumber = i - firstDayIndex;
+                    dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
+                } 
+                // Next month days
+                else {
+                    dayNumber = i - (firstDayIndex + lastDay);
+                    isCurrentMonth = false;
+                }
+
+                // Determine column index (0=Sun, 6=Sat)
+                const colIndex = (i - 1) % 7;
+                
+                // Styling based on day type
+                let textClass = 'text-gray-400 text-sm'; // Default for non-current month
+                if (isCurrentMonth) {
+                    if (colIndex === 0) textClass = 'text-diary-sun font-bold'; // Sunday
+                    else if (colIndex === 6) textClass = 'text-diary-sat font-bold'; // Saturday
+                    else textClass = 'text-diary-text font-bold'; // Weekday
+                }
+
+                // Cell styling
+                let cellClasses = 'calendar-cell p-1.5 cursor-pointer hover:bg-pink-50 flex flex-col group';
+                // Add bottom border only if it's NOT the last row
+                if (i <= totalCells - 7) {
+                    cellClasses += ' border-b border-gray-200';
+                }
+
+                // Get data for this day if it exists
+                const dayData = calendarData[dateStr] || { text: '', color: '#333333', image: null };
+                
+                // Format text with line breaks for HTML
+                const formattedText = dayData.text ? dayData.text.replace(/\n/g, '<br>') : '';
+
+                // HTML structure for a single day cell
+                if (isCurrentMonth) {
+                    daysHtml += `
+                        <div class="${cellClasses}" onclick="openModal('${dateStr}')" data-date="${dateStr}">
+                            <div class="${textClass} text-lg font-sans ml-1">${dayNumber}</div>
+                            
+                            <!-- Content Area (Text & Image) -->
+                            <div class="flex-1 flex flex-col gap-1 mt-1 overflow-hidden pointer-events-none">
+                                ${dayData.image ? `<div class="flex justify-center mb-1"><img src="${dayData.image}" class="max-h-14 max-w-full object-contain drop-shadow-sm"></div>` : ''}
+                                ${formattedText ? `<div class="text-sm font-handwriting leading-tight text-center" style="color: ${dayData.color}">${formattedText}</div>` : ''}
+                            </div>
+                            
+                            <!-- Hover indicator -->
+                            <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity no-print">
+                                <i class="ph-fill ph-plus-circle text-pink-300 text-lg"></i>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Empty/faded cells for prev/next month
+                    daysHtml += `
+                        <div class="calendar-cell p-1.5 bg-gray-50/50 ${i <= totalCells - 7 ? 'border-b border-gray-200' : ''}">
+                            <div class="${textClass} ml-1">${dayNumber}</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            daysContainer.innerHTML = daysHtml;
+        }
+
+        // Navigation
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            renderCalendar();
+        }
+
+        // --- Modal & Data Logic ---
+        
+        function openModal(dateStr) {
+            editingDateStr = dateStr;
+            const data = calendarData[dateStr] || { text: '', color: '#333333', image: null };
+            
+            // Format title: "2026년 9월 15일"
+            const [y, m, d] = dateStr.split('-');
+            document.getElementById('modal-date-title').textContent = `${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
+            
+            // Populate inputs
+            document.getElementById('modal-text').value = data.text;
+            document.getElementById('modal-color').value = data.color;
+            
+            // Handle image preview
+            pendingImageDataUrl = data.image;
+            updateImagePreviewUI();
+            
+            // Show modal
+            document.getElementById('edit-modal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('modal-text').focus();
+            }, 100);
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+            editingDateStr = null;
+            pendingImageDataUrl = null;
+            document.getElementById('modal-image-upload').value = ''; // Reset file input
+        }
+
+        function handleImagePreview(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pendingImageDataUrl = e.target.result;
+                    updateImagePreviewUI();
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function clearImage() {
+            pendingImageDataUrl = null;
+            document.getElementById('modal-image-upload').value = '';
+            updateImagePreviewUI();
+        }
+
+        function updateImagePreviewUI() {
+            const previewContainer = document.getElementById('modal-image-preview-container');
+            const previewImg = document.getElementById('modal-image-preview');
+            
+            if (pendingImageDataUrl) {
+                previewImg.src = pendingImageDataUrl;
+                previewContainer.classList.remove('hidden');
+            } else {
+                previewImg.src = '';
+                previewContainer.classList.add('hidden');
+            }
+        }
+
+        function saveDayData() {
+            if (!editingDateStr) return;
+            
+            const text = document.getElementById('modal-text').value.trim();
+            const color = document.getElementById('modal-color').value;
+            
+            // Save to state
+            calendarData[editingDateStr] = {
+                text: text,
+                color: color,
+                image: pendingImageDataUrl
+            };
+            
+            // Clean up empty entries to save memory (optional)
+            if (!text && !pendingImageDataUrl) {
+                delete calendarData[editingDateStr];
+            }
+            
+            closeModal();
+            renderCalendar(); // Re-render to show changes
+        }
+
+        // --- Export to PNG Logic ---
+        
+        async function downloadCalendar() {
+            const captureArea = document.getElementById('capture-area');
+            const textarea = document.getElementById('global-memo');
+            const renderDiv = document.getElementById('global-memo-render');
+            const originalBtnHtml = document.querySelector('button[onclick="downloadCalendar()"]').innerHTML;
+            const btn = document.querySelector('button[onclick="downloadCalendar()"]');
+            
+            try {
+                // UI feedback
+                btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin text-xl"></i> 저장 중...';
+                btn.disabled = true;
+
+                // Pre-process for capture
+                document.body.classList.add('is-printing');
+                
+                // Swap textarea with a div to ensure text renders perfectly in canvas
+                renderDiv.textContent = textarea.value || textarea.placeholder;
+                if(!textarea.value) renderDiv.classList.add('text-pink-300'); // placeholder color
+                else renderDiv.classList.remove('text-pink-300');
+                
+                textarea.style.display = 'none';
+                renderDiv.classList.remove('hidden');
+
+                // Wait a tiny bit for UI to settle
+                await new Promise(r => setTimeout(r, 100));
+
+                // Capture
+                const canvas = await html2canvas(captureArea, {
+                    scale: 2, // High resolution
+                    backgroundColor: '#e5e7eb', // Match body bg so rounded corners look good
+                    logging: false,
+                    useCORS: true // Attempt to load external images if any
+                });
+
+                // Create download link
+                const image = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                
+                // Filename based on current viewed month
+                const titleStr = document.getElementById('calendar-title').textContent.replace('.', '_');
+                link.download = `다이어리_${titleStr}.png`;
+                link.href = image;
+                link.click();
+                
+            } catch (error) {
+                console.error("Capture failed:", error);
+                alert("이미지 저장 중 오류가 발생했습니다.");
+            } finally {
+                // Restore UI
+                textarea.style.display = 'block';
+                renderDiv.classList.add('hidden');
+                document.body.classList.remove('is-printing');
+                
+                btn.innerHTML = originalBtnHtml;
+                btn.disabled = false;
+            }
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>
