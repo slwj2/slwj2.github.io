@@ -2,10 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Transparent Fireworks Overlay</title>
     <style>
-        /* HTML과 Body 배경을 완전 투명하게 설정 */
         html, body {
             margin: 0;
             padding: 0;
@@ -13,9 +12,10 @@
             height: 100%;
             background: transparent;
             overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        /* 캔버스 설정: 전체화면 고정, 마우스 이벤트 무시, 최상단 배치 */
         #fireworks {
             position: fixed;
             top: 0;
@@ -34,313 +34,389 @@
 
     <script>
         /**
-         * Canvas 2D 기반 고품질 불꽃놀이 오버레이
-         * 의존성 없음, 완전 투명 배경, 물리 엔진 시뮬레이션
+         * 1. 고성능 투명 캔버스 설정
          */
-
         const canvas = document.getElementById('fireworks');
-        const ctx = canvas.getContext('2d', { alpha: true }); // 투명도 완벽 지원
+        const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
 
-        let cw, ch;
-        let dpr = window.devicePixelRatio || 1;
+        let cw = window.innerWidth;
+        let ch = window.innerHeight;
+        // 모바일 및 고해상도 기기 렉 방지를 위해 DPR을 최대 1.5로 제한
+        let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-        // 화면 크기 조정 함수
-        function resizeCanvas() {
+        function resize() {
             cw = window.innerWidth;
             ch = window.innerHeight;
-            canvas.width = cw * dpr;
-            canvas.height = ch * dpr;
+            canvas.width = Math.floor(cw * dpr);
+            canvas.height = Math.floor(ch * dpr);
             ctx.scale(dpr, dpr);
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.addEventListener('resize', resize);
+        resize();
 
-        // 시스템 상태 및 설정
-        const system = {
-            auto: true,
-            maxParticles: 2000,
-            particleMultiplier: 1.0, // FPS에 따른 파티클 수 조절
-            fps: 60,
-            lastTime: performance.now(),
-            nextLaunchTime: 0,
-            gravity: 0.15
-        };
+        /**
+         * 2. Web Audio API 절차적 사운드 신시사이저
+         * 외부 에셋 0%, 순수 오디오 노드 합성
+         */
+        let audioCtx = null;
 
-        // 색상 프리셋 (r, g, b)
-        const COLORS = [
-            [255, 255, 255], // White
-            [255, 215, 0],   // Gold
-            [255, 165, 0],   // Orange
-            [255, 50, 50],   // Red
-            [255, 105, 180], // Pink
-            [160, 32, 240],  // Purple
-            [50, 100, 255],  // Blue
-            [0, 255, 255],   // Cyan
-            [50, 255, 50]    // Green
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+        window.addEventListener('click', initAudio, { once: true });
+        window.addEventListener('keydown', initAudio, { once: true });
+
+        // 발사음: 밴드패스 필터를 260Hz에서 1500Hz로 스윕
+        function playLaunchSound() {
+            if (!audioCtx || audioCtx.state !== 'running') return;
+            const now = audioCtx.currentTime;
+
+            const bufferSize = audioCtx.sampleRate * 1.2;
+            const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+
+            const whiteNoise = audioCtx.createBufferSource();
+            whiteNoise.buffer = noiseBuffer;
+
+            const bpf = audioCtx.createBiquadFilter();
+            bpf.type = 'bandpass';
+            bpf.Q.value = 3.5;
+            bpf.frequency.setValueAtTime(260, now);
+            bpf.frequency.exponentialRampToValueAtTime(1500, now + 1.1);
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.linearRampToValueAtTime(0.2, now + 0.2);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+            whiteNoise.connect(bpf);
+            bpf.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            whiteNoise.start(now);
+            whiteNoise.stop(now + 1.2);
+        }
+
+        // 폭음: 저역 사인파 + 로우패스 노이즈 펀치 (거리/음속 지연 0.6~1.2초 반영)
+        function playExplosionSound(delaySec) {
+            if (!audioCtx || audioCtx.state !== 'running') return;
+
+            setTimeout(() => {
+                if (!audioCtx || audioCtx.state !== 'running') return;
+                const now = audioCtx.currentTime;
+
+                // [Sub-bass Sine] 타격감 넘치는 저역 진동
+                const osc = audioCtx.createOscillator();
+                const oscGain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(140, now);
+                osc.frequency.exponentialRampToValueAtTime(32, now + 0.7);
+
+                oscGain.gain.setValueAtTime(0.6, now);
+                oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+                osc.connect(oscGain);
+                oscGain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.8);
+
+                // [Lowpass Noise] 육중한 폭발 잔향
+                const bufferSize = audioCtx.sampleRate * 1.5;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const out = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    out[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = noiseBuffer;
+
+                const lpf = audioCtx.createBiquadFilter();
+                lpf.type = 'lowpass';
+                lpf.frequency.setValueAtTime(450, now);
+                lpf.frequency.exponentialRampToValueAtTime(60, now + 1.3);
+
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0.5, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+
+                noise.connect(lpf);
+                lpf.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+
+                noise.start(now);
+                noise.stop(now + 1.4);
+            }, delaySec * 1000);
+        }
+
+        // 크랙클링: 타닥거리는 잔광 사운드
+        function playCrackSound() {
+            if (!audioCtx || audioCtx.state !== 'running') return;
+            const now = audioCtx.currentTime;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(random(1200, 3200), now);
+
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.04);
+        }
+
+        /**
+         * 3. 물리 시뮬레이션 및 그래픽 시스템
+         */
+        const random = (min, max) => Math.random() * (max - min) + min;
+
+        const PALETTES = [
+            { r: 255, g: 215, b: 0 },   // Gold
+            { r: 255, g: 70,  b: 50 },   // Red
+            { r: 0,   g: 220, b: 255 },  // Cyan
+            { r: 255, g: 105, b: 180 },  // Pink
+            { r: 160, g: 60,  b: 255 },  // Purple
+            { r: 50,  g: 255, b: 120 },  // Lime
+            { r: 255, g: 150, b: 40 },   // Orange
+            { r: 245, g: 245, b: 255 }   // Pure Silver
         ];
 
-        // 폭죽 타입
         const TYPES = ['Sphere', 'Peony', 'Chrysanthemum', 'Willow', 'Ring', 'Double', 'Crackling'];
 
-        // 오브젝트 풀 (배열)
         let shells = [];
         let particles = [];
         let flashes = [];
         let smokes = [];
 
-        // 유틸리티 함수
-        const random = (min, max) => Math.random() * (max - min) + min;
-        const randomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
-
-        // 1. 발사체 (상승하는 폭죽)
+        // 1. 발사체 (약 1.4초 상승)
         class Shell {
-            constructor() {
-                this.x = random(cw * 0.2, cw * 0.8);
+            constructor(targetX, targetY) {
+                this.x = targetX !== undefined ? targetX : random(cw * 0.15, cw * 0.85);
                 this.y = ch;
-                this.targetY = random(ch * 0.1, ch * 0.4);
-                this.vx = random(-1.5, 1.5);
-                this.vy = random(-14, -18);
-                this.color = randomColor();
+                this.targetY = targetY !== undefined ? targetY : random(ch * 0.12, ch * 0.38);
+
+                // 1.4초 동안 도달하도록 물리 수치 정밀 튜닝
+                this.lifeTime = 84; // 84 frames ≈ 1.4s
+                this.gravity = 0.18;
+                this.vy = -((ch - this.targetY) / this.lifeTime + 0.5 * this.gravity * this.lifeTime);
+                this.vx = random(-1.0, 1.0);
+
+                this.color = PALETTES[Math.floor(Math.random() * PALETTES.length)];
                 this.type = TYPES[Math.floor(Math.random() * TYPES.length)];
                 this.history = [];
                 this.dead = false;
+
+                playLaunchSound();
             }
 
-            update(dt) {
+            update() {
                 this.history.push({ x: this.x, y: this.y });
-                if (this.history.length > 8) this.history.shift();
+                if (this.history.length > 5) this.history.shift();
 
-                this.vy += system.gravity * 0.8 * (dt / 16.6); // 상승 중력
-                this.x += this.vx * (dt / 16.6);
-                this.y += this.vy * (dt / 16.6);
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
 
-                // 약간의 좌우 흔들림
-                this.vx += random(-0.2, 0.2);
-
-                // 상승 중 작은 spark 발생
-                if (Math.random() > 0.5) {
+                // 꼬리 스파크
+                if (Math.random() < 0.6) {
                     particles.push(new Spark(this.x, this.y, this.color));
                 }
 
-                // 폭발 조건: 목표 높이 도달 또는 하강 시작
-                if (this.vy >= 0 || this.y <= this.targetY) {
+                if (this.vy >= -0.5 || this.y <= this.targetY) {
                     this.explode();
                     this.dead = true;
                 }
             }
 
-            draw(ctx) {
-                ctx.globalCompositeOperation = 'lighter';
+            draw() {
+                if (this.history.length < 2) return;
                 ctx.beginPath();
-                if (this.history.length > 0) {
-                    ctx.moveTo(this.history[0].x, this.history[0].y);
-                    for (let i = 1; i < this.history.length; i++) {
-                        ctx.lineTo(this.history[i].x, this.history[i].y);
-                    }
+                ctx.moveTo(this.history[0].x, this.history[0].y);
+                for (let i = 1; i < this.history.length; i++) {
+                    ctx.lineTo(this.history[i].x, this.history[i].y);
                 }
-                ctx.strokeStyle = `rgba(255, 230, 200, 0.8)`;
-                ctx.lineWidth = 3;
-                
-                // 중심부 밝은 빛과 Glow (상승 궤적)
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = `rgb(${this.color[0]}, ${this.color[1]}, ${this.color[2]})`;
+                ctx.strokeStyle = `rgba(255, 235, 180, 0.8)`;
+                ctx.lineWidth = 2.5;
                 ctx.stroke();
-                
-                ctx.shadowBlur = 0; // 초기화
             }
 
             explode() {
-                // Flash 발생
                 flashes.push(new Flash(this.x, this.y));
 
-                // 폭죽 타입에 따른 파티클 생성
-                let count = Math.floor(random(80, 150) * system.particleMultiplier);
-                let color = this.color;
-                let isCrackling = this.type === 'Crackling';
+                // 빛보다 0.6~1.2초 늦게 오는 음속 지연 계산
+                const delay = random(0.6, 1.2);
+                playExplosionSound(delay);
 
-                // 성능 조절 방어코드
-                if (particles.length > system.maxParticles) return;
+                let count = Math.floor(random(90, 140));
+                let color = this.color;
 
                 switch (this.type) {
                     case 'Sphere':
                     case 'Peony':
                         for (let i = 0; i < count; i++) {
                             let angle = random(0, Math.PI * 2);
-                            let speed = random(1, this.type === 'Peony' ? 5 : 8);
-                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color, false, 0.94));
+                            let spd = random(2, this.type === 'Peony' ? 5.5 : 8.5);
+                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * spd, Math.sin(angle) * spd, color, 0.95, false));
                         }
                         break;
                     case 'Chrysanthemum':
                         for (let i = 0; i < count; i++) {
                             let angle = random(0, Math.PI * 2);
-                            let speed = random(2, 10);
-                            // 긴 꼬리를 가지며 약간 더 느리게 사라짐
-                            let p = new Particle(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color, false, 0.96);
-                            p.historySize = 15;
+                            let spd = random(3, 9.5);
+                            let p = new Particle(this.x, this.y, Math.cos(angle) * spd, Math.sin(angle) * spd, color, 0.965, false);
+                            p.maxHistory = 8;
+                            p.life = p.maxLife = random(60, 95);
                             particles.push(p);
                         }
                         break;
                     case 'Willow':
                         for (let i = 0; i < count; i++) {
                             let angle = random(0, Math.PI * 2);
-                            let speed = random(1, 6);
-                            // 버드나무처럼 중력을 강하게, 마찰을 높게, 황금색 강제
-                            let p = new Particle(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, [255, 215, 100], false, 0.92);
-                            p.gravity = 0.25;
-                            p.life = random(80, 120);
-                            p.historySize = 20;
+                            let spd = random(1.5, 6);
+                            let p = new Particle(this.x, this.y, Math.cos(angle) * spd, Math.sin(angle) * spd, { r: 255, g: 200, b: 90 }, 0.93, false);
+                            p.gravity = 0.28;
+                            p.maxHistory = 12;
+                            p.life = p.maxLife = random(80, 120);
                             particles.push(p);
                         }
                         break;
                     case 'Ring':
-                        count = Math.floor(40 * system.particleMultiplier);
+                        count = 45;
                         for (let i = 0; i < count; i++) {
                             let angle = (Math.PI * 2 / count) * i;
-                            let speed = 7;
-                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color, false, 0.95));
+                            let spd = 7.5;
+                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * spd, Math.sin(angle) * spd, color, 0.955, false));
                         }
                         break;
                     case 'Double':
-                        let color2 = randomColor();
-                        // 외곽
-                        for (let i = 0; i < count; i++) {
+                        let color2 = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+                        for (let i = 0; i < count * 0.65; i++) {
                             let angle = random(0, Math.PI * 2);
-                            let speed = random(5, 9);
-                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color, false, 0.94));
+                            let spd = random(6, 10);
+                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * spd, Math.sin(angle) * spd, color, 0.95, false));
                         }
-                        // 내부
-                        for (let i = 0; i < count * 0.5; i++) {
+                        for (let i = 0; i < count * 0.35; i++) {
                             let angle = random(0, Math.PI * 2);
-                            let speed = random(1, 4);
-                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color2, false, 0.92));
+                            let spd = random(1.5, 4.5);
+                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * spd, Math.sin(angle) * spd, color2, 0.93, false));
                         }
                         break;
                     case 'Crackling':
                         for (let i = 0; i < count; i++) {
                             let angle = random(0, Math.PI * 2);
-                            let speed = random(2, 8);
-                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * speed, Math.sin(angle) * speed, color, true, 0.91));
+                            let spd = random(2.5, 8.5);
+                            particles.push(new Particle(this.x, this.y, Math.cos(angle) * spd, Math.sin(angle) * spd, color, 0.93, true));
                         }
                         break;
                 }
 
-                // 연기 생성
-                for (let i = 0; i < 5; i++) {
+                // 가벼운 연기 2개 추가
+                for (let i = 0; i < 2; i++) {
                     smokes.push(new Smoke(this.x, this.y));
                 }
             }
         }
 
-        // 2. 파티클 시스템 (폭발 파편)
+        // 2. 파티클 (2-패스 렌더링으로 shadowBlur 없이 발광 시뮬레이션)
         class Particle {
-            constructor(x, y, vx, vy, color, crackling, friction) {
+            constructor(x, y, vx, vy, color, friction, crackling) {
                 this.x = x;
                 this.y = y;
                 this.vx = vx;
                 this.vy = vy;
                 this.color = color;
-                this.alpha = 1;
-                this.friction = friction || 0.95;
-                this.gravity = system.gravity;
-                this.life = random(40, 80);
-                this.maxLife = this.life;
+                this.friction = friction;
+                this.gravity = 0.14;
                 this.crackling = crackling;
+
+                this.life = random(40, 75);
+                this.maxLife = this.life;
                 this.history = [];
-                this.historySize = 10;
+                this.maxHistory = 4;
                 this.dead = false;
             }
 
-            update(dt) {
-                let timeScale = dt / 16.6;
-
-                // Trail 저장
+            update() {
                 this.history.push({ x: this.x, y: this.y });
-                if (this.history.length > this.historySize) {
-                    this.history.shift();
+                if (this.history.length > this.maxHistory) this.history.shift();
+
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.life--;
+                if (this.life <= 0) {
+                    if (this.crackling && Math.random() < 0.4) {
+                        flashes.push(new MiniFlash(this.x, this.y));
+                        playCrackSound();
+                    }
+                    this.dead = true;
                 }
 
-                // 물리 업데이트
-                this.vx *= Math.pow(this.friction, timeScale);
-                this.vy *= Math.pow(this.friction, timeScale);
-                this.vy += this.gravity * timeScale;
-                this.x += this.vx * timeScale;
-                this.y += this.vy * timeScale;
-
-                this.life -= timeScale;
-                this.alpha = Math.max(0, this.life / this.maxLife);
-
-                // Crackling 특수 효과
-                if (this.crackling && this.life < 15 && Math.random() < 0.2) {
-                    flashes.push(new MiniFlash(this.x, this.y));
-                    this.dead = true; 
-                }
-
-                if (this.life <= 0 || this.alpha <= 0) this.dead = true;
-                
-                // 화면 밖으로 나가면 제거
                 if (this.x < 0 || this.x > cw || this.y > ch) this.dead = true;
             }
 
-            draw(ctx) {
+            drawGlow(targetCtx) {
                 if (this.history.length < 2) return;
+                const alpha = Math.max(0, this.life / this.maxLife);
+                targetCtx.strokeStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha * 0.45})`;
+                targetCtx.lineWidth = 3.5;
+                targetCtx.beginPath();
+                targetCtx.moveTo(this.history[0].x, this.history[0].y);
+                targetCtx.lineTo(this.x, this.y);
+                targetCtx.stroke();
+            }
 
-                ctx.globalCompositeOperation = 'lighter';
-                
-                // 코어 → 외곽으로 색상이 부드럽게 변하는 효과 (상태에 따라 밝기 조절)
-                let brightness = (this.life / this.maxLife); 
-                let r = Math.min(255, this.color[0] + (255 - this.color[0]) * brightness);
-                let g = Math.min(255, this.color[1] + (255 - this.color[1]) * brightness);
-                let b = Math.min(255, this.color[2] + (255 - this.color[2]) * brightness);
-
-                ctx.beginPath();
-                ctx.moveTo(this.history[0].x, this.history[0].y);
-                for (let i = 1; i < this.history.length; i++) {
-                    ctx.lineTo(this.history[i].x, this.history[i].y);
-                }
-
-                // 오래된 trail은 점점 투명해짐 (그라데이션 대신 획 전체 알파로 성능 최적화)
-                ctx.strokeStyle = `rgba(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)}, ${this.alpha})`;
-                ctx.lineWidth = 2.5 * brightness;
-                ctx.lineCap = 'round';
-                
-                // 초기 파티클 폭발 시에만 글로우 효과 적용 (성능 확보)
-                if (brightness > 0.8) {
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]}, ${this.alpha})`;
-                } else {
-                    ctx.shadowBlur = 0;
-                }
-
-                ctx.stroke();
-                ctx.shadowBlur = 0; // 초기화
+            drawCore(targetCtx) {
+                if (this.history.length < 2) return;
+                const alpha = Math.max(0, this.life / this.maxLife);
+                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.9})`;
+                targetCtx.lineWidth = 1.2;
+                targetCtx.beginPath();
+                targetCtx.moveTo(this.history[this.history.length - 1].x, this.history[this.history.length - 1].y);
+                targetCtx.lineTo(this.x, this.y);
+                targetCtx.stroke();
             }
         }
 
-        // 3. 발사 시 떨어지는 작은 Spark
+        // 3. 발사 스파크
         class Spark {
             constructor(x, y, color) {
-                this.x = x;
+                this.x = x + random(-2, 2);
                 this.y = y;
-                this.vx = random(-1, 1);
-                this.vy = random(1, 3);
+                this.vx = random(-0.6, 0.6);
+                this.vy = random(1.5, 3.5);
                 this.color = color;
-                this.alpha = 1;
+                this.alpha = 0.8;
                 this.dead = false;
             }
-            update(dt) {
-                this.x += this.vx * (dt / 16.6);
-                this.y += this.vy * (dt / 16.6);
-                this.alpha -= 0.05 * (dt / 16.6);
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.05;
                 if (this.alpha <= 0) this.dead = true;
             }
-            draw(ctx) {
-                ctx.globalCompositeOperation = 'lighter';
-                ctx.fillStyle = `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]}, ${this.alpha})`;
-                ctx.fillRect(this.x, this.y, 2, 2);
+            draw() {
+                ctx.fillStyle = `rgba(255, 220, 150, ${this.alpha})`;
+                ctx.fillRect(this.x, this.y, 1.5, 1.5);
             }
         }
 
-        // 4. 폭발 순간 강렬한 Flash (Glow / Radial Gradient 사용)
+        // 4. 강렬한 Flash (고성능 원형 렌더)
         class Flash {
             constructor(x, y) {
                 this.x = x;
@@ -348,84 +424,82 @@
                 this.life = 1.0;
                 this.dead = false;
             }
-            update(dt) {
-                this.life -= 0.1 * (dt / 16.6); // 빠르게 감소
+            update() {
+                this.life -= 0.14;
                 if (this.life <= 0) this.dead = true;
             }
-            draw(ctx) {
-                ctx.globalCompositeOperation = 'lighter';
-                let radius = 150 * (1 - this.life) + 50; // 순간적으로 팽창
-                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, radius);
-                gradient.addColorStop(0, `rgba(255, 255, 255, ${this.life})`);
-                gradient.addColorStop(0.2, `rgba(255, 200, 150, ${this.life * 0.5})`);
-                gradient.addColorStop(1, `rgba(0, 0, 0, 0)`);
+            draw() {
+                let r = 85 * (1 - this.life) + 25;
+                let grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r);
+                grad.addColorStop(0, `rgba(255, 255, 255, ${this.life * 0.8})`);
+                grad.addColorStop(0.3, `rgba(255, 230, 180, ${this.life * 0.3})`);
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
 
-                ctx.fillStyle = gradient;
+                ctx.fillStyle = grad;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        class MiniFlash extends Flash {
-            draw(ctx) {
-                ctx.globalCompositeOperation = 'lighter';
-                let radius = 15;
-                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, radius);
-                gradient.addColorStop(0, `rgba(255, 255, 255, ${this.life})`);
-                gradient.addColorStop(1, `rgba(0, 0, 0, 0)`);
-
-                ctx.fillStyle = gradient;
+        class MiniFlash {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.life = 1.0;
+                this.dead = false;
+            }
+            update() {
+                this.life -= 0.3;
+                if (this.life <= 0) this.dead = true;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.life})`;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        // 5. 폭발 후 남는 연기
+        // 5. 연기 (부하가 적은 저화질 다각형 연기)
         class Smoke {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.vx = random(-0.5, 0.5);
-                this.vy = random(-0.5, 0); // 천천히 상승
-                this.size = random(20, 40);
-                this.alpha = random(0.05, 0.1); // 매우 낮은 초기 알파
-                this.life = 0;
+                this.vx = random(-0.3, 0.3);
+                this.vy = random(-0.2, -0.6);
+                this.radius = random(18, 30);
+                this.alpha = 0.08;
                 this.dead = false;
             }
-            update(dt) {
-                let timeScale = dt / 16.6;
-                this.x += this.vx * timeScale;
-                this.y += this.vy * timeScale;
-                this.size += 0.2 * timeScale; // 천천히 확장
-                this.life += timeScale;
-
-                if (this.life > 100) {
-                    this.alpha -= 0.001 * timeScale; // 자연스러운 소멸
-                }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.radius += 0.25;
+                this.alpha -= 0.0009;
                 if (this.alpha <= 0) this.dead = true;
             }
-            draw(ctx) {
-                ctx.globalCompositeOperation = 'source-over'; // 연기는 Additive 렌더링을 하지 않음
-                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                // 어두운 흰색~회색 톤으로 연기 표현
-                gradient.addColorStop(0, `rgba(150, 150, 150, ${this.alpha})`);
-                gradient.addColorStop(1, `rgba(150, 150, 150, 0)`);
-
-                ctx.fillStyle = gradient;
+            draw() {
+                ctx.fillStyle = `rgba(200, 200, 200, ${this.alpha})`;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        // 키보드 조작 처리
+        /**
+         * 4. 메인 루프 & 인터랙션
+         */
+        let isAuto = true;
+        let nextLaunch = 0;
+
+        // 키보드 조작
         window.addEventListener('keydown', (e) => {
+            initAudio();
             if (e.code === 'Space') {
                 shells.push(new Shell());
             } else if (e.code === 'KeyA') {
-                system.auto = !system.auto;
+                isAuto = !isAuto;
             } else if (e.code === 'KeyC') {
                 shells = [];
                 particles = [];
@@ -434,86 +508,73 @@
             }
         });
 
-        // 자동 불꽃놀이 스케줄링
-        function manageAutoLaunch(currentTime) {
-            if (!system.auto) return;
-            
-            if (currentTime > system.nextLaunchTime) {
-                // 한 번에 발사될 폭죽 개수 결정 (자연스러운 리듬)
-                let volleyCount = Math.random() > 0.8 ? Math.floor(random(2, 5)) : 1;
-                
-                for(let i=0; i<volleyCount; i++) {
-                    setTimeout(() => {
-                        shells.push(new Shell());
-                    }, i * random(100, 300));
-                }
+        // 화면 탭/클릭 시 해당 위치로 불꽃 발사
+        window.addEventListener('pointerdown', (e) => {
+            initAudio();
+            shells.push(new Shell(e.clientX, e.clientY));
+        });
 
-                // 다음 발사까지의 시간 (쉬는 타이밍 생성)
-                let delay = Math.random() > 0.7 ? random(2000, 4000) : random(500, 1500);
-                system.nextLaunchTime = currentTime + delay;
-            }
-        }
-
-        // 성능 최적화: FPS 모니터링 및 파티클 조절
-        function adjustPerformance(dt) {
-            let currentFps = 1000 / dt;
-            system.fps = system.fps * 0.9 + currentFps * 0.1;
-
-            if (system.fps < 45) {
-                system.particleMultiplier = Math.max(0.3, system.particleMultiplier - 0.05);
-            } else if (system.fps > 55) {
-                system.particleMultiplier = Math.min(1.0, system.particleMultiplier + 0.02);
-            }
-        }
-
-        // 메인 렌더 루프
         function animate(timestamp) {
-            let dt = timestamp - system.lastTime;
-            // 탭 변경 등으로 딜레이가 커졌을 때 폭발 방지
-            if (dt > 100) dt = 16.6; 
-            system.lastTime = timestamp;
-
-            adjustPerformance(dt);
-            manageAutoLaunch(timestamp);
-
-            // 핵심: 배경을 칠하지 않고 이전 프레임을 완전히 삭제하여 투명도 유지
+            // 투명 캔버스 유지: 배경 덮기 없이 clearRect만 사용
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 1. 연기 렌더링 (가장 뒤에)
+            // 자동 발사 스케줄링
+            if (isAuto && timestamp > nextLaunch) {
+                let burstCount = Math.random() < 0.25 ? Math.floor(random(2, 4)) : 1;
+                for (let i = 0; i < burstCount; i++) {
+                    setTimeout(() => {
+                        shells.push(new Shell());
+                    }, i * random(120, 280));
+                }
+                nextLaunch = timestamp + (Math.random() < 0.2 ? random(2500, 4200) : random(600, 1600));
+            }
+
+            // 1. 연기 (source-over, 은은하게)
+            ctx.globalCompositeOperation = 'source-over';
             for (let i = smokes.length - 1; i >= 0; i--) {
-                smokes[i].update(dt);
-                smokes[i].draw(ctx);
+                smokes[i].update();
+                smokes[i].draw();
                 if (smokes[i].dead) smokes.splice(i, 1);
             }
 
-            // 2. 파티클 렌더링
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update(dt);
-                particles[i].draw(ctx);
-                if (particles[i].dead) particles.splice(i, 1);
-            }
+            // 2. 가산 혼합 (빛 발광 효과)
+            ctx.globalCompositeOperation = 'lighter';
+            ctx.lineCap = 'round';
 
-            // 3. 발사체 렌더링
+            // 발사체 갱신 및 렌더
             for (let i = shells.length - 1; i >= 0; i--) {
-                shells[i].update(dt);
-                shells[i].draw(ctx);
+                shells[i].update();
+                shells[i].draw();
                 if (shells[i].dead) shells.splice(i, 1);
             }
 
-            // 4. Flash 렌더링 (최상단)
+            // 파티클 패스 1: 외부 컬러 글로우
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                if (particles[i].dead) {
+                    particles.splice(i, 1);
+                } else {
+                    particles[i].drawGlow(ctx);
+                }
+            }
+
+            // 파티클 패스 2: 중심 고휘도 코어 (화이트)
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].drawCore(ctx);
+            }
+
+            // 플래시 및 크랙클링
             for (let i = flashes.length - 1; i >= 0; i--) {
-                flashes[i].update(dt);
-                flashes[i].draw(ctx);
+                flashes[i].update();
+                flashes[i].draw();
                 if (flashes[i].dead) flashes.splice(i, 1);
             }
 
             requestAnimationFrame(animate);
         }
 
-        // 초기 시작 시 첫 폭죽 발사 시간 세팅
-        system.nextLaunchTime = performance.now() + 1000;
+        // 초기 시작
         requestAnimationFrame(animate);
-
     </script>
 </body>
 </html>
