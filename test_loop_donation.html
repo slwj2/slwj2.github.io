@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>치지직 후원 오버레이 테스트</title>
+
+    <style>
+        /* =========================================
+           기본 설정
+           ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+
+            margin: 0;
+            padding: 0;
+
+            overflow: hidden;
+
+            background: transparent;
+
+            font-family:
+                "Pretendard",
+                "Noto Sans KR",
+                Arial,
+                sans-serif;
+        }
+
+
+        /* =========================================
+           OBS 전체 영역
+           ========================================= */
+
+        .overlay {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            padding: clamp(
+                16px,
+                2vw,
+                40px
+            );
+
+            background: transparent;
+        }
+
+
+        /* =========================================
+           후원 콘텐츠
+           
+           바깥 박스 없음
+           ========================================= */
+
+        .donation-content {
+            width: min(90vw, 900px);
+
+            max-height: 90vh;
+
+            text-align: center;
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform:
+                translateY(2vh)
+                scale(0.96);
+        }
+
+
+        /* =========================================
+           등장
+           ========================================= */
+
+        .donation-content.show {
+            visibility: visible;
+
+            animation:
+                donation-in
+                0.45s
+                ease-out
+                forwards;
+        }
+
+
+        /* =========================================
+           퇴장
+           ========================================= */
+
+        .donation-content.hide {
+            visibility: visible;
+
+            animation:
+                donation-out
+                0.5s
+                ease-in
+                forwards;
+        }
+
+
+        /* =========================================
+           후원 문구
+           
+           박스 없음
+           ========================================= */
+
+        .donation-title {
+            margin: 0;
+
+            font-size: clamp(
+                20px,
+                2.2vw,
+                38px
+            );
+
+            line-height: 1.4;
+
+            font-weight: 800;
+
+            color: #ffffff;
+
+            text-align: center;
+
+            word-break: keep-all;
+
+            overflow-wrap: anywhere;
+
+            text-shadow:
+                0 2px 5px
+                rgba(0, 0, 0, 0.75);
+        }
+
+
+        /* =========================================
+           닉네임
+           ========================================= */
+
+        .nickname {
+            color: #ffffff;
+
+            font-weight: 900;
+        }
+
+
+        /* =========================================
+           후원 금액
+           ========================================= */
+
+        .amount {
+            color: #ff5c8a;
+
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           후원 채팅
+           
+           ★ 유일한 네모 박스
+           ========================================= */
+
+        .donation-message {
+            margin-top: clamp(
+                12px,
+                1.5vw,
+                24px
+            );
+
+            padding:
+                clamp(12px, 1.5vw, 22px)
+                clamp(16px, 2.5vw, 35px);
+
+            background: #f5f5f5;
+
+            border-radius: clamp(
+                8px,
+                0.8vw,
+                14px
+            );
+
+            font-size: clamp(
+                16px,
+                1.6vw,
+                28px
+            );
+
+            line-height: 1.5;
+
+            font-weight: 600;
+
+            color: #333333;
+
+            text-align: center;
+
+            word-break: keep-all;
+
+            overflow-wrap: anywhere;
+
+            max-width: 100%;
+
+            max-height: 35vh;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================
+           등장 애니메이션
+           ========================================= */
+
+        @keyframes donation-in {
+
+            0% {
+                opacity: 0;
+
+                transform:
+                    translateY(2vh)
+                    scale(0.96);
+            }
+
+            100% {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        /* =========================================
+           퇴장 애니메이션
+           ========================================= */
+
+        @keyframes donation-out {
+
+            0% {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+            100% {
+                opacity: 0;
+
+                transform:
+                    translateY(-1.5vh)
+                    scale(0.97);
+            }
+        }
+
+
+        /* =========================================
+           세로 화면
+           ========================================= */
+
+        @media (orientation: portrait) {
+
+            .donation-content {
+                width: 90vw;
+            }
+
+            .donation-title {
+                font-size: clamp(
+                    18px,
+                    4.5vw,
+                    30px
+                );
+            }
+
+            .donation-message {
+                font-size: clamp(
+                    15px,
+                    3.8vw,
+                    24px
+                );
+
+                max-height: 40vh;
+            }
+        }
+
+
+        /* =========================================
+           작은 화면
+           ========================================= */
+
+        @media (max-width: 400px) {
+
+            .overlay {
+                padding: 12px;
+            }
+
+            .donation-content {
+                width: 94vw;
+            }
+
+            .donation-title {
+                font-size: 18px;
+            }
+
+            .donation-message {
+                margin-top: 10px;
+
+                padding:
+                    10px
+                    14px;
+
+                font-size: 15px;
+
+                border-radius: 7px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================================
+         OBS 투명 영역
+         ========================================= -->
+
+    <div class="overlay">
+
+        <!-- 바깥 박스가 없는 투명한 영역 -->
+        <div
+            id="donationContent"
+            class="donation-content"
+        >
+
+            <!-- =================================
+                 후원 문구
+                 ================================= -->
+
+            <div
+                id="donationTitle"
+                class="donation-title"
+            >
+
+                <span
+                    id="nickname"
+                    class="nickname"
+                ></span>
+
+                님! 치즈
+
+                <span
+                    id="amount"
+                    class="amount"
+                ></span>
+
+                후원 감사합니다.
+
+            </div>
+
+
+            <!-- =================================
+                 후원 채팅
+                 
+                 유일한 박스
+                 ================================= -->
+
+            <div
+                id="donationMessage"
+                class="donation-message"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================
+           HTML 요소 가져오기
+           ========================================= */
+
+        const donationContent =
+            document.getElementById(
+                "donationContent"
+            );
+
+        const nicknameElement =
+            document.getElementById(
+                "nickname"
+            );
+
+        const amountElement =
+            document.getElementById(
+                "amount"
+            );
+
+        const messageElement =
+            document.getElementById(
+                "donationMessage"
+            );
+
+
+        /* =========================================
+           테스트 닉네임
+           ========================================= */
+
+        const nicknames = [
+
+            "스누피",
+            "딸기우유",
+            "초코라떼",
+            "감자튀김",
+            "김치찌개",
+            "고양이집사",
+            "치즈냥",
+            "게임하는곰",
+            "퇴근한직장인",
+            "잠이안와요",
+            "오늘도왔어요",
+            "방송보는사람",
+            "익명의시청자",
+            "구독자123",
+            "치지직팬",
+            "버그입니다",
+            "오류발생",
+            "데이터누락",
+            "지나가던사람",
+            "처음왔습니다"
+
+        ];
+
+
+        /* =========================================
+           테스트 금액
+           ========================================= */
+
+        const amounts = [
+
+            "100원",
+            "500원",
+            "1,000원",
+            "2,000원",
+            "3,000원",
+            "5,000원",
+            "10,000원",
+            "20,000원",
+            "50,000원"
+
+        ];
+
+
+        /* =========================================
+           테스트 채팅
+           ========================================= */
+
+        const messages = [
+
+            "오늘도 방송 잘보고있어요 😊",
+
+            "방송 너무 재미있어요!",
+
+            "오늘도 화이팅하세요!",
+
+            "스트리머님 항상 응원합니다!",
+
+            "방송 켜져있길래 바로 들어왔어요",
+
+            "오늘 게임 뭐 하시나요?",
+
+            "목소리 너무 좋아요 ㅋㅋ",
+
+            "오늘도 잘 보고 갑니다!",
+
+            "재밌게 보고 있어요 😆",
+
+            "치즈 받아주세요!",
+
+            "오늘 방송 기다리고 있었어요",
+
+            "방송 너무 편안합니다",
+
+            "벌써 시간이 이렇게 됐네요",
+
+            "게임 실력 대박입니다",
+
+            "오늘도 정상 작동하시나요?",
+
+            "버그 여러분 반갑습니다!",
+
+            "오늘도 좋은 방송 감사합니다",
+
+            "이 방송 처음인데 재미있네요",
+
+            "ㅋㅋㅋㅋㅋㅋ 너무 웃겨요",
+
+            "다음 게임도 기대할게요!",
+
+            "오늘도 같이 놀아요!",
+
+            "방송 분위기 너무 좋아요",
+
+            "치즈 맛있게 드세요 🧀",
+
+            "스트리머님 파이팅!",
+
+            "오늘도 출석 완료했습니다!"
+
+        ];
+
+
+        /* =========================================
+           랜덤 선택
+           ========================================= */
+
+        function randomItem(array) {
+
+            return array[
+                Math.floor(
+                    Math.random() * array.length
+                )
+            ];
+        }
+
+
+        /* =========================================
+           후원 표시
+           ========================================= */
+
+        function showDonation() {
+
+            /*
+             * 랜덤 데이터 생성
+             */
+
+            const nickname =
+                randomItem(nicknames);
+
+            const amount =
+                randomItem(amounts);
+
+            const message =
+                randomItem(messages);
+
+
+            /*
+             * 화면에 데이터 적용
+             */
+
+            nicknameElement.textContent =
+                nickname;
+
+            amountElement.textContent =
+                amount;
+
+            messageElement.textContent =
+                message;
+
+
+            /*
+             * 이전 상태 완전히 초기화
+             */
+
+            donationContent.classList.remove(
+                "show"
+            );
+
+            donationContent.classList.remove(
+                "hide"
+            );
+
+
+            /*
+             * visibility 초기화
+             */
+
+            donationContent.style.visibility =
+                "hidden";
+
+
+            /*
+             * 브라우저가 변경사항을
+             * 즉시 적용하도록 강제
+             */
+
+            void donationContent.offsetWidth;
+
+
+            /*
+             * 다시 표시
+             */
+
+            donationContent.style.visibility =
+                "visible";
+
+            donationContent.classList.add(
+                "show"
+            );
+
+
+            /*
+             * 정확히 5초 동안 표시
+             */
+
+            setTimeout(() => {
+
+                /*
+                 * 등장 애니메이션 제거
+                 */
+
+                donationContent.classList.remove(
+                    "show"
+                );
+
+
+                /*
+                 * 퇴장 애니메이션 시작
+                 */
+
+                donationContent.classList.add(
+                    "hide"
+                );
+
+
+                /*
+                 * 0.5초 후
+                 * 다음 후원 표시
+                 */
+
+                setTimeout(() => {
+
+                    /*
+                     * 퇴장 상태 제거
+                     */
+
+                    donationContent.classList.remove(
+                        "hide"
+                    );
+
+
+                    /*
+                     * 완전히 숨김
+                     */
+
+                    donationContent.style.visibility =
+                        "hidden";
+
+
+                    /*
+                     * 다음 랜덤 후원
+                     */
+
+                    showDonation();
+
+                }, 500);
+
+            }, 5000);
+        }
+
+
+        /* =========================================
+           테스트 시작
+           ========================================= */
+
+        showDonation();
+
+    </script>
+
+</body>
+</html>
