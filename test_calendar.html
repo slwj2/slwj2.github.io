@@ -41,21 +41,6 @@
                             'Quicksand',
                             'sans-serif'
                         ]
-                    },
-
-                    colors: {
-                        diary: {
-                            bg: '#FAF8F5',
-                            paper: '#FFFDFB',
-                            line: '#A94442',
-                            lightLine: '#E8CACA',
-                            pink: '#FDF0F1',
-                            pink2: '#F8DDE0',
-                            red: '#B33A3A',
-                            text: '#3F3F46',
-                            muted: '#9CA3AF',
-                            blue: '#4267A9'
-                        }
                     }
                 }
             }
@@ -64,26 +49,36 @@
 
     <style>
 
+        /* =========================================================
+           기본
+        ========================================================= */
+
         * {
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        html,
-        body {
-            margin: 0;
+        html {
+            width: 100%;
             min-height: 100%;
         }
 
         body {
+            margin: 0;
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+
             background:
-                radial-gradient(
-                    circle at top,
-                    #ffffff 0%,
-                    #f4f1ef 55%,
-                    #e8e5e3 100%
+                linear-gradient(
+                    135deg,
+                    #eeeeee 0%,
+                    #e7e7e7 50%,
+                    #eeeeee 100%
                 );
 
-            overflow-x: hidden;
+            color: #333333;
+            font-family: "Quicksand", sans-serif;
         }
 
         button,
@@ -93,26 +88,50 @@
             font-family: inherit;
         }
 
+        button {
+            cursor: pointer;
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d3d3d3;
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #bcbcbc;
+        }
+
+
         /* =========================================================
-           다이어리 종이
+           메인 다이어리 종이
         ========================================================= */
 
         .diary-paper {
             position: relative;
 
-            background:
-                linear-gradient(
-                    rgba(255,255,255,0.2),
-                    rgba(255,255,255,0.2)
-                ),
-                #FAF8F5;
+            width: 100%;
+
+            background: #faf8f5;
+
+            border: 2px solid #eadede;
+            border-radius: 24px;
 
             box-shadow:
-                0 18px 45px rgba(0,0,0,0.13),
-                inset 0 0 35px rgba(130,80,80,0.035);
+                0 18px 45px rgba(0, 0, 0, 0.12),
+                inset 0 0 35px rgba(120, 80, 80, 0.025);
 
-            border: 2px solid #EDD9D9;
+            overflow: visible;
         }
+
 
         /* =========================================================
            스프링
@@ -121,15 +140,16 @@
         .spring-wrapper {
             position: absolute;
 
-            top: -25px;
+            top: -22px;
             left: 0;
 
             width: 100%;
 
-            display: flex;
-            justify-content: space-evenly;
+            padding: 0 38px;
 
-            padding: 0 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
 
             z-index: 20;
 
@@ -137,118 +157,203 @@
         }
 
         .spring {
-            width: 15px;
-            height: 43px;
+            position: relative;
+
+            width: 16px;
+            height: 42px;
+
+            flex-shrink: 0;
 
             background:
                 linear-gradient(
                     to right,
-                    #bdbdbd 0%,
-                    #ffffff 35%,
-                    #e5e5e5 55%,
-                    #929292 100%
+                    #a7a7a7 0%,
+                    #f9f9f9 30%,
+                    #ffffff 48%,
+                    #c2c2c2 72%,
+                    #858585 100%
                 );
 
             border-radius: 9px;
 
             box-shadow:
-                2px 4px 5px rgba(0,0,0,0.28);
+                1px 3px 5px rgba(0, 0, 0, 0.25);
 
-            position: relative;
+            z-index: 2;
         }
 
-        .spring::after {
-            content: '';
+        .spring::before {
+            content: "";
 
             position: absolute;
 
-            bottom: -7px;
+            top: -2px;
             left: 1px;
 
-            width: 13px;
-            height: 13px;
+            width: 14px;
+            height: 10px;
 
-            background: #222;
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    #ffffff,
+                    #c7c7c7
+                );
+
+            opacity: 0.9;
+        }
+
+        .spring::after {
+            content: "";
+
+            position: absolute;
+
+            left: 1px;
+            bottom: -7px;
+
+            width: 14px;
+            height: 14px;
+
+            background: #666666;
 
             border-radius: 50%;
 
             box-shadow:
-                inset 1px 1px 3px rgba(255,255,255,0.2);
+                inset 1px 1px 3px rgba(255,255,255,0.5),
+                1px 2px 3px rgba(0,0,0,0.15);
         }
 
+
         /* =========================================================
-           캘린더
+           상단 날짜
+        ========================================================= */
+
+        .calendar-top {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            min-height: 72px;
+
+            padding: 10px 10px 8px;
+        }
+
+        #calendar-title {
+            color: #a94442;
+
+            font-size: 42px;
+            font-weight: 700;
+
+            letter-spacing: 0.04em;
+
+            line-height: 1;
+        }
+
+
+        /* =========================================================
+           달력 전체
         ========================================================= */
 
         .calendar-grid {
-            border: 3px solid #A94442;
+            width: 100%;
 
+            border: 2px solid #a94442;
             border-radius: 14px;
 
             overflow: hidden;
 
             background: #ffffff;
+        }
 
-            box-shadow:
-                0 2px 0 rgba(169,68,66,0.05);
+
+        /* =========================================================
+           요일 헤더
+        ========================================================= */
+
+        .calendar-weekdays {
+            display: grid;
+
+            grid-template-columns:
+                repeat(7, minmax(0, 1fr));
+
+            background: #fdf0f1;
+
+            border-bottom: 2px solid #a94442;
         }
 
         .calendar-header-cell {
             min-width: 0;
 
-            padding: 8px 0;
+            padding: 10px 4px;
 
-            background: #FDEDEE;
+            text-align: center;
 
-            color: #A94442;
+            color: #a94442;
 
-            border-right:
-                1px solid rgba(169,68,66,0.2);
+            font-family:
+                "Nanum Pen Script",
+                cursive;
 
-            border-bottom:
-                3px solid #A94442;
+            font-size: 22px;
+            font-weight: 700;
+
+            line-height: 1;
+
+            border-right: 1px solid #efdada;
         }
 
         .calendar-header-cell:last-child {
             border-right: none;
         }
 
+        .calendar-header-cell.sun {
+            color: #df5555;
+        }
+
+        .calendar-header-cell.sat {
+            color: #4f8ce8;
+        }
+
+
         /* =========================================================
-           날짜 칸
+           날짜 영역
+        ========================================================= */
+
+        #calendar-days {
+            display: grid;
+
+            grid-template-columns:
+                repeat(7, minmax(0, 1fr));
+
+            background: #ffffff;
+        }
+
+
+        /* =========================================================
+           날짜 셀
         ========================================================= */
 
         .calendar-cell {
             position: relative;
 
             min-width: 0;
-            min-height: 125px;
+            min-height: 170px;
 
-            padding: 8px;
+            padding: 12px;
 
             background: #ffffff;
 
-            border-right:
-                1px solid rgba(169,68,66,0.18);
-
-            border-bottom:
-                1px solid rgba(169,68,66,0.18);
+            border-right: 1px solid #eeeeee;
+            border-bottom: 1px solid #eeeeee;
 
             display: flex;
             flex-direction: column;
 
-            cursor: pointer;
-
             transition:
                 background-color 0.15s ease,
-                transform 0.1s ease;
-        }
-
-        .calendar-cell:hover {
-            background: #FFF8F8;
-        }
-
-        .calendar-cell:active {
-            transform: scale(0.995);
+                box-shadow 0.15s ease;
         }
 
         .calendar-cell:nth-child(7n) {
@@ -259,85 +364,112 @@
             border-bottom: none;
         }
 
-        .other-month {
-            background: #FAFAFA;
+        .calendar-cell.current-month {
+            cursor: pointer;
+        }
+
+        .calendar-cell.current-month:hover {
+            background: #fffafa;
+
+            box-shadow:
+                inset 0 0 0 1px rgba(169, 68, 66, 0.08);
+        }
+
+        .calendar-cell.other-month {
+            background: #fcfcfc;
+
             cursor: default;
         }
 
-        .other-month .day-number {
-            color: #C8C8C8 !important;
-        }
 
         /* =========================================================
-           날짜 번호
+           날짜 숫자
         ========================================================= */
 
         .day-number {
-            font-family: 'Quicksand', sans-serif;
+            width: max-content;
 
-            font-size: 19px;
+            min-width: 28px;
+            height: 28px;
 
-            line-height: 1;
-
-            font-weight: 700;
-
-            color: #444;
-
-            width: fit-content;
-
-            margin-bottom: 5px;
-
-            position: relative;
-
-            z-index: 2;
-        }
-
-        .day-number.today {
-            width: 34px;
-            height: 34px;
+            padding: 2px 4px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
+            font-family: "Quicksand", sans-serif;
+
+            font-size: 18px;
+            font-weight: 700;
+
+            line-height: 1;
+
+            color: #4b4b4b;
+
             border-radius: 50%;
 
-            background: #7357E8;
-
-            color: white;
-
-            margin-top: -2px;
+            flex-shrink: 0;
         }
 
+        .day-number.sun {
+            color: #df5555;
+        }
+
+        .day-number.sat {
+            color: #4f8ce8;
+        }
+
+        .day-number.other {
+            color: #c9c9c9;
+        }
+
+        .day-number.today {
+            color: white;
+
+            background: #7160e8;
+
+            box-shadow:
+                0 2px 5px rgba(113, 96, 232, 0.25);
+        }
+
+
         /* =========================================================
-           날짜 내용
+           날짜 내부
         ========================================================= */
 
         .day-content {
+            width: 100%;
+
+            min-width: 0;
+
             flex: 1;
 
-            min-height: 0;
-
             display: flex;
-
             flex-direction: column;
-
             align-items: center;
-
             justify-content: flex-start;
 
-            gap: 4px;
+            gap: 6px;
+
+            padding: 5px 2px 4px;
 
             overflow: hidden;
         }
+
 
         /* =========================================================
            치지직 이모지
         ========================================================= */
 
         .day-emoji {
-            width: 34px;
-            height: 34px;
+            display: block;
+
+            width: 38px;
+            height: 38px;
+
+            max-width: 38px;
+            max-height: 38px;
 
             object-fit: contain;
 
@@ -346,45 +478,38 @@
             image-rendering: auto;
 
             user-select: none;
+
+            pointer-events: none;
         }
 
-        .day-emoji-row {
-            width: 100%;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            min-height: 34px;
-        }
 
         /* =========================================================
-           일정 글자
+           일정 텍스트
         ========================================================= */
 
         .schedule-text {
             width: 100%;
 
-            color: #333;
+            color: #333333;
 
             font-family:
-                'Nanum Pen Script',
+                "Nanum Pen Script",
                 cursive;
 
-            font-size: 23px;
+            font-size: 21px;
+            font-weight: 400;
 
-            line-height: 1.15;
+            line-height: 1.12;
 
             text-align: center;
 
+            white-space: pre-wrap;
             word-break: keep-all;
-
             overflow-wrap: anywhere;
 
-            white-space: pre-wrap;
+            padding: 0 2px;
         }
+
 
         /* =========================================================
            메모
@@ -393,46 +518,40 @@
         .desktop-memo {
             position: relative;
 
+            width: 100%;
+
             margin-top: 18px;
 
-            padding:
-                25px
-                28px
-                22px;
+            padding: 25px 28px 20px;
+
+            background: #fdf0f1;
+
+            border: 2px solid #a94442;
+            border-radius: 14px;
 
             min-height: 145px;
-
-            background: #FDEDEE;
-
-            border:
-                3px solid #A94442;
-
-            border-radius: 13px;
-
-            box-shadow:
-                0 2px 0 rgba(169,68,66,0.04);
         }
 
-        .memo-title {
+        .memo-label {
             position: absolute;
 
-            top: -24px;
-            left: 20px;
+            top: -19px;
+            left: 22px;
 
-            padding:
-                0 13px;
+            padding: 0 12px;
 
-            background: #FAF8F5;
+            background: #faf8f5;
 
-            color: #A94442;
+            color: #a94442;
 
             font-family:
-                'Nanum Pen Script',
+                "Nanum Pen Script",
                 cursive;
 
-            font-size: 34px;
-
+            font-size: 30px;
             font-weight: 700;
+
+            line-height: 1.2;
         }
 
         #global-memo {
@@ -443,115 +562,52 @@
             background: transparent;
 
             border: none;
+            outline: none;
 
+            resize: vertical;
+
+            color: #426aa8;
+
+            font-family:
+                "Nanum Pen Script",
+                cursive;
+
+            font-size: 23px;
+
+            line-height: 1.35;
+        }
+
+        #global-memo::placeholder {
+            color: #9bb4db;
+        }
+
+
+        /* =========================================================
+           모바일 메모
+        ========================================================= */
+
+        .mobile-memo {
+            width: 100%;
+            height: 100%;
+
+            background: transparent;
+
+            border: none;
             outline: none;
 
             resize: none;
 
-            color: #4267A9;
-
             font-family:
-                'Nanum Pen Script',
+                "Nanum Pen Script",
                 cursive;
 
-            font-size: 25px;
+            font-size: 22px;
 
-            line-height: 1.45;
+            line-height: 1.5;
+
+            color: #426aa8;
         }
 
-        #global-memo::placeholder {
-            color: #A8B8D5;
-        }
-
-        /* =========================================================
-           이모지 선택기
-        ========================================================= */
-
-        .emoji-board {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(42px, 1fr)
-                );
-
-            gap: 3px;
-
-            max-height: 230px;
-
-            overflow-y: auto;
-
-            padding: 5px;
-        }
-
-        .emoji-button {
-            width: 42px;
-            height: 42px;
-
-            margin: auto;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 8px;
-
-            background: transparent;
-
-            transition:
-                background-color 0.12s ease,
-                transform 0.12s ease;
-        }
-
-        .emoji-button:hover {
-            background: #FDEDEE;
-
-            transform: scale(1.08);
-        }
-
-        .emoji-button.selected {
-            background: #F8D7DA;
-
-            box-shadow:
-                inset 0 0 0 2px #A94442;
-        }
-
-        .emoji-button img {
-            width: 32px;
-            height: 32px;
-
-            object-fit: contain;
-
-            pointer-events: none;
-        }
-
-        .emoji-preview {
-            width: 48px;
-            height: 48px;
-
-            object-fit: contain;
-        }
-
-        /* =========================================================
-           스크롤바
-        ========================================================= */
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #D7B9BC;
-
-            border-radius: 20px;
-        }
 
         /* =========================================================
            모바일
@@ -560,287 +616,638 @@
         @media (max-width: 767px) {
 
             body {
-                background: #F4F1EF;
+                background: #eeeeee;
             }
 
             .diary-paper {
-                border-radius: 16px;
-            }
+                border-radius: 18px;
 
-            .calendar-cell {
-                min-height: 82px;
-
-                padding: 5px;
-            }
-
-            .day-number {
-                font-size: 13px;
-            }
-
-            .day-number.today {
-                width: 25px;
-                height: 25px;
-
-                font-size: 12px;
-            }
-
-            .day-emoji {
-                width: 27px;
-                height: 27px;
-            }
-
-            .day-emoji-row {
-                min-height: 27px;
-            }
-
-            .schedule-text {
-                font-size: 15px;
-            }
-
-            .calendar-header-cell {
-                padding: 5px 0;
-
-                font-size: 13px;
-            }
-
-            .desktop-memo {
-                min-height: 130px;
-
-                padding: 22px 17px 15px;
-            }
-
-            .memo-title {
-                font-size: 28px;
-
-                top: -20px;
-                left: 14px;
-            }
-
-            #global-memo {
-                font-size: 20px;
+                padding:
+                    42px 10px 18px !important;
             }
 
             .spring-wrapper {
-                padding: 0 10px;
+                top: -17px;
+
+                padding:
+                    0 18px;
             }
 
             .spring {
                 width: 10px;
-                height: 32px;
+                height: 30px;
+
+                border-radius: 6px;
+            }
+
+            .spring::before {
+                width: 8px;
+                height: 7px;
             }
 
             .spring::after {
-                width: 9px;
-                height: 9px;
+                width: 10px;
+                height: 10px;
 
+                left: 0;
                 bottom: -5px;
+            }
+
+            .calendar-top {
+                min-height: 48px;
+
+                padding:
+                    0 5px 8px;
+            }
+
+            #calendar-title {
+                font-size: 30px;
+            }
+
+            .calendar-grid {
+                border-radius: 10px;
+            }
+
+            .calendar-header-cell {
+                padding: 8px 2px;
+
+                font-size: 17px;
+            }
+
+            .calendar-cell {
+                min-height: 105px;
+
+                padding: 6px;
+            }
+
+            .day-number {
+                min-width: 23px;
+                height: 23px;
+
+                font-size: 14px;
+            }
+
+            .day-emoji {
+                width: 29px;
+                height: 29px;
+
+                max-width: 29px;
+                max-height: 29px;
+            }
+
+            .schedule-text {
+                font-size: 16px;
+                line-height: 1.08;
+            }
+
+            .desktop-memo {
+                margin-top: 18px;
+
+                padding:
+                    22px 15px 12px;
+
+                min-height: 125px;
+            }
+
+            .memo-label {
+                left: 14px;
+
+                top: -16px;
+
+                font-size: 25px;
+            }
+
+            #global-memo {
+                min-height: 82px;
+
+                font-size: 19px;
             }
         }
 
+
         /* =========================================================
-           이미지 캡처용 스타일
+           모바일 메뉴
+        ========================================================= */
+
+        .drawer {
+            will-change: transform;
+        }
+
+
+        /* =========================================================
+           이모지 모달
+        ========================================================= */
+
+        .emoji-modal {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 100;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 16px;
+
+            background: rgba(0, 0, 0, 0.58);
+
+            backdrop-filter: blur(5px);
+        }
+
+        .emoji-modal-card {
+            width: 100%;
+            max-width: 470px;
+
+            max-height: 92vh;
+
+            overflow: hidden;
+
+            background: white;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.25);
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 15px 18px;
+
+            background: #fdeff0;
+
+            border-bottom: 1px solid #f2d7d8;
+        }
+
+        .modal-body {
+            padding: 18px;
+
+            overflow-y: auto;
+        }
+
+        .field-label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #444444;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .input-box {
+            width: 100%;
+
+            border: 1px solid #d7d7d7;
+            border-radius: 9px;
+
+            outline: none;
+
+            transition:
+                border-color 0.15s,
+                box-shadow 0.15s;
+        }
+
+        .input-box:focus {
+            border-color: #e3a2a5;
+
+            box-shadow:
+                0 0 0 3px rgba(227, 162, 165, 0.16);
+        }
+
+        #modal-text {
+            min-height: 90px;
+
+            padding: 11px;
+
+            resize: vertical;
+
+            font-family:
+                "Nanum Pen Script",
+                cursive;
+
+            font-size: 21px;
+
+            line-height: 1.3;
+        }
+
+
+        /* =========================================================
+           이모지 선택 영역
+        ========================================================= */
+
+        .emoji-section {
+            margin-top: 18px;
+        }
+
+        .emoji-tools {
+            display: grid;
+
+            grid-template-columns:
+                1fr;
+
+            gap: 8px;
+        }
+
+        #emojiSearch {
+            height: 42px;
+
+            padding:
+                0 12px;
+
+            font-size: 14px;
+        }
+
+        #emojiPack {
+            height: 42px;
+
+            padding:
+                0 10px;
+
+            background: white;
+
+            border: 1px solid #d7d7d7;
+            border-radius: 9px;
+
+            outline: none;
+
+            font-size: 14px;
+        }
+
+        .emoji-board {
+            margin-top: 10px;
+
+            height: 245px;
+
+            overflow-y: auto;
+
+            padding: 7px;
+
+            border: 1px solid #e5e5e5;
+
+            border-radius: 10px;
+
+            background: #fafafa;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(8, minmax(0, 1fr));
+
+            align-content: start;
+
+            gap: 4px;
+        }
+
+        .emoji-item {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 4px;
+
+            border: none;
+            border-radius: 7px;
+
+            background: transparent;
+
+            transition:
+                background 0.12s,
+                transform 0.12s;
+        }
+
+        .emoji-item:hover {
+            background: #eeeeee;
+
+            transform: scale(1.05);
+        }
+
+        .emoji-item.selected {
+            background: #ffe3e5;
+
+            box-shadow:
+                inset 0 0 0 2px #e29a9d;
+        }
+
+        .emoji-item img {
+            width: 31px;
+            height: 31px;
+
+            object-fit: contain;
+
+            pointer-events: none;
+        }
+
+        .emoji-empty {
+            grid-column: 1 / -1;
+
+            padding: 35px 10px;
+
+            text-align: center;
+
+            color: #999999;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           선택된 이모지 미리보기
+        ========================================================= */
+
+        .selected-emoji-area {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            min-height: 48px;
+
+            margin-top: 10px;
+
+            padding: 8px 10px;
+
+            background: #fafafa;
+
+            border: 1px solid #eeeeee;
+
+            border-radius: 9px;
+        }
+
+        #selectedEmojiPreview {
+            width: 32px;
+            height: 32px;
+
+            object-fit: contain;
+        }
+
+        #selectedEmojiName {
+            color: #777777;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           모달 하단
+        ========================================================= */
+
+        .modal-footer {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 8px;
+
+            padding: 13px 18px;
+
+            background: #fafafa;
+
+            border-top: 1px solid #eeeeee;
+        }
+
+        .modal-button {
+            padding:
+                9px 17px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           캡처 전용 영역
         ========================================================= */
 
         #hidden-capture-container {
-            position: absolute;
+            position: fixed;
 
-            left: -99999px;
+            left: -10000px;
             top: 0;
 
             width: 1480px;
             height: 1309px;
 
-            padding: 40px;
-
             overflow: hidden;
 
             background: transparent;
 
-            display: none;
+            z-index: -100;
         }
 
         #hidden-capture-container .diary-paper {
-            width: 1400px !important;
-            height: 1229px !important;
+            width: 1400px;
+            height: 1229px;
+
+            margin: 40px;
 
             padding:
-                60px
-                50px
-                50px !important;
+                58px 48px 40px;
 
-            border-radius: 24px !important;
+            border-radius: 24px;
 
-            box-shadow: none !important;
-
-            background: #FAF8F5 !important;
+            box-shadow: none;
         }
 
         #hidden-capture-container .spring-wrapper {
-            top: -25px !important;
+            top: -22px;
+
+            padding:
+                0 40px;
         }
 
         #hidden-capture-container .spring {
-            width: 20px !important;
-            height: 50px !important;
+            width: 18px;
+            height: 45px;
+
+            border-radius: 9px;
         }
 
         #hidden-capture-container .spring::after {
-            width: 16px !important;
-            height: 16px !important;
+            width: 15px;
+            height: 15px;
 
-            bottom: -8px !important;
+            bottom: -7px;
         }
 
-        #hidden-capture-container .calendar-grid {
-            flex: 1;
+        #hidden-capture-container .calendar-top {
+            min-height: 65px;
 
-            min-height: 0;
-
-            border-width: 3px !important;
-
-            border-radius: 14px !important;
-
-            display: flex !important;
-
-            flex-direction: column !important;
+            padding:
+                0 5px 10px;
         }
 
-        #hidden-capture-container #calendar-days {
-            flex: 1 !important;
+        #hidden-capture-container #calendar-title {
+            font-size: 44px;
+        }
 
-            min-height: 0 !important;
+        #hidden-capture-container .calendar-header-cell {
+            padding:
+                10px 4px;
 
-            display: grid !important;
-
-            grid-template-rows:
-                repeat(
-                    var(--row-count),
-                    minmax(0, 1fr)
-                ) !important;
+            font-size: 22px;
         }
 
         #hidden-capture-container .calendar-cell {
-            min-height: 0 !important;
+            min-height: 0;
 
-            height: 100% !important;
+            height: 100%;
 
-            padding: 8px !important;
+            padding: 9px;
 
-            overflow: hidden !important;
+            overflow: hidden;
+        }
+
+        #hidden-capture-container #calendar-days {
+            grid-template-rows:
+                repeat(var(--row-count), minmax(0, 1fr));
         }
 
         #hidden-capture-container .day-number {
-            font-size: 26px !important;
-        }
+            min-width: 30px;
+            height: 30px;
 
-        #hidden-capture-container .day-number.today {
-            width: 40px !important;
-            height: 40px !important;
-
-            font-size: 22px !important;
+            font-size: 19px;
         }
 
         #hidden-capture-container .day-emoji {
-            width: 48px !important;
-            height: 48px !important;
-        }
+            width: 38px;
+            height: 38px;
 
-        #hidden-capture-container .day-emoji-row {
-            min-height: 48px !important;
+            max-width: 38px;
+            max-height: 38px;
         }
 
         #hidden-capture-container .schedule-text {
-            font-size: 32px !important;
+            font-size: 22px;
 
-            line-height: 1.1 !important;
+            line-height: 1.1;
         }
 
         #hidden-capture-container .desktop-memo {
-            flex-shrink: 0 !important;
+            margin-top: 17px;
 
-            height: 180px !important;
+            min-height: 130px;
 
-            margin-top: 30px !important;
-
-            padding: 30px 35px !important;
+            padding:
+                24px 28px 15px;
         }
 
-        #hidden-capture-container .memo-title {
-            top: -29px !important;
-            left: 22px !important;
-
-            font-size: 42px !important;
+        #hidden-capture-container .memo-label {
+            font-size: 30px;
         }
 
         #hidden-capture-container #global-memo {
+            min-height: 85px;
+
+            font-size: 23px;
+        }
+
+
+        /* =========================================================
+           캡처 중 textarea 대신 표시되는 메모
+        ========================================================= */
+
+        #global-memo-render {
+            display: none;
+        }
+
+        .capture-mode #global-memo {
             display: none !important;
         }
 
-        #hidden-capture-container #global-memo-render {
+        .capture-mode #global-memo-render {
             display: block !important;
-
-            width: 100% !important;
-
-            min-height: 90px !important;
-
-            color: #4267A9 !important;
-
-            font-family:
-                'Nanum Pen Script',
-                cursive !important;
-
-            font-size: 38px !important;
-
-            line-height: 1.45 !important;
-
-            white-space: pre-wrap !important;
-
-            word-break: break-word !important;
         }
 
     </style>
 </head>
 
-<body class="font-sans text-diary-text min-h-screen">
+
+<body>
 
     <!-- =========================================================
          모바일 상단 메뉴
-    ========================================================== -->
+    ========================================================= -->
 
     <div
         class="
             md:hidden
             w-full
             bg-white
+            shadow-sm
             px-4
             py-3
             flex
             items-center
             justify-between
-            shadow-sm
-            no-print
+            sticky
+            top-0
+            z-30
         "
     >
 
         <button
             onclick="toggleLeftMenu()"
-            class="p-2 rounded-lg bg-gray-100"
+            class="
+                w-10
+                h-10
+                rounded-xl
+                bg-gray-100
+                flex
+                items-center
+                justify-center
+            "
         >
-            <i class="ph ph-list text-2xl"></i>
+            <i class="ph ph-list text-xl"></i>
         </button>
 
         <div
-            id="mobile-title"
-            class="font-bold text-lg text-gray-700"
+            class="
+                font-bold
+                text-gray-700
+                flex
+                items-center
+                gap-2
+            "
         >
+            <i class="ph ph-calendar-heart text-pink-500 text-xl"></i>
             다이어리
         </div>
 
         <button
             onclick="toggleRightMenu()"
-            class="p-2 rounded-lg bg-pink-100 text-pink-600"
+            class="
+                w-10
+                h-10
+                rounded-xl
+                bg-pink-100
+                text-pink-600
+                flex
+                items-center
+                justify-center
+            "
         >
-            <i class="ph ph-note-pencil text-2xl"></i>
+            <i class="ph ph-note-pencil text-xl"></i>
         </button>
 
     </div>
@@ -848,11 +1255,12 @@
 
     <!-- =========================================================
          모바일 왼쪽 메뉴
-    ========================================================== -->
+    ========================================================= -->
 
     <div
         id="left-drawer"
         class="
+            drawer
             fixed
             inset-y-0
             left-0
@@ -864,33 +1272,35 @@
             transition-transform
             duration-300
             z-50
-            p-6
+            p-5
             flex
             flex-col
             md:hidden
         "
     >
 
-        <h2
+        <div
             class="
                 text-xl
                 font-bold
-                mb-8
+                text-gray-800
                 pb-4
+                mb-5
                 border-b
             "
         >
             메뉴
-        </h2>
+        </div>
 
         <div class="flex flex-col gap-3">
 
             <button
-                onclick="changeMonth(-1); closeAllDrawers();"
+                onclick="changeMonth(-1); toggleLeftMenu();"
                 class="
                     p-3
-                    rounded-xl
                     bg-gray-50
+                    rounded-xl
+                    text-left
                     flex
                     items-center
                     gap-3
@@ -901,11 +1311,12 @@
             </button>
 
             <button
-                onclick="goToToday(); closeAllDrawers();"
+                onclick="goToToday(); toggleLeftMenu();"
                 class="
                     p-3
-                    rounded-xl
                     bg-gray-50
+                    rounded-xl
+                    text-left
                     flex
                     items-center
                     gap-3
@@ -917,11 +1328,12 @@
             </button>
 
             <button
-                onclick="changeMonth(1); closeAllDrawers();"
+                onclick="changeMonth(1); toggleLeftMenu();"
                 class="
                     p-3
-                    rounded-xl
                     bg-gray-50
+                    rounded-xl
+                    text-left
                     flex
                     items-center
                     gap-3
@@ -933,36 +1345,40 @@
 
         </div>
 
-        <button
-            onclick="downloadCalendar(); closeAllDrawers();"
-            class="
-                mt-auto
-                w-full
-                py-3
-                rounded-xl
-                bg-pink-500
-                text-white
-                font-bold
-                flex
-                justify-center
-                items-center
-                gap-2
-            "
-        >
-            <i class="ph ph-download-simple text-xl"></i>
-            이미지 저장
-        </button>
+        <div class="mt-auto">
+
+            <button
+                onclick="downloadCalendar(); toggleLeftMenu();"
+                class="
+                    w-full
+                    py-3
+                    rounded-xl
+                    bg-pink-500
+                    text-white
+                    font-bold
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                "
+            >
+                <i class="ph ph-download-simple text-xl"></i>
+                이미지 저장
+            </button>
+
+        </div>
 
     </div>
 
 
     <!-- =========================================================
-         모바일 오른쪽 메모
-    ========================================================== -->
+         모바일 오른쪽 메모 메뉴
+    ========================================================= -->
 
     <div
         id="right-drawer"
         class="
+            drawer
             fixed
             inset-y-0
             right-0
@@ -974,16 +1390,18 @@
             transition-transform
             duration-300
             z-50
-            p-6
+            p-5
             flex
             flex-col
             md:hidden
+            border-l
+            border-pink-200
         "
     >
 
         <h2
             class="
-                text-2xl
+                text-xl
                 font-handwriting
                 text-diary-line
                 font-bold
@@ -995,18 +1413,9 @@
 
         <textarea
             id="mobile-memo"
-            class="
-                flex-1
-                w-full
-                resize-none
-                outline-none
-                bg-transparent
-                font-handwriting
-                text-xl
-                leading-relaxed
-                text-blue-600
-            "
-            placeholder="메모를 입력하세요..."
+            class="mobile-memo"
+            placeholder="중요한 메모나 공지를 적어보세요..."
+            oninput="syncMemos('mobile-memo', 'global-memo')"
         ></textarea>
 
         <button
@@ -1018,6 +1427,7 @@
                 rounded-xl
                 font-bold
                 border
+                border-gray-200
             "
         >
             닫기
@@ -1027,8 +1437,8 @@
 
 
     <!-- =========================================================
-         모바일 백드롭
-    ========================================================== -->
+         모바일 메뉴 배경
+    ========================================================= -->
 
     <div
         id="drawer-backdrop"
@@ -1045,8 +1455,8 @@
 
 
     <!-- =========================================================
-         PC 상단 메뉴
-    ========================================================== -->
+         PC 상단 컨트롤
+    ========================================================= -->
 
     <div
         class="
@@ -1054,54 +1464,59 @@
             md:flex
             w-full
             max-w-6xl
-            mx-auto
             px-4
-            pt-6
-            pb-4
+            pt-8
+            pb-5
             items-center
             justify-between
-            no-print
         "
     >
 
         <div
             class="
-                text-xl
                 font-bold
                 text-gray-700
+                text-xl
+            "
+        >
+            나만의 다이어리
+        </div>
+
+        <div
+            class="
                 flex
                 items-center
                 gap-2
             "
         >
-            <i class="ph ph-calendar-heart text-pink-500 text-2xl"></i>
-            다이어리
-        </div>
-
-        <div class="flex items-center gap-2">
 
             <button
                 onclick="changeMonth(-1)"
                 class="
-                    p-2
-                    rounded-full
+                    w-10
+                    h-10
+                    rounded-xl
                     bg-white
                     shadow-sm
-                    hover:bg-gray-100
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-gray-50
                 "
             >
-                <i class="ph ph-caret-left text-xl"></i>
+                <i class="ph ph-caret-left text-lg"></i>
             </button>
 
             <button
                 onclick="goToToday()"
                 class="
                     px-4
-                    py-2
-                    rounded-lg
+                    h-10
+                    rounded-xl
                     bg-white
                     shadow-sm
                     font-bold
+                    hover:bg-gray-50
                 "
             >
                 오늘
@@ -1110,14 +1525,18 @@
             <button
                 onclick="changeMonth(1)"
                 class="
-                    p-2
-                    rounded-full
+                    w-10
+                    h-10
+                    rounded-xl
                     bg-white
                     shadow-sm
-                    hover:bg-gray-100
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-gray-50
                 "
             >
-                <i class="ph ph-caret-right text-xl"></i>
+                <i class="ph ph-caret-right text-lg"></i>
             </button>
 
             <button
@@ -1125,19 +1544,20 @@
                 class="
                     ml-3
                     px-5
-                    py-2
-                    rounded-lg
+                    h-10
+                    rounded-xl
                     bg-pink-500
                     text-white
                     font-bold
-                    shadow-md
+                    shadow-sm
                     flex
                     items-center
                     gap-2
+                    hover:bg-pink-600
                 "
             >
-                <i class="ph ph-download-simple text-xl"></i>
-                이미지로 저장
+                <i class="ph ph-download-simple"></i>
+                이미지 저장
             </button>
 
         </div>
@@ -1147,14 +1567,13 @@
 
     <!-- =========================================================
          캘린더
-    ========================================================== -->
+    ========================================================= -->
 
     <main
         id="capture-area"
         class="
             w-full
             max-w-6xl
-            mx-auto
             px-2
             md:px-4
             pb-8
@@ -1164,10 +1583,9 @@
         <div
             class="
                 diary-paper
-                rounded-2xl
                 p-3
-                md:p-8
-                pt-10
+                md:p-10
+                pt-12
                 md:pt-14
             "
         >
@@ -1180,31 +1598,14 @@
 
 
             <!-- =================================================
-                 헤더
-            ================================================== -->
+                 상단 날짜
+            ================================================= -->
 
-            <div
-                class="
-                    flex
-                    justify-end
-                    items-center
-                    mb-4
-                    md:mb-6
-                    px-1
-                    md:px-2
-                "
-            >
+            <div class="calendar-top">
 
                 <div
                     id="calendar-title"
-                    class="
-                        font-sans
-                        text-3xl
-                        md:text-5xl
-                        font-bold
-                        tracking-wider
-                        text-diary-line
-                    "
+                    class="font-sans"
                 >
                     2026.09
                 </div>
@@ -1214,29 +1615,13 @@
 
             <!-- =================================================
                  달력
-            ================================================== -->
+            ================================================= -->
 
             <div class="calendar-grid">
 
-                <!-- 요일 -->
-                <div
-                    class="
-                        grid
-                        grid-cols-7
-                        text-center
-                        font-bold
-                        font-handwriting
-                        text-lg
-                        md:text-2xl
-                    "
-                >
+                <div class="calendar-weekdays">
 
-                    <div
-                        class="
-                            calendar-header-cell
-                            text-red-500
-                        "
-                    >
+                    <div class="calendar-header-cell sun">
                         Sun
                     </div>
 
@@ -1260,46 +1645,36 @@
                         Fri
                     </div>
 
-                    <div
-                        class="
-                            calendar-header-cell
-                            text-blue-500
-                        "
-                    >
+                    <div class="calendar-header-cell sat">
                         Sat
                     </div>
 
                 </div>
 
 
-                <!-- 날짜 -->
-                <div
-                    id="calendar-days"
-                    class="grid grid-cols-7"
-                ></div>
+                <div id="calendar-days"></div>
 
             </div>
 
 
             <!-- =================================================
                  메모
-            ================================================== -->
+            ================================================= -->
 
             <div class="desktop-memo">
 
-                <div class="memo-title">
+                <span class="memo-label">
                     Memo
-                </div>
+                </span>
 
                 <textarea
                     id="global-memo"
-                    placeholder="여기에 중요한 메모나 공지를 적어보세요..."
+                    placeholder="중요한 메모나 공지를 적어보세요..."
+                    oninput="saveMemo()"
                 ></textarea>
 
-                <!-- 이미지 저장용 -->
                 <div
                     id="global-memo-render"
-                    class="hidden"
                 ></div>
 
             </div>
@@ -1311,51 +1686,24 @@
 
     <!-- =========================================================
          일정 편집 모달
-    ========================================================== -->
+    ========================================================= -->
 
     <div
         id="edit-modal"
-        class="
-            hidden
-            fixed
-            inset-0
-            bg-black/60
-            backdrop-blur-sm
-            items-center
-            justify-center
-            z-[100]
-            p-4
-        "
+        class="emoji-modal hidden"
     >
 
-        <div
-            class="
-                bg-white
-                rounded-2xl
-                shadow-2xl
-                w-full
-                max-w-lg
-                overflow-hidden
-            "
-        >
+        <div class="emoji-modal-card">
 
-            <!-- 모달 헤더 -->
-            <div
-                class="
-                    bg-pink-100
-                    p-4
-                    border-b
-                    border-pink-200
-                    flex
-                    justify-between
-                    items-center
-                "
-            >
+
+            <!-- 헤더 -->
+
+            <div class="modal-header">
 
                 <h3
                     class="
                         font-bold
-                        text-xl
+                        text-lg
                         text-gray-800
                         flex
                         items-center
@@ -1371,95 +1719,74 @@
                         "
                     ></i>
 
-                    <span id="modal-date-title"></span>
+                    <span id="modal-date-title">
+                        일정
+                    </span>
 
                 </h3>
 
                 <button
                     onclick="closeModal()"
                     class="
-                        p-2
-                        text-gray-500
-                        hover:text-gray-800
+                        w-9
+                        h-9
+                        rounded-lg
+                        hover:bg-white/70
+                        flex
+                        items-center
+                        justify-center
                     "
                 >
-                    <i class="ph ph-x text-2xl"></i>
+                    <i class="ph ph-x text-xl"></i>
                 </button>
 
             </div>
 
 
-            <!-- 모달 내용 -->
-            <div
-                class="
-                    p-5
-                    md:p-6
-                    space-y-5
-                    max-h-[80vh]
-                    overflow-y-auto
-                "
-            >
+            <!-- 본문 -->
+
+            <div class="modal-body">
+
 
                 <!-- 일정 -->
+
                 <div>
 
-                    <label
-                        class="
-                            block
-                            text-sm
-                            font-bold
-                            text-gray-700
-                            mb-2
-                        "
-                    >
+                    <label class="field-label">
                         일정 내용
                     </label>
 
                     <textarea
                         id="modal-text"
-                        rows="3"
-                        class="
-                            w-full
-                            border
-                            border-gray-300
-                            rounded-xl
-                            p-3
-                            outline-none
-                            focus:ring-2
-                            focus:ring-pink-300
-                            font-handwriting
-                            text-xl
-                            resize-none
-                        "
-                        placeholder="여러 줄로 일정을 적어보세요!"
+                        class="input-box"
+                        placeholder="일정 내용을 적어보세요."
                     ></textarea>
 
                 </div>
 
 
                 <!-- 글자 색 -->
-                <div>
 
-                    <label
-                        class="
-                            block
-                            text-sm
-                            font-bold
-                            text-gray-700
-                            mb-2
-                        "
-                    >
+                <div class="mt-4">
+
+                    <label class="field-label">
                         글자 색상
                     </label>
 
-                    <div class="flex gap-3">
+                    <div
+                        class="
+                            flex
+                            items-center
+                            gap-3
+                        "
+                    >
 
                         <input
                             type="color"
                             id="modal-color"
                             value="#333333"
                             class="
-                                w-14
+                                w-12
                                 h-10
                                 rounded-lg
                                 border
@@ -1468,16 +1795,14 @@
                             "
                         >
 
-                        <div
+                        <span
                             class="
-                                flex
-                                items-center
                                 text-sm
                                 text-gray-500
                             "
                         >
-                            일정 글자의 색상을 선택합니다.
-                        </div>
+                            일정에 표시할 글자 색상
+                        </span>
 
                     </div>
 
@@ -1486,158 +1811,87 @@
 
                 <!-- =================================================
                      치지직 이모지
-                ================================================== -->
+                ================================================= -->
 
-                <div>
+                <div class="emoji-section">
+
+                    <label class="field-label">
+                        치지직 이모지
+                    </label>
+
+
+                    <div class="emoji-tools">
+
+                        <input
+                            id="emojiSearch"
+                            class="input-box"
+                            type="search"
+                            placeholder="이모지 검색..."
+                            autocomplete="off"
+                            oninput="renderEmojiBoard()"
+                        >
+
+
+                        <select
+                            id="emojiPack"
+                            onchange="renderEmojiBoard()"
+                        >
+
+                            <option value="">
+                                전체 이모지
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- 이모지 그리드 -->
 
                     <div
-                        class="
-                            flex
-                            items-center
-                            justify-between
-                            mb-2
-                        "
+                        id="emojiBoard"
+                        class="emoji-board"
                     >
 
-                        <label
-                            class="
-                                text-sm
-                                font-bold
-                                text-gray-700
-                            "
-                        >
-                            치지직 이모지
-                        </label>
-
-                        <button
-                            onclick="clearSelectedEmoji()"
-                            class="
-                                text-xs
-                                text-gray-400
-                                hover:text-red-500
-                            "
-                        >
-                            선택 해제
-                        </button>
+                        <div class="emoji-empty">
+                            이모지를 불러오는 중입니다...
+                        </div>
 
                     </div>
 
 
                     <!-- 선택된 이모지 -->
+
                     <div
-                        class="
-                            h-16
-                            border
-                            border-gray-200
-                            rounded-xl
-                            bg-gray-50
-                            flex
-                            items-center
-                            justify-center
-                            mb-3
-                        "
+                        class="selected-emoji-area"
                     >
 
-                        <div
-                            id="selected-emoji-preview"
-                            class="
-                                text-sm
-                                text-gray-400
-                            "
-                        >
-                            이모지를 선택해주세요
-                        </div>
-
-                    </div>
-
-
-                    <!-- 검색 -->
-                    <div class="relative mb-2">
-
-                        <i
-                            class="
-                                ph
-                                ph-magnifying-glass
-                                absolute
-                                left-3
-                                top-1/2
-                                -translate-y-1/2
-                                text-gray-400
-                            "
-                        ></i>
-
-                        <input
-                            id="emoji-search"
-                            type="text"
-                            placeholder="이모지 검색..."
-                            class="
-                                w-full
-                                h-10
-                                pl-9
-                                pr-3
-                                border
-                                border-gray-300
-                                rounded-lg
-                                outline-none
-                                focus:ring-2
-                                focus:ring-pink-300
-                            "
+                        <img
+                            id="selectedEmojiPreview"
+                            src=""
+                            alt=""
+                            class="hidden"
                         >
 
-                    </div>
+                        <span
+                            id="selectedEmojiName"
+                        >
+                            선택된 이모지가 없습니다.
+                        </span>
 
-
-                    <!-- 팩 선택 -->
-                    <select
-                        id="emoji-pack"
-                        class="
-                            w-full
-                            h-10
-                            px-3
-                            border
-                            border-gray-300
-                            rounded-lg
-                            outline-none
-                            bg-white
-                            mb-2
-                        "
-                    >
-                        <option value="">
-                            전체 이모지
-                        </option>
-                    </select>
-
-
-                    <!-- 이모지 개수 -->
-                    <div
-                        id="emoji-status"
-                        class="
-                            text-xs
-                            text-gray-400
-                            mb-1
-                        "
-                    >
-                        이모지를 불러오는 중...
-                    </div>
-
-
-                    <!-- 이모지 보드 -->
-                    <div
-                        id="emoji-board"
-                        class="emoji-board"
-                    >
-
-                        <div
+                        <button
+                            id="clearEmojiButton"
+                            onclick="clearEmojiSelection()"
                             class="
-                                col-span-full
-                                py-8
-                                text-center
-                                text-sm
-                                text-gray-400
+                                ml-auto
+                                hidden
+                                text-xs
+                                text-red-500
+                                font-bold
                             "
                         >
-                            이모지를 불러오는 중...
-                        </div>
+                            제거
+                        </button>
 
                     </div>
 
@@ -1646,65 +1900,33 @@
             </div>
 
 
-            <!-- 모달 하단 -->
-            <div
-                class="
-                    p-4
-                    bg-gray-50
-                    border-t
-                    border-gray-100
-                    flex
-                    justify-between
-                    gap-2
-                "
-            >
+            <!-- 하단 -->
+
+            <div class="modal-footer">
 
                 <button
-                    onclick="deleteDayData()"
+                    onclick="closeModal()"
                     class="
-                        px-4
-                        py-2
-                        rounded-lg
-                        font-bold
-                        text-red-500
-                        hover:bg-red-50
+                        modal-button
+                        bg-gray-100
+                        text-gray-600
+                        hover:bg-gray-200
                     "
                 >
-                    삭제
+                    취소
                 </button>
 
-                <div class="flex gap-2">
-
-                    <button
-                        onclick="closeModal()"
-                        class="
-                            px-4
-                            py-2
-                            rounded-lg
-                            font-bold
-                            text-gray-600
-                            hover:bg-gray-200
-                        "
-                    >
-                        취소
-                    </button>
-
-                    <button
-                        onclick="saveDayData()"
-                        class="
-                            px-6
-                            py-2
-                            rounded-lg
-                            font-bold
-                            text-white
-                            bg-pink-500
-                            hover:bg-pink-600
-                        "
-                    >
-                        저장
-                    </button>
-
-                </div>
+                <button
+                    onclick="saveDayData()"
+                    class="
+                        modal-button
+                        bg-pink-500
+                        text-white
+                        hover:bg-pink-600
+                    "
+                >
+                    저장하기
+                </button>
 
             </div>
 
@@ -1714,23 +1936,27 @@
 
 
     <!-- =========================================================
-         이미지 캡처용 영역
-    ========================================================== -->
+         이미지 저장용 캡처 영역
+    ========================================================= -->
 
     <div id="hidden-capture-container"></div>
 
 
+    <!-- =========================================================
+         JavaScript
+    ========================================================= -->
+
     <script>
 
         /* =========================================================
-           기본 변수
+           기본 설정
         ========================================================= */
 
         const EMOJI_API_URL =
-            'https://chzzk.dico.page/emojipacks';
+            "https://chzzk.dico.page/emojipacks";
 
         const STORAGE_KEY =
-            'cute_diary_calendar_v3';
+            "diary_calendar_data_v3";
 
         let currentDate = new Date();
 
@@ -1740,35 +1966,35 @@
 
         let selectedEmoji = null;
 
-        let emojis = [];
+        let emojiList = [];
 
 
         /* =========================================================
            초기화
-        ========================================================== */
+        ========================================================= */
 
         function init() {
 
-            loadData();
+            loadLocalData();
 
             generateSprings();
 
             renderCalendar();
 
-            initEventListeners();
+            loadEmojis();
 
             initSwipeGestures();
 
-            loadEmojis();
+            loadMemo();
 
         }
 
 
         /* =========================================================
-           localStorage
-        ========================================================== */
+           localStorage 불러오기
+        ========================================================= */
 
-        function loadData() {
+        function loadLocalData() {
 
             try {
 
@@ -1783,23 +2009,12 @@
                     JSON.parse(saved);
 
                 calendarData =
-                    parsed.calendarData || {};
-
-                const memo =
-                    parsed.memo || '';
-
-                document.getElementById(
-                    'global-memo'
-                ).value = memo;
-
-                document.getElementById(
-                    'mobile-memo'
-                ).value = memo;
+                    parsed.days || {};
 
             } catch (error) {
 
                 console.error(
-                    '저장 데이터 불러오기 실패:',
+                    "저장 데이터 불러오기 실패:",
                     error
                 );
 
@@ -1810,117 +2025,154 @@
         }
 
 
-        function saveData() {
+        /* =========================================================
+           전체 데이터 저장
+        ========================================================= */
 
-            const memo =
-                document.getElementById(
-                    'global-memo'
-                ).value;
+        function saveLocalData() {
 
-            const data = {
+            try {
 
-                calendarData,
+                const memo =
+                    document.getElementById(
+                        "global-memo"
+                    ).value;
 
-                memo
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify({
+                        days: calendarData,
+                        memo: memo
+                    })
+                );
 
-            };
+            } catch (error) {
 
-            localStorage.setItem(
-                STORAGE_KEY,
-                JSON.stringify(data)
-            );
+                console.error(
+                    "localStorage 저장 실패:",
+                    error
+                );
+
+            }
 
         }
 
 
         /* =========================================================
-           이벤트 등록
-        ========================================================== */
+           메모 불러오기
+        ========================================================= */
 
-        function initEventListeners() {
+        function loadMemo() {
 
-            const globalMemo =
+            try {
+
+                const saved =
+                    localStorage.getItem(STORAGE_KEY);
+
+                if (!saved) {
+                    return;
+                }
+
+                const parsed =
+                    JSON.parse(saved);
+
+                const memo =
+                    parsed.memo || "";
+
                 document.getElementById(
-                    'global-memo'
+                    "global-memo"
+                ).value = memo;
+
+                const mobileMemo =
+                    document.getElementById(
+                        "mobile-memo"
+                    );
+
+                if (mobileMemo) {
+                    mobileMemo.value = memo;
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "메모 불러오기 실패:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           메모 저장
+        ========================================================= */
+
+        function saveMemo() {
+
+            const desktopMemo =
+                document.getElementById(
+                    "global-memo"
                 );
 
             const mobileMemo =
                 document.getElementById(
-                    'mobile-memo'
+                    "mobile-memo"
                 );
 
-            globalMemo.addEventListener(
-                'input',
-                () => {
+            if (mobileMemo) {
+                mobileMemo.value =
+                    desktopMemo.value;
+            }
 
-                    mobileMemo.value =
-                        globalMemo.value;
+            saveLocalData();
 
-                    saveData();
-
-                }
-            );
-
-            mobileMemo.addEventListener(
-                'input',
-                () => {
-
-                    globalMemo.value =
-                        mobileMemo.value;
-
-                    saveData();
-
-                }
-            );
+        }
 
 
-            document.getElementById(
-                'emoji-search'
-            ).addEventListener(
-                'input',
-                renderEmojiBoard
-            );
+        /* =========================================================
+           메모 동기화
+        ========================================================= */
 
+        function syncMemos(
+            sourceId,
+            targetId
+        ) {
 
-            document.getElementById(
-                'emoji-pack'
-            ).addEventListener(
-                'change',
-                renderEmojiBoard
-            );
+            const source =
+                document.getElementById(
+                    sourceId
+                );
 
+            const target =
+                document.getElementById(
+                    targetId
+                );
 
-            document.getElementById(
-                'edit-modal'
-            ).addEventListener(
-                'click',
-                event => {
+            if (!source || !target) {
+                return;
+            }
 
-                    if (
-                        event.target.id ===
-                        'edit-modal'
-                    ) {
-                        closeModal();
-                    }
+            target.value =
+                source.value;
 
-                }
-            );
+            saveLocalData();
 
         }
 
 
         /* =========================================================
            스프링 생성
-        ========================================================== */
+        ========================================================= */
 
         function generateSprings() {
 
             const container =
                 document.getElementById(
-                    'springs-container'
+                    "springs-container"
                 );
 
-            container.innerHTML = '';
+            container.innerHTML = "";
 
             const count =
                 window.innerWidth < 768
@@ -1935,11 +2187,11 @@
 
                 const spring =
                     document.createElement(
-                        'div'
+                        "div"
                     );
 
                 spring.className =
-                    'spring';
+                    "spring";
 
                 container.appendChild(
                     spring
@@ -1952,7 +2204,7 @@
 
         /* =========================================================
            달력 렌더링
-        ========================================================== */
+        ========================================================= */
 
         function renderCalendar() {
 
@@ -1962,18 +2214,13 @@
             const month =
                 currentDate.getMonth();
 
-
             const title =
                 `${year}.${String(
                     month + 1
-                ).padStart(2, '0')}`;
+                ).padStart(2, "0")}`;
 
             document.getElementById(
-                'calendar-title'
-            ).textContent = title;
-
-            document.getElementById(
-                'mobile-title'
+                "calendar-title"
             ).textContent = title;
 
 
@@ -1984,6 +2231,7 @@
                     1
                 ).getDay();
 
+
             const lastDay =
                 new Date(
                     year,
@@ -1991,7 +2239,8 @@
                     0
                 ).getDate();
 
-            const previousLastDay =
+
+            const prevLastDay =
                 new Date(
                     year,
                     month,
@@ -2001,22 +2250,19 @@
 
             const totalCells =
                 Math.ceil(
-                    (
-                        firstDay +
-                        lastDay
-                    ) / 7
+                    (firstDay + lastDay) / 7
                 ) * 7;
 
 
             const daysContainer =
                 document.getElementById(
-                    'calendar-days'
+                    "calendar-days"
                 );
 
-            daysContainer.innerHTML = '';
+            daysContainer.innerHTML = "";
 
             daysContainer.style.setProperty(
-                '--row-count',
+                "--row-count",
                 totalCells / 7
             );
 
@@ -2024,7 +2270,12 @@
             const today =
                 new Date();
 
-            let html = '';
+            const todayStr =
+                `${today.getFullYear()}-${String(
+                    today.getMonth() + 1
+                ).padStart(2, "0")}-${String(
+                    today.getDate()
+                ).padStart(2, "0")}`;
 
 
             for (
@@ -2037,13 +2288,12 @@
 
                 let isCurrentMonth = true;
 
-                let dateStr = '';
-
+                let dateStr = "";
 
                 if (i < firstDay) {
 
                     dayNumber =
-                        previousLastDay -
+                        prevLastDay -
                         firstDay +
                         i +
                         1;
@@ -2063,18 +2313,15 @@
                     dateStr =
                         `${year}-${String(
                             month + 1
-                        ).padStart(2, '0')}-${String(
+                        ).padStart(2, "0")}-${String(
                             dayNumber
-                        ).padStart(2, '0')}`;
+                        ).padStart(2, "0")}`;
 
                 } else {
 
                     dayNumber =
                         i -
-                        (
-                            firstDay +
-                            lastDay
-                        ) +
+                        (firstDay + lastDay) +
                         1;
 
                     isCurrentMonth = false;
@@ -2087,196 +2334,232 @@
 
 
                 let numberClass =
-                    'day-number';
+                    "day-number";
 
 
-                if (isCurrentMonth) {
+                if (!isCurrentMonth) {
 
-                    if (col === 0) {
+                    numberClass +=
+                        " other";
 
-                        numberClass +=
-                            ' text-red-500';
+                } else if (col === 0) {
 
-                    } else if (col === 6) {
+                    numberClass +=
+                        " sun";
 
-                        numberClass +=
-                            ' text-blue-500';
+                } else if (col === 6) {
 
-                    }
+                    numberClass +=
+                        " sat";
 
                 }
 
 
-                const isToday =
+                if (
                     isCurrentMonth &&
-                    today.getFullYear() === year &&
-                    today.getMonth() === month &&
-                    today.getDate() === dayNumber;
+                    dateStr === todayStr
+                ) {
+
+                    numberClass +=
+                        " today";
+
+                }
 
 
-                if (isToday) {
+                const cell =
+                    document.createElement(
+                        "div"
+                    );
 
-                    numberClass =
-                        'day-number today';
+                cell.className =
+                    "calendar-cell " +
+                    (
+                        isCurrentMonth
+                            ? "current-month"
+                            : "other-month"
+                    );
+
+
+                if (
+                    i >= totalCells - 7
+                ) {
+
+                    cell.classList.add(
+                        "last-row"
+                    );
+
+                }
+
+
+                if (
+                    !isCurrentMonth
+                ) {
+
+                    cell.innerHTML = `
+                        <div class="${numberClass}">
+                            ${dayNumber}
+                        </div>
+                    `;
+
+                    daysContainer.appendChild(
+                        cell
+                    );
+
+                    continue;
 
                 }
 
 
                 const data =
                     calendarData[dateStr] || {
-
-                        text: '',
-
-                        color: '#333333',
-
+                        text: "",
+                        color: "#333333",
                         emoji: null
-
                     };
 
 
-                const text =
-                    escapeHtml(
-                        data.text || ''
-                    ).replace(
-                        /\n/g,
-                        '<br>'
-                    );
+                let contentHtml = "";
 
 
-                let emojiHtml = '';
-
+                /* 이모지 */
 
                 if (
                     data.emoji &&
                     data.emoji.image
                 ) {
 
-                    emojiHtml = `
-                        <div class="day-emoji-row">
-                            <img
-                                src="${escapeAttribute(
-                                    data.emoji.image
-                                )}"
-                                class="day-emoji"
-                                alt=""
-                                crossorigin="anonymous"
-                            >
-                        </div>
+                    contentHtml += `
+                        <img
+                            src="${escapeAttribute(
+                                data.emoji.image
+                            )}"
+                            class="day-emoji"
+                            alt=""
+                            crossorigin="anonymous"
+                            draggable="false"
+                        >
                     `;
 
                 }
 
 
-                let textHtml = '';
+                /* 일정 */
 
+                if (data.text) {
 
-                if (text) {
-
-                    textHtml = `
+                    contentHtml += `
                         <div
                             class="schedule-text"
                             style="color:${escapeAttribute(
-                                data.color || '#333333'
+                                data.color || "#333333"
                             )};"
                         >
-                            ${text}
+                            ${escapeHtml(
+                                data.text
+                            )}
                         </div>
                     `;
 
                 }
 
 
-                if (isCurrentMonth) {
+                cell.innerHTML = `
+                    <div class="${numberClass}">
+                        ${dayNumber}
+                    </div>
 
-                    html += `
-                        <div
-                            class="
-                                calendar-cell
-                                ${i >= totalCells - 7
-                                    ? 'last-row'
-                                    : ''}
-                            "
-                            onclick="openModal('${dateStr}')"
-                        >
+                    <div class="day-content">
+                        ${contentHtml}
+                    </div>
+                `;
 
-                            <div
-                                class="${numberClass}"
-                            >
-                                ${dayNumber}
-                            </div>
 
-                            <div
-                                class="day-content"
-                            >
+                cell.addEventListener(
+                    "click",
+                    function () {
+                        openModal(dateStr);
+                    }
+                );
 
-                                ${emojiHtml}
 
-                                ${textHtml}
-
-                            </div>
-
-                        </div>
-                    `;
-
-                } else {
-
-                    html += `
-                        <div
-                            class="
-                                calendar-cell
-                                other-month
-                                ${i >= totalCells - 7
-                                    ? 'last-row'
-                                    : ''}
-                            "
-                        >
-
-                            <div
-                                class="day-number"
-                            >
-                                ${dayNumber}
-                            </div>
-
-                        </div>
-                    `;
-
-                }
+                daysContainer.appendChild(
+                    cell
+                );
 
             }
 
+        }
 
-            daysContainer.innerHTML =
-                html;
+
+        /* =========================================================
+           HTML escape
+        ========================================================= */
+
+        function escapeHtml(text) {
+
+            return String(text)
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                )
+                .replace(
+                    /\n/g,
+                    "<br>"
+                );
 
         }
 
 
         /* =========================================================
-           HTML 이스케이프
-        ========================================================== */
+           Attribute escape
+        ========================================================= */
 
-        function escapeHtml(value) {
+        function escapeAttribute(text) {
 
-            return String(value)
-                .replaceAll('&', '&amp;')
-                .replaceAll('<', '&lt;')
-                .replaceAll('>', '&gt;')
-                .replaceAll('"', '&quot;')
-                .replaceAll("'", '&#039;');
-
-        }
-
-
-        function escapeAttribute(value) {
-
-            return escapeHtml(value);
+            return String(text)
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                );
 
         }
 
 
         /* =========================================================
-           월 이동
-        ========================================================== */
+           월 변경
+        ========================================================= */
 
         function changeMonth(delta) {
 
@@ -2288,6 +2571,10 @@
 
         }
 
+
+        /* =========================================================
+           오늘
+        ========================================================= */
 
         function goToToday() {
 
@@ -2301,7 +2588,7 @@
 
         /* =========================================================
            모달 열기
-        ========================================================== */
+        ========================================================= */
 
         function openModal(dateStr) {
 
@@ -2311,95 +2598,93 @@
 
             const data =
                 calendarData[dateStr] || {
-
-                    text: '',
-
-                    color: '#333333',
-
+                    text: "",
+                    color: "#333333",
                     emoji: null
-
                 };
 
 
             const parts =
-                dateStr.split('-');
+                dateStr.split("-");
 
 
             const year =
                 parts[0];
 
             const month =
-                parseInt(parts[1]);
+                parseInt(
+                    parts[1],
+                    10
+                );
 
             const day =
-                parseInt(parts[2]);
+                parseInt(
+                    parts[2],
+                    10
+                );
 
 
             document.getElementById(
-                'modal-date-title'
+                "modal-date-title"
             ).textContent =
                 `${year}년 ${month}월 ${day}일`;
 
 
             document.getElementById(
-                'modal-text'
+                "modal-text"
             ).value =
-                data.text || '';
+                data.text || "";
 
 
             document.getElementById(
-                'modal-color'
+                "modal-color"
             ).value =
-                data.color || '#333333';
+                data.color || "#333333";
 
 
             selectedEmoji =
                 data.emoji
-                    ? { ...data.emoji }
+                    ? {
+                        ...data.emoji
+                    }
                     : null;
 
 
-            renderSelectedEmoji();
+            updateSelectedEmojiUI();
 
 
             document.getElementById(
-                'edit-modal'
+                "edit-modal"
             ).classList.remove(
-                'hidden'
+                "hidden"
             );
 
-            document.getElementById(
-                'edit-modal'
-            ).classList.add(
-                'flex'
-            );
 
-            document.body.style.overflow =
-                'hidden';
+            setTimeout(
+                function () {
+
+                    document.getElementById(
+                        "modal-text"
+                    ).focus();
+
+                },
+                50
+            );
 
         }
 
 
         /* =========================================================
            모달 닫기
-        ========================================================== */
+        ========================================================= */
 
         function closeModal() {
 
             document.getElementById(
-                'edit-modal'
+                "edit-modal"
             ).classList.add(
-                'hidden'
+                "hidden"
             );
-
-            document.getElementById(
-                'edit-modal'
-            ).classList.remove(
-                'flex'
-            );
-
-            document.body.style.overflow =
-                '';
 
             editingDateStr =
                 null;
@@ -2407,12 +2692,14 @@
             selectedEmoji =
                 null;
 
+            updateSelectedEmojiUI();
+
         }
 
 
         /* =========================================================
            일정 저장
-        ========================================================== */
+        ========================================================= */
 
         function saveDayData() {
 
@@ -2423,13 +2710,13 @@
 
             const text =
                 document.getElementById(
-                    'modal-text'
+                    "modal-text"
                 ).value.trim();
 
 
             const color =
                 document.getElementById(
-                    'modal-color'
+                    "modal-color"
                 ).value;
 
 
@@ -2448,14 +2735,24 @@
                     editingDateStr
                 ] = {
 
-                    text,
+                    text: text,
 
-                    color,
+                    color: color,
 
                     emoji:
                         selectedEmoji
                             ? {
-                                ...selectedEmoji
+                                code:
+                                    selectedEmoji.code,
+
+                                name:
+                                    selectedEmoji.name,
+
+                                image:
+                                    selectedEmoji.image,
+
+                                pack:
+                                    selectedEmoji.pack
                             }
                             : null
 
@@ -2464,32 +2761,7 @@
             }
 
 
-            saveData();
-
-            closeModal();
-
-            renderCalendar();
-
-        }
-
-
-        /* =========================================================
-           일정 삭제
-        ========================================================== */
-
-        function deleteDayData() {
-
-            if (!editingDateStr) {
-                return;
-            }
-
-
-            delete calendarData[
-                editingDateStr
-            ];
-
-
-            saveData();
+            saveLocalData();
 
             closeModal();
 
@@ -2500,34 +2772,32 @@
 
         /* =========================================================
            치지직 이모지 API
-        ========================================================== */
+        ========================================================= */
 
         async function loadEmojis() {
 
             const board =
                 document.getElementById(
-                    'emoji-board'
-                );
-
-            const status =
-                document.getElementById(
-                    'emoji-status'
+                    "emojiBoard"
                 );
 
 
             try {
 
-                status.textContent =
-                    '치지직 이모지를 불러오는 중...';
+                board.innerHTML = `
+                    <div class="emoji-empty">
+                        치지직 이모지를 불러오는 중입니다...
+                    </div>
+                `;
 
 
                 const response =
                     await fetch(
                         EMOJI_API_URL,
                         {
-                            method: 'GET',
+                            method: "GET",
 
-                            cache: 'no-store'
+                            cache: "no-store"
                         }
                     );
 
@@ -2546,7 +2816,7 @@
 
 
                 /*
-                 * API 실제 구조:
+                 * 실제 API 구조:
                  *
                  * {
                  *   "emojis": {
@@ -2560,119 +2830,195 @@
 
 
                 const source =
-                    json.emojis || json;
+                    json.emojis || {};
 
 
                 const result = [];
 
-                const duplicateCheck =
+                const duplicate =
                     new Set();
 
 
                 Object.entries(
                     source
                 ).forEach(
-                    ([outerCode, emojiData]) => {
+                    function (
+                        [outerCode, emojiData]
+                    ) {
+
+                        /*
+                         * API 값이 객체인 경우
+                         */
 
                         if (
-                            !emojiData ||
-                            typeof emojiData !==
-                            'object'
+                            emojiData &&
+                            typeof emojiData ===
+                                "object" &&
+                            !Array.isArray(
+                                emojiData
+                            )
                         ) {
+
+                            Object.entries(
+                                emojiData
+                            ).forEach(
+                                function (
+                                    [name, image]
+                                ) {
+
+                                    if (
+                                        typeof image !==
+                                        "string"
+                                    ) {
+                                        return;
+                                    }
+
+
+                                    const code =
+                                        outerCode ||
+                                        `{:${name}:}`;
+
+
+                                    const uniqueKey =
+                                        `${name}|${image}`;
+
+
+                                    if (
+                                        duplicate.has(
+                                            uniqueKey
+                                        )
+                                    ) {
+                                        return;
+                                    }
+
+
+                                    duplicate.add(
+                                        uniqueKey
+                                    );
+
+
+                                    const pack =
+                                        getEmojiPack(
+                                            name
+                                        );
+
+
+                                    result.push({
+
+                                        code:
+                                            code,
+
+                                        name:
+                                            name,
+
+                                        image:
+                                            image,
+
+                                        pack:
+                                            pack,
+
+                                        search:
+                                            `${name} ${code} ${pack}`
+                                                .toLowerCase()
+
+                                    });
+
+                                }
+                            );
+
                             return;
                         }
 
 
-                        Object.entries(
-                            emojiData
-                        ).forEach(
-                            ([name, image]) => {
+                        /*
+                         * 혹시 API가
+                         *
+                         * "ag_1":
+                         * "https://..."
+                         *
+                         * 형태로 바뀌는 경우도 대응
+                         */
 
-                                if (
-                                    typeof image !==
-                                    'string'
-                                ) {
-                                    return;
-                                }
+                        if (
+                            typeof emojiData ===
+                            "string"
+                        ) {
 
-
-                                if (
-                                    !image.startsWith(
-                                        'http'
+                            const name =
+                                outerCode
+                                    .replace(
+                                        /^\{:\s*/,
+                                        ""
                                     )
-                                ) {
-                                    return;
-                                }
+                                    .replace(
+                                        /\s*:\}$/,
+                                        ""
+                                    );
 
 
-                                const key =
-                                    `${name}|${image}`;
+                            const uniqueKey =
+                                `${name}|${emojiData}`;
 
 
-                                if (
-                                    duplicateCheck.has(
-                                        key
-                                    )
-                                ) {
-                                    return;
-                                }
+                            if (
+                                duplicate.has(
+                                    uniqueKey
+                                )
+                            ) {
+                                return;
+                            }
 
 
-                                duplicateCheck.add(
-                                    key
+                            duplicate.add(
+                                uniqueKey
+                            );
+
+
+                            const pack =
+                                getEmojiPack(
+                                    name
                                 );
 
 
-                                /*
-                                 * ag_1
-                                 * d_1
-                                 * mlb_1
-                                 * chky_1
-                                 *
-                                 * 첫 번째 '_' 앞을
-                                 * 이모지팩으로 사용합니다.
-                                 */
+                            result.push({
 
-                                const pack =
-                                    name.includes('_')
-                                        ? name.split('_')[0]
-                                        : name;
+                                code:
+                                    outerCode,
 
-
-                                result.push({
-
-                                    code:
-                                        outerCode,
-
+                                name:
                                     name,
 
-                                    image,
+                                image:
+                                    emojiData,
 
+                                pack:
                                     pack,
 
-                                    search:
-                                        `${name} ${outerCode} ${pack}`
-                                            .toLowerCase()
+                                search:
+                                    `${name} ${outerCode} ${pack}`
+                                        .toLowerCase()
 
-                                });
+                            });
 
-                            }
-                        );
+                        }
 
                     }
                 );
 
 
-                emojis =
+                emojiList =
                     result.sort(
-                        (a, b) =>
-                            a.name.localeCompare(
+                        function (a, b) {
+
+                            return a.name.localeCompare(
                                 b.name,
                                 undefined,
                                 {
                                     numeric: true
                                 }
-                            )
+                            );
+
+                        }
                     );
 
 
@@ -2681,52 +3027,27 @@
                 renderEmojiBoard();
 
 
-                status.textContent =
-                    `전체 이모지 ${emojis.length}개`;
+                console.log(
+                    `치지직 이모지 ${emojiList.length}개 로드 완료`
+                );
+
 
             } catch (error) {
 
                 console.error(
-                    '치지직 이모지 로딩 실패:',
+                    "치지직 이모지 로드 실패:",
                     error
                 );
 
 
-                status.textContent =
-                    '이모지를 불러오지 못했습니다.';
-
-
                 board.innerHTML = `
-                    <div
-                        class="
-                            col-span-full
-                            py-8
-                            text-center
-                            text-sm
-                            text-red-400
-                        "
-                    >
-                        <i
-                            class="
-                                ph
-                                ph-warning-circle
-                                text-2xl
-                                block
-                                mb-2
-                            "
-                        ></i>
-
-                        이모지를 불러오지 못했습니다.
-
-                        <div
-                            class="
-                                text-xs
-                                text-gray-400
-                                mt-2
-                            "
-                        >
-                            브라우저의 CORS 설정을 확인해주세요.
-                        </div>
+                    <div class="emoji-empty">
+                        이모지를 불러오지 못했습니다.<br>
+                        <small>
+                            ${escapeHtml(
+                                error.message
+                            )}
+                        </small>
                     </div>
                 `;
 
@@ -2736,35 +3057,62 @@
 
 
         /* =========================================================
+           이모지팩 이름 추출
+        ========================================================= */
+
+        function getEmojiPack(name) {
+
+            const value =
+                String(name || "")
+                    .trim();
+
+
+            const match =
+                value.match(
+                    /^([a-zA-Z0-9]+)_/
+                );
+
+
+            if (match) {
+
+                return match[1];
+
+            }
+
+
+            return "기타";
+
+        }
+
+
+        /* =========================================================
            이모지팩 목록
-        ========================================================== */
+        ========================================================= */
 
         function buildEmojiPackList() {
 
             const select =
                 document.getElementById(
-                    'emoji-pack'
+                    "emojiPack"
                 );
-
-
-            const currentValue =
-                select.value;
 
 
             const counts =
                 new Map();
 
 
-            emojis.forEach(
-                emoji => {
+            emojiList.forEach(
+                function (emoji) {
+
+                    const pack =
+                        emoji.pack || "기타";
+
 
                     counts.set(
-                        emoji.pack,
-
+                        pack,
                         (
-                            counts.get(
-                                emoji.pack
-                            ) || 0
+                            counts.get(pack) ||
+                            0
                         ) + 1
                     );
 
@@ -2772,78 +3120,88 @@
             );
 
 
-            select.innerHTML = `
-                <option value="">
-                    전체 이모지 (${emojis.length})
-                </option>
-            `;
+            select.innerHTML = "";
 
 
-            [...counts.entries()]
-                .sort(
-                    (a, b) =>
-                        a[0].localeCompare(
-                            b[0],
-                            undefined,
-                            {
-                                numeric: true
-                            }
-                        )
-                )
-                .forEach(
-                    ([pack, count]) => {
-
-                        const option =
-                            document.createElement(
-                                'option'
-                            );
-
-                        option.value =
-                            pack;
-
-                        option.textContent =
-                            `${pack} (${count})`;
-
-                        select.appendChild(
-                            option
-                        );
-
-                    }
+            const allOption =
+                document.createElement(
+                    "option"
                 );
 
 
-            if (
-                [...select.options]
-                    .some(
-                        option =>
-                            option.value ===
-                            currentValue
-                    )
-            ) {
+            allOption.value =
+                "";
 
-                select.value =
-                    currentValue;
 
-            }
+            allOption.textContent =
+                `전체 이모지 (${emojiList.length})`;
+
+
+            select.appendChild(
+                allOption
+            );
+
+
+            Array.from(
+                counts.entries()
+            )
+            .sort(
+                function (a, b) {
+
+                    return a[0].localeCompare(
+                        b[0],
+                        undefined,
+                        {
+                            numeric: true
+                        }
+                    );
+
+                }
+            )
+            .forEach(
+                function (
+                    [pack, count]
+                ) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        pack;
+
+
+                    option.textContent =
+                        `${pack} (${count})`;
+
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
 
         }
 
 
         /* =========================================================
-           이모지 보드
-        ========================================================== */
+           이모지 검색 / 렌더링
+        ========================================================= */
 
         function renderEmojiBoard() {
 
             const board =
                 document.getElementById(
-                    'emoji-board'
+                    "emojiBoard"
                 );
 
 
             const search =
                 document.getElementById(
-                    'emoji-search'
+                    "emojiSearch"
                 ).value
                     .trim()
                     .toLowerCase();
@@ -2851,13 +3209,13 @@
 
             const pack =
                 document.getElementById(
-                    'emoji-pack'
+                    "emojiPack"
                 ).value;
 
 
             const filtered =
-                emojis.filter(
-                    emoji => {
+                emojiList.filter(
+                    function (emoji) {
 
                         const matchesSearch =
                             !search ||
@@ -2868,8 +3226,7 @@
 
                         const matchesPack =
                             !pack ||
-                            emoji.pack ===
-                                pack;
+                            emoji.pack === pack;
 
 
                         return (
@@ -2881,28 +3238,13 @@
                 );
 
 
-            const status =
-                document.getElementById(
-                    'emoji-status'
-                );
-
-
-            status.textContent =
-                `${filtered.length}개 표시`;
+            board.innerHTML = "";
 
 
             if (!filtered.length) {
 
                 board.innerHTML = `
-                    <div
-                        class="
-                            col-span-full
-                            py-8
-                            text-center
-                            text-sm
-                            text-gray-400
-                        "
-                    >
+                    <div class="emoji-empty">
                         검색 결과가 없습니다.
                     </div>
                 `;
@@ -2917,30 +3259,30 @@
 
 
             filtered.forEach(
-                emoji => {
+                function (emoji) {
 
                     const button =
                         document.createElement(
-                            'button'
+                            "button"
                         );
 
 
                     button.type =
-                        'button';
+                        "button";
 
 
                     button.className =
-                        'emoji-button';
+                        "emoji-item";
 
 
                     if (
                         selectedEmoji &&
-                        selectedEmoji.name ===
-                            emoji.name
+                        selectedEmoji.image ===
+                            emoji.image
                     ) {
 
                         button.classList.add(
-                            'selected'
+                            "selected"
                         );
 
                     }
@@ -2952,21 +3294,24 @@
 
                     const img =
                         document.createElement(
-                            'img'
+                            "img"
                         );
 
 
                     img.src =
                         emoji.image;
 
+
                     img.alt =
                         emoji.name;
 
+
                     img.loading =
-                        'lazy';
+                        "lazy";
+
 
                     img.crossOrigin =
-                        'anonymous';
+                        "anonymous";
 
 
                     button.appendChild(
@@ -2975,8 +3320,8 @@
 
 
                     button.addEventListener(
-                        'click',
-                        () => {
+                        "click",
+                        function () {
 
                             selectEmoji(
                                 emoji
@@ -2994,8 +3339,6 @@
             );
 
 
-            board.innerHTML = '';
-
             board.appendChild(
                 fragment
             );
@@ -3005,7 +3348,7 @@
 
         /* =========================================================
            이모지 선택
-        ========================================================== */
+        ========================================================= */
 
         function selectEmoji(emoji) {
 
@@ -3026,7 +3369,7 @@
             };
 
 
-            renderSelectedEmoji();
+            updateSelectedEmojiUI();
 
             renderEmojiBoard();
 
@@ -3034,79 +3377,83 @@
 
 
         /* =========================================================
-           이모지 선택 표시
-        ========================================================== */
+           이모지 선택 UI
+        ========================================================= */
 
-        function renderSelectedEmoji() {
+        function updateSelectedEmojiUI() {
 
             const preview =
                 document.getElementById(
-                    'selected-emoji-preview'
+                    "selectedEmojiPreview"
+                );
+
+
+            const name =
+                document.getElementById(
+                    "selectedEmojiName"
+                );
+
+
+            const clearButton =
+                document.getElementById(
+                    "clearEmojiButton"
                 );
 
 
             if (
-                !selectedEmoji
+                selectedEmoji &&
+                selectedEmoji.image
             ) {
 
-                preview.innerHTML = `
-                    <span
-                        class="text-sm text-gray-400"
-                    >
-                        이모지를 선택해주세요
-                    </span>
-                `;
+                preview.src =
+                    selectedEmoji.image;
 
-                return;
+                preview.classList.remove(
+                    "hidden"
+                );
+
+
+                name.textContent =
+                    selectedEmoji.name;
+
+
+                clearButton.classList.remove(
+                    "hidden"
+                );
+
+            } else {
+
+                preview.src =
+                    "";
+
+                preview.classList.add(
+                    "hidden"
+                );
+
+
+                name.textContent =
+                    "선택된 이모지가 없습니다.";
+
+
+                clearButton.classList.add(
+                    "hidden"
+                );
 
             }
-
-
-            preview.innerHTML = `
-                <div
-                    class="
-                        flex
-                        items-center
-                        gap-3
-                    "
-                >
-
-                    <img
-                        src="${escapeAttribute(
-                            selectedEmoji.image
-                        )}"
-                        class="emoji-preview"
-                        alt=""
-                        crossorigin="anonymous"
-                    >
-
-                    <div
-                        class="
-                            text-xs
-                            text-gray-500
-                        "
-                    >
-                        ${escapeHtml(
-                            selectedEmoji.name
-                        )}
-                    </div>
-
-                </div>
-            `;
 
         }
 
 
         /* =========================================================
            이모지 선택 해제
-        ========================================================== */
+        ========================================================= */
 
-        function clearSelectedEmoji() {
+        function clearEmojiSelection() {
 
             selectedEmoji =
                 null;
 
-            renderSelectedEmoji();
+            updateSelectedEmojiUI();
 
             renderEmojiBoard();
 
@@ -3115,98 +3462,124 @@
 
         /* =========================================================
            모바일 메뉴
-        ========================================================== */
+        ========================================================= */
 
         function toggleLeftMenu() {
 
             const drawer =
                 document.getElementById(
-                    'left-drawer'
+                    "left-drawer"
+                );
+
+            const backdrop =
+                document.getElementById(
+                    "drawer-backdrop"
                 );
 
 
             if (
                 drawer.classList.contains(
-                    '-translate-x-full'
+                    "-translate-x-full"
                 )
             ) {
 
                 closeAllDrawers();
 
                 drawer.classList.remove(
-                    '-translate-x-full'
+                    "-translate-x-full"
                 );
 
-                document.getElementById(
-                    'drawer-backdrop'
-                ).classList.remove(
-                    'hidden'
+                backdrop.classList.remove(
+                    "hidden"
                 );
 
             } else {
 
-                closeAllDrawers();
+                drawer.classList.add(
+                    "-translate-x-full"
+                );
+
+                backdrop.classList.add(
+                    "hidden"
+                );
 
             }
 
         }
 
+
+        /* =========================================================
+           오른쪽 메뉴
+        ========================================================= */
 
         function toggleRightMenu() {
 
             const drawer =
                 document.getElementById(
-                    'right-drawer'
+                    "right-drawer"
+                );
+
+            const backdrop =
+                document.getElementById(
+                    "drawer-backdrop"
                 );
 
 
             if (
                 drawer.classList.contains(
-                    'translate-x-full'
+                    "translate-x-full"
                 )
             ) {
 
                 closeAllDrawers();
 
                 drawer.classList.remove(
-                    'translate-x-full'
+                    "translate-x-full"
                 );
 
-                document.getElementById(
-                    'drawer-backdrop'
-                ).classList.remove(
-                    'hidden'
+                backdrop.classList.remove(
+                    "hidden"
                 );
 
             } else {
 
-                closeAllDrawers();
+                drawer.classList.add(
+                    "translate-x-full"
+                );
+
+                backdrop.classList.add(
+                    "hidden"
+                );
 
             }
 
         }
 
 
+        /* =========================================================
+           메뉴 닫기
+        ========================================================= */
+
         function closeAllDrawers() {
 
             document.getElementById(
-                'left-drawer'
+                "left-drawer"
             ).classList.add(
-                '-translate-x-full'
+                "-translate-x-full"
             );
 
 
             document.getElementById(
-                'right-drawer'
+                "right-drawer"
             ).classList.add(
-                'translate-x-full'
+                "translate-x-full"
             );
 
 
             document.getElementById(
-                'drawer-backdrop'
+                "drawer-backdrop"
             ).classList.add(
-                'hidden'
+                "hidden"
             );
 
         }
@@ -3214,26 +3587,35 @@
 
         /* =========================================================
            스와이프
-        ========================================================== */
+        ========================================================= */
 
         let touchStartX = 0;
 
         let touchStartY = 0;
 
-        let touchEndX = 0;
-
-        let touchEndY = 0;
-
-
-        const SWIPE_THRESHOLD =
-            60;
+        const SWIPE_THRESHOLD = 60;
 
 
         function initSwipeGestures() {
 
             document.addEventListener(
-                'touchstart',
-                event => {
+                "touchstart",
+                function (event) {
+
+                    if (
+                        !document
+                            .getElementById(
+                                "edit-modal"
+                            )
+                            .classList.contains(
+                                "hidden"
+                            )
+                    ) {
+
+                        return;
+
+                    }
+
 
                     touchStartX =
                         event.changedTouches[0]
@@ -3251,18 +3633,74 @@
 
 
             document.addEventListener(
-                'touchend',
-                event => {
+                "touchend",
+                function (event) {
 
-                    touchEndX =
+                    if (
+                        !document
+                            .getElementById(
+                                "edit-modal"
+                            )
+                            .classList.contains(
+                                "hidden"
+                            )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const endX =
                         event.changedTouches[0]
                             .screenX;
 
-                    touchEndY =
+                    const endY =
                         event.changedTouches[0]
                             .screenY;
 
-                    handleSwipe();
+
+                    const diffX =
+                        endX -
+                        touchStartX;
+
+
+                    const diffY =
+                        endY -
+                        touchStartY;
+
+
+                    if (
+                        Math.abs(diffY) >
+                        Math.abs(diffX)
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        Math.abs(diffX) <
+                        SWIPE_THRESHOLD
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        diffX > 0
+                    ) {
+
+                        changeMonth(-1);
+
+                    } else {
+
+                        changeMonth(1);
+
+                    }
 
                 },
                 {
@@ -3273,84 +3711,22 @@
         }
 
 
-        function handleSwipe() {
-
-            const modal =
-                document.getElementById(
-                    'edit-modal'
-                );
-
-
-            if (
-                !modal.classList.contains(
-                    'hidden'
-                )
-            ) {
-                return;
-            }
-
-
-            const diffX =
-                touchEndX -
-                touchStartX;
-
-
-            const diffY =
-                touchEndY -
-                touchStartY;
-
-
-            if (
-                Math.abs(diffY) >
-                Math.abs(diffX)
-            ) {
-                return;
-            }
-
-
-            if (
-                Math.abs(diffX) <
-                SWIPE_THRESHOLD
-            ) {
-                return;
-            }
-
-
-            if (diffX < 0) {
-
-                changeMonth(1);
-
-            } else {
-
-                changeMonth(-1);
-
-            }
-
-        }
-
-
         /* =========================================================
-           이미지 저장
-        ========================================================== */
+           캘린더 다운로드
+        ========================================================= */
 
         async function downloadCalendar() {
 
             const liveArea =
                 document.getElementById(
-                    'capture-area'
+                    "capture-area"
                 );
 
 
-            const hiddenContainer =
+            const hidden =
                 document.getElementById(
-                    'hidden-capture-container'
+                    "hidden-capture-container"
                 );
-
-
-            const memoText =
-                document.getElementById(
-                    'global-memo'
-                ).value;
 
 
             try {
@@ -3365,109 +3741,153 @@
 
 
                 clone.id =
-                    'capture-clone';
+                    "capture-clone";
 
 
                 clone.style.width =
-                    '1400px';
+                    "1400px";
 
 
                 clone.style.height =
-                    '1229px';
+                    "1229px";
 
 
-                clone.style.maxWidth =
-                    'none';
+                clone.style.margin =
+                    "40px";
 
 
-                clone.style.padding =
-                    '0';
+                clone.style.boxSizing =
+                    "border-box";
 
 
-                clone.className =
-                    '';
-
-
-                hiddenContainer.innerHTML =
-                    '';
-
-
-                hiddenContainer.style.display =
-                    'flex';
-
-
-                hiddenContainer.appendChild(
-                    clone
+                clone.classList.add(
+                    "capture-mode"
                 );
 
 
                 /*
-                 * 캡처 전용 CSS가 제대로 적용되도록
-                 * 약간 기다립니다.
+                 * 캡처용 영역에 넣기 전에
+                 * 현재 메모 내용을 복사
                  */
 
-                await new Promise(
-                    resolve =>
-                        setTimeout(
-                            resolve,
-                            150
-                        )
-                );
-
-
                 const memo =
+                    document.getElementById(
+                        "global-memo"
+                    ).value;
+
+
+                const memoTextarea =
                     clone.querySelector(
-                        '#global-memo'
+                        "#global-memo"
                     );
 
 
                 const memoRender =
                     clone.querySelector(
-                        '#global-memo-render'
+                        "#global-memo-render"
                     );
 
 
-                if (memo) {
+                if (memoTextarea) {
 
-                    memo.style.display =
-                        'none';
+                    memoTextarea.style.display =
+                        "none";
 
                 }
 
 
                 if (memoRender) {
 
-                    memoRender.classList.remove(
-                        'hidden'
-                    );
+                    memoRender.textContent =
+                        memo ||
+                        "여기에 중요한 메모나 공지를 적어보세요...";
 
                     memoRender.style.display =
-                        'block';
-
-                    memoRender.textContent =
-                        memoText ||
-                        '여기에 중요한 메모나 공지를 적어보세요...';
+                        "block";
 
                 }
 
 
                 /*
-                 * 캘린더 안 일정이 너무 길 경우
-                 * 자동으로 글자 크기를 줄입니다.
+                 * 다운로드 영역의 달력은
+                 * 5행/6행을 자동 처리
+                 */
+
+                const days =
+                    clone.querySelector(
+                        "#calendar-days"
+                    );
+
+
+                if (days) {
+
+                    const cells =
+                        days.children.length;
+
+                    const rows =
+                        Math.ceil(
+                            cells / 7
+                        );
+
+                    days.style.setProperty(
+                        "--row-count",
+                        rows
+                    );
+
+                }
+
+
+                hidden.innerHTML =
+                    "";
+
+
+                hidden.appendChild(
+                    clone
+                );
+
+
+                hidden.style.display =
+                    "block";
+
+
+                /*
+                 * 브라우저 렌더링 완료 대기
+                 */
+
+                await new Promise(
+                    function (resolve) {
+
+                        requestAnimationFrame(
+                            function () {
+
+                                requestAnimationFrame(
+                                    resolve
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+                /*
+                 * 일정 글자가 너무 길 경우
+                 * 셀 안에서 자동 축소
                  */
 
                 const cells =
                     clone.querySelectorAll(
-                        '.calendar-cell'
+                        ".calendar-cell.current-month"
                     );
 
 
                 cells.forEach(
-                    cell => {
+                    function (cell) {
 
                         const text =
                             cell.querySelector(
-                                '.schedule-text'
+                                ".schedule-text"
                             );
 
 
@@ -3476,30 +3896,23 @@
                         }
 
 
-                        let size = 32;
+                        let size = 22;
 
 
-                        text.style.setProperty(
-                            'font-size',
-                            `${size}px`,
-                            'important'
-                        );
+                        text.style.fontSize =
+                            size + "px";
 
 
                         while (
                             cell.scrollHeight >
                                 cell.clientHeight &&
-                            size > 15
+                            size > 13
                         ) {
 
                             size -= 1;
 
-
-                            text.style.setProperty(
-                                'font-size',
-                                `${size}px`,
-                                'important'
-                            );
+                            text.style.fontSize =
+                                size + "px";
 
                         }
 
@@ -3508,17 +3921,24 @@
 
 
                 await new Promise(
-                    resolve =>
+                    function (resolve) {
+
                         setTimeout(
                             resolve,
                             100
-                        )
+                        );
+
+                    }
                 );
 
 
+                /*
+                 * html2canvas
+                 */
+
                 const canvas =
                     await html2canvas(
-                        hiddenContainer,
+                        hidden,
                         {
 
                             width: 1480,
@@ -3546,23 +3966,23 @@
 
                 const image =
                     canvas.toDataURL(
-                        'image/png'
+                        "image/png"
                     );
 
 
                 const link =
                     document.createElement(
-                        'a'
+                        "a"
                     );
 
 
                 const title =
                     document.getElementById(
-                        'calendar-title'
+                        "calendar-title"
                     ).textContent
                         .replace(
-                            '.',
-                            '_'
+                            ".",
+                            "_"
                         );
 
 
@@ -3574,28 +3994,36 @@
                     image;
 
 
+                document.body.appendChild(
+                    link
+                );
+
+
                 link.click();
+
+
+                link.remove();
 
 
             } catch (error) {
 
                 console.error(
-                    '이미지 저장 실패:',
+                    "캘린더 저장 실패:",
                     error
                 );
 
 
                 alert(
-                    '이미지 저장 중 오류가 발생했습니다.'
+                    "이미지 저장 중 오류가 발생했습니다."
                 );
 
             } finally {
 
-                hiddenContainer.style.display =
-                    'none';
+                hidden.style.display =
+                    "none";
 
-                hiddenContainer.innerHTML =
-                    '';
+                hidden.innerHTML =
+                    "";
 
             }
 
@@ -3603,20 +4031,32 @@
 
 
         /* =========================================================
-           ESC 키
-        ========================================================== */
+           ESC로 모달 닫기
+        ========================================================= */
 
         document.addEventListener(
-            'keydown',
-            event => {
+            "keydown",
+            function (event) {
 
                 if (
-                    event.key === 'Escape'
+                    event.key === "Escape"
                 ) {
 
-                    closeModal();
+                    const modal =
+                        document.getElementById(
+                            "edit-modal"
+                        );
 
-                    closeAllDrawers();
+
+                    if (
+                        !modal.classList.contains(
+                            "hidden"
+                        )
+                    ) {
+
+                        closeModal();
+
+                    }
 
                 }
 
@@ -3625,11 +4065,64 @@
 
 
         /* =========================================================
-           시작
-        ========================================================== */
+           모달 바깥 클릭 닫기
+        ========================================================= */
+
+        document.getElementById(
+            "edit-modal"
+        ).addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target ===
+                    this
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           창 크기 변경 시 스프링 재생성
+        ========================================================= */
+
+        let resizeTimer = null;
+
 
         window.addEventListener(
-            'load',
+            "resize",
+            function () {
+
+                clearTimeout(
+                    resizeTimer
+                );
+
+
+                resizeTimer =
+                    setTimeout(
+                        function () {
+
+                            generateSprings();
+
+                        },
+                        150
+                    );
+
+            }
+        );
+
+
+        /* =========================================================
+           시작
+        ========================================================= */
+
+        window.addEventListener(
+            "load",
             init
         );
 
