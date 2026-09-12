@@ -2,52 +2,29 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Transparent Canvas Fireworks</title>
 
     <style>
-
-        /*
-         * 페이지 전체를 투명하게 만듭니다.
-         */
         html,
         body {
-
             margin: 0;
-
             width: 100%;
             height: 100%;
-
             overflow: hidden;
-
             background: transparent;
         }
 
-
-        /*
-         * Canvas 역시 투명하게 사용합니다.
-         */
         canvas {
-
             position: fixed;
-
             inset: 0;
-
             width: 100%;
             height: 100%;
-
             display: block;
-
             background: transparent;
-
             cursor: crosshair;
         }
-
     </style>
 </head>
 
@@ -56,7 +33,6 @@
 <canvas id="canvas"></canvas>
 
 <script>
-
 "use strict";
 
 
@@ -68,20 +44,11 @@ const canvas =
     document.getElementById("canvas");
 
 
-/*
- * 투명 Canvas입니다.
- *
- * desynchronized 옵션을 사용하여
- * 가능한 경우 브라우저의 렌더링 지연을 줄입니다.
- */
 const ctx =
-    canvas.getContext(
-        "2d",
-        {
-            alpha: true,
-            desynchronized: true
-        }
-    );
+    canvas.getContext("2d", {
+        alpha: true,
+        desynchronized: true
+    });
 
 
 /* =========================================================
@@ -89,15 +56,14 @@ const ctx =
    ========================================================= */
 
 let width = 0;
-
 let height = 0;
 
 
 /*
  * DPR을 최대 1.5로 제한합니다.
  *
- * 스마트폰의 2x / 3x 해상도를 그대로 사용하면
- * Canvas가 필요 이상으로 무거워질 수 있습니다.
+ * 모바일에서 2x / 3x Canvas를 그대로 사용하면
+ * 렌더링 픽셀이 급격하게 증가합니다.
  */
 let dpr =
     Math.min(
@@ -106,9 +72,6 @@ let dpr =
     );
 
 
-/*
- * Canvas 크기 변경
- */
 function resize() {
 
     width =
@@ -125,9 +88,6 @@ function resize() {
         );
 
 
-    /*
-     * 실제 Canvas 픽셀 크기
-     */
     canvas.width =
         Math.floor(
             width * dpr
@@ -139,9 +99,6 @@ function resize() {
         );
 
 
-    /*
-     * CSS 크기
-     */
     canvas.style.width =
         width + "px";
 
@@ -149,9 +106,6 @@ function resize() {
         height + "px";
 
 
-    /*
-     * 이후 좌표를 CSS 픽셀 기준으로 사용합니다.
-     */
     ctx.setTransform(
         dpr,
         0,
@@ -176,35 +130,22 @@ resize();
 
 
 /* =========================================================
-   수학 함수
+   수학
    ========================================================= */
 
 const TAU =
     Math.PI * 2;
 
 
-/*
- * 랜덤 실수
- */
-function random(
-    min,
-    max
-) {
+function random(min, max) {
 
-    return (
-        Math.random() *
-        (max - min)
-    ) + min;
+    return Math.random() *
+        (max - min) +
+        min;
 }
 
 
-/*
- * 랜덤 정수
- */
-function randomInt(
-    min,
-    max
-) {
+function randomInt(min, max) {
 
     return Math.floor(
         random(
@@ -215,9 +156,6 @@ function randomInt(
 }
 
 
-/*
- * 값 제한
- */
 function clamp(
     value,
     min,
@@ -234,308 +172,47 @@ function clamp(
 }
 
 
-/*
- * 0 → 1
- *
- * 시작은 느리고
- * 끝으로 갈수록 빠르게 진행합니다.
- */
 function easeOutCubic(t) {
 
-    return (
-        1 -
+    return 1 -
         Math.pow(
             1 - t,
             3
-        )
-    );
-}
-
-
-/*
- * 부드러운 색상 변화에 사용하는
- * smoothstep 함수입니다.
- */
-function smoothstep(t) {
-
-    return (
-        t * t *
-        (3 - 2 * t)
-    );
+        );
 }
 
 
 /* =========================================================
-   색상
+   불꽃 색상
    ========================================================= */
 
-/*
- * 불꽃의 시작 색상입니다.
- */
 const COLORS = [
 
-    "#ff3158",
-
-    "#ff5c9a",
-
-    "#ff8b32",
-
-    "#ffd23f",
-
-    "#7c6cff",
-
-    "#3c9cff",
-
-    "#32d9ff",
-
-    "#42f5b8",
-
-    "#a96cff"
+    "#fff7d6",
+    "#ffd166",
+    "#ff9f43",
+    "#ff5c7a",
+    "#ff6bd6",
+    "#bd7cff",
+    "#7189ff",
+    "#55d9ff",
+    "#62ffe4",
+    "#8cff72"
 
 ];
-
-
-/* =========================================================
-   HEX → RGB
-   ========================================================= */
-
-function hexToRgb(hex) {
-
-    /*
-     * #ffffff → ff ff ff
-     */
-    const value =
-        hex.replace(
-            "#",
-            ""
-        );
-
-
-    return {
-
-        r: parseInt(
-            value.substring(
-                0,
-                2
-            ),
-            16
-        ),
-
-        g: parseInt(
-            value.substring(
-                2,
-                4
-            ),
-            16
-        ),
-
-        b: parseInt(
-            value.substring(
-                4,
-                6
-            ),
-            16
-        )
-
-    };
-}
-
-
-/* =========================================================
-   RGB → 문자열
-   ========================================================= */
-
-function rgbToString(
-    r,
-    g,
-    b
-) {
-
-    return (
-        "rgb(" +
-        Math.round(r) +
-        "," +
-        Math.round(g) +
-        "," +
-        Math.round(b) +
-        ")"
-    );
-}
-
-
-/* =========================================================
-   색상 보간
-   ========================================================= */
-
-/*
- * 시작 색상에서 흰색으로 이동합니다.
- *
- * t = 0
- * → 원래 색상
- *
- * t = 0.5
- * → 밝은 색상
- *
- * t = 0.8
- * → 거의 흰색
- *
- * t = 1
- * → 완전한 흰색
- */
-function colorToWhite(
-    color,
-    t
-) {
-
-    const rgb =
-        hexToRgb(
-            color
-        );
-
-
-    /*
-     * 색상 변화가 초반에는 천천히,
-     * 후반에는 빠르게 흰색으로 갑니다.
-     */
-    const amount =
-        smoothstep(
-            clamp(
-                t,
-                0,
-                1
-            )
-        );
-
-
-    const r =
-        rgb.r +
-        (
-            255 -
-            rgb.r
-        ) *
-        amount;
-
-
-    const g =
-        rgb.g +
-        (
-            255 -
-            rgb.g
-        ) *
-        amount;
-
-
-    const b =
-        rgb.b +
-        (
-            255 -
-            rgb.b
-        ) *
-        amount;
-
-
-    return rgbToString(
-        r,
-        g,
-        b
-    );
-}
-
-
-/* =========================================================
-   색상 캐시
-   ========================================================= */
-
-/*
- * 매 프레임 HEX → RGB를 계산하면 불필요한 연산이
- * 많아질 수 있으므로 RGB를 미리 저장합니다.
- */
-const colorCache =
-    new Map();
-
-
-for (
-    const color of COLORS
-) {
-
-    colorCache.set(
-        color,
-        hexToRgb(
-            color
-        )
-    );
-}
-
-
-/*
- * RGB 값을 직접 받아
- * 흰색으로 보간합니다.
- */
-function particleColor(
-    rgb,
-    whiteAmount
-) {
-
-    const t =
-        smoothstep(
-            clamp(
-                whiteAmount,
-                0,
-                1
-            )
-        );
-
-
-    const r =
-        rgb.r +
-        (
-            255 -
-            rgb.r
-        ) * t;
-
-
-    const g =
-        rgb.g +
-        (
-            255 -
-            rgb.g
-        ) * t;
-
-
-    const b =
-        rgb.b +
-        (
-            255 -
-            rgb.b
-        ) * t;
-
-
-    return rgbToString(
-        r,
-        g,
-        b
-    );
-}
 
 
 /* =========================================================
    파티클 수
    ========================================================= */
 
-/*
- * 화면 크기에 따라 최대 파티클 수를
- * 자동으로 제한합니다.
- */
 const MAX_PARTICLES =
     Math.min(
         220,
         Math.max(
             110,
             Math.floor(
-                (
-                    width *
-                    height
-                ) /
+                (width * height) /
                 10000
             )
         )
@@ -543,7 +220,7 @@ const MAX_PARTICLES =
 
 
 /* =========================================================
-   Particle
+   파티클
    ========================================================= */
 
 class Particle {
@@ -553,60 +230,25 @@ class Particle {
         this.active =
             false;
 
-
         this.x = 0;
-
         this.y = 0;
 
-
         this.vx = 0;
-
         this.vy = 0;
 
-
         this.life = 0;
-
         this.maxLife = 0;
-
 
         this.size = 1;
 
-
-        this.rgb = {
-
-            r: 255,
-            g: 255,
-            b: 255
-
-        };
-
+        this.color =
+            "#fff";
 
         this.gravity =
             .05;
-
-
-        /*
-         * 파티클마다 색상 변화 시점을
-         * 약간 다르게 합니다.
-         */
-        this.whiteStart =
-            .55;
-
-
-        /*
-         * 잔광 길이
-         */
-        this.previousX =
-            0;
-
-        this.previousY =
-            0;
     }
 
 
-    /*
-     * 파티클 초기화
-     */
     reset(
         x,
         y,
@@ -620,20 +262,11 @@ class Particle {
         this.active =
             true;
 
-
         this.x =
             x;
 
         this.y =
             y;
-
-
-        this.previousX =
-            x;
-
-        this.previousY =
-            y;
-
 
         this.vx =
             vx;
@@ -641,6 +274,8 @@ class Particle {
         this.vy =
             vy;
 
+        this.color =
+            color;
 
         this.life =
             life;
@@ -648,106 +283,42 @@ class Particle {
         this.maxLife =
             life;
 
-
         this.size =
             size;
 
-
-        /*
-         * 미리 캐싱한 RGB를 사용합니다.
-         */
-        this.rgb =
-            colorCache.get(
-                color
-            );
-
-
-        /*
-         * 중력
-         */
         this.gravity =
             random(
                 .025,
                 .065
             );
-
-
-        /*
-         * 파티클마다 흰색으로 변하는
-         * 시작 시점을 조금씩 다르게 합니다.
-         */
-        this.whiteStart =
-            random(
-                .45,
-                .68
-            );
     }
 
 
-    /*
-     * 업데이트
-     */
     update() {
 
-        /*
-         * 이전 위치 저장
-         */
-        this.previousX =
-            this.x;
-
-        this.previousY =
-            this.y;
-
-
-        /*
-         * 공기 저항
-         */
         this.vx *=
             .988;
 
         this.vy *=
             .988;
 
-
-        /*
-         * 중력
-         */
         this.vy +=
             this.gravity;
 
-
-        /*
-         * 위치 이동
-         */
         this.x +=
             this.vx;
 
         this.y +=
             this.vy;
 
-
-        /*
-         * 수명 감소
-         */
         this.life--;
 
 
-        /*
-         * 화면 밖으로 나가면 제거합니다.
-         */
         if (
-
             this.life <= 0 ||
-
-            this.y >
-                height + 40 ||
-
-            this.x <
-                -50 ||
-
-            this.x >
-                width + 50
-
+            this.y > height + 40 ||
+            this.x < -50 ||
+            this.x > width + 50
         ) {
 
             this.active =
@@ -756,9 +327,6 @@ class Particle {
     }
 
 
-    /*
-     * 렌더링
-     */
     draw() {
 
         if (
@@ -769,84 +337,19 @@ class Particle {
         }
 
 
-        /*
-         * 현재 남은 생명 비율
-         *
-         * 1 → 처음
-         * 0 → 마지막
-         */
-        const lifeRatio =
+        const alpha =
             this.life /
             this.maxLife;
-
-
-        /*
-         * 진행률
-         *
-         * 0 → 처음
-         * 1 → 마지막
-         */
-        const progress =
-            1 -
-            lifeRatio;
-
-
-        /*
-         * 마지막으로 갈수록 흰색으로 변합니다.
-         */
-        let whiteAmount =
-            (
-                progress -
-                this.whiteStart
-            ) /
-            (
-                1 -
-                this.whiteStart
-            );
-
-
-        whiteAmount =
-            clamp(
-                whiteAmount,
-                0,
-                1
-            );
-
-
-        /*
-         * 최종 색상
-         */
-        const color =
-            particleColor(
-                this.rgb,
-                whiteAmount
-            );
-
-
-        /*
-         * 수명에 따른 투명도
-         */
-        const alpha =
-            clamp(
-                lifeRatio,
-                0,
-                1
-            );
 
 
         ctx.globalAlpha =
             alpha;
 
-
         ctx.fillStyle =
-            color;
+            this.color;
 
 
-        /*
-         * 파티클 본체
-         */
         ctx.beginPath();
-
 
         ctx.arc(
             this.x,
@@ -856,71 +359,16 @@ class Particle {
             TAU
         );
 
-
         ctx.fill();
-
-
-        /*
-         * 아주 짧은 잔광을 추가합니다.
-         *
-         * 그림자나 blur를 사용하지 않기 때문에
-         * 성능 부담이 매우 낮습니다.
-         */
-        if (
-            this.size > 1.1 &&
-            lifeRatio > .25
-        ) {
-
-            ctx.globalAlpha =
-                alpha * .18;
-
-
-            ctx.strokeStyle =
-                color;
-
-
-            ctx.lineWidth =
-                this.size * .55;
-
-
-            ctx.beginPath();
-
-
-            ctx.moveTo(
-                this.previousX,
-                this.previousY
-            );
-
-
-            ctx.lineTo(
-                this.x,
-                this.y
-            );
-
-
-            ctx.stroke();
-        }
     }
 }
 
 
 /* =========================================================
-   Particle Pool
+   파티클 Pool
    ========================================================= */
 
-/*
- * 파티클 객체를 미리 만들어 놓습니다.
- *
- * 매번 new Particle()을 만들지 않기 때문에
- *
- * GC 감소
- * 메모리 할당 감소
- * 프레임 드랍 감소
- *
- * 효과가 있습니다.
- */
-const particlePool =
-    [];
+const particlePool = [];
 
 
 for (
@@ -935,9 +383,6 @@ for (
 }
 
 
-/*
- * 사용 가능한 파티클을 찾습니다.
- */
 function getParticle() {
 
     for (
@@ -968,20 +413,14 @@ let audioContext =
 
 
 /*
- * Noise Buffer도 한 번만 생성합니다.
+ * Noise Buffer는 한 번만 생성합니다.
  */
 let noiseBuffer =
     null;
 
 
-/*
- * AudioContext 초기화
- */
 function initAudio() {
 
-    /*
-     * 이미 만들어졌으면 재사용합니다.
-     */
     if (
         audioContext
     ) {
@@ -994,7 +433,6 @@ function initAudio() {
             audioContext.resume();
         }
 
-
         return;
     }
 
@@ -1004,9 +442,7 @@ function initAudio() {
         window.webkitAudioContext;
 
 
-    if (
-        !AudioContext
-    ) {
+    if (!AudioContext) {
 
         return;
     }
@@ -1040,9 +476,6 @@ function getNoiseBuffer() {
     }
 
 
-    /*
-     * 이미 생성했다면 재사용합니다.
-     */
     if (
         noiseBuffer
     ) {
@@ -1064,14 +497,9 @@ function getNoiseBuffer() {
 
 
     const data =
-        noiseBuffer.getChannelData(
-            0
-        );
+        noiseBuffer.getChannelData(0);
 
 
-    /*
-     * White Noise 생성
-     */
     for (
         let i = 0;
         i < size;
@@ -1079,9 +507,7 @@ function getNoiseBuffer() {
     ) {
 
         data[i] =
-            Math.random() *
-            2 -
-            1;
+            Math.random() * 2 - 1;
     }
 
 
@@ -1090,113 +516,28 @@ function getNoiseBuffer() {
 
 
 /* =========================================================
-   발사음
+   로켓 상승 비행음
    ========================================================= */
 
-function playLaunchSound() {
-
-    if (
-        !audioContext
-    ) {
-
-        return;
-    }
-
-
-    const now =
-        audioContext.currentTime;
-
-
-    /*
-     * Noise
-     */
-    const source =
-        audioContext
-            .createBufferSource();
-
-
-    source.buffer =
-        getNoiseBuffer();
-
-
-    /*
-     * Band-pass
-     *
-     * 260Hz → 1500Hz
-     */
-    const filter =
-        audioContext
-            .createBiquadFilter();
-
-
-    filter.type =
-        "bandpass";
-
-
-    filter.frequency.setValueAtTime(
-        260,
-        now
-    );
-
-
-    filter.frequency.exponentialRampToValueAtTime(
-        1500,
-        now + .28
-    );
-
-
-    filter.Q.value =
-        1.1;
-
-
-    /*
-     * 볼륨
-     */
-    const gain =
-        audioContext
-            .createGain();
-
-
-    gain.gain.setValueAtTime(
-        .0001,
-        now
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-        .09,
-        now + .015
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-        .0001,
-        now + .3
-    );
-
-
-    source
-        .connect(filter)
-        .connect(gain)
-        .connect(
-            audioContext.destination
-        );
-
-
-    source.start(
-        now
-    );
-
-
-    source.stop(
-        now + .35
-    );
-}
-
-
-/* =========================================================
-   로켓 비행음
-   ========================================================= */
+/*
+ * 실제 로켓이 날아가는 것처럼
+ *
+ * 0초
+ * ↓
+ * 낮은 Whoosh
+ *
+ * 0.7초
+ * ↓
+ * 중간 음역
+ *
+ * 1.4초
+ * ↓
+ * 높은 Whoosh
+ *
+ * 이후 폭발
+ *
+ * 형태로 만듭니다.
+ */
 
 function playRocketFlightSound() {
 
@@ -1213,11 +554,13 @@ function playRocketFlightSound() {
 
 
     /*
-     * 상승 Noise
+     * -----------------------------------------------------
+     * 1. Noise 기반 Whoosh
+     * -----------------------------------------------------
      */
+
     const source =
-        audioContext
-            .createBufferSource();
+        audioContext.createBufferSource();
 
 
     source.buffer =
@@ -1225,13 +568,18 @@ function playRocketFlightSound() {
 
 
     /*
-     * Band-pass
+     * Band-pass 필터
      *
-     * 상승하면서 음역이 올라갑니다.
+     * 180Hz
+     * →
+     * 700Hz
+     * →
+     * 1800Hz
+     * →
+     * 2800Hz
      */
     const filter =
-        audioContext
-            .createBiquadFilter();
+        audioContext.createBiquadFilter();
 
 
     filter.type =
@@ -1267,19 +615,27 @@ function playRocketFlightSound() {
 
 
     /*
-     * 상승 볼륨
+     * -----------------------------------------------------
+     * Whoosh 볼륨
+     * -----------------------------------------------------
      */
+
     const gain =
-        audioContext
-            .createGain();
+        audioContext.createGain();
 
 
+    /*
+     * 처음에는 거의 들리지 않게 합니다.
+     */
     gain.gain.setValueAtTime(
         .0001,
         now
     );
 
 
+    /*
+     * 상승하면서 점점 커집니다.
+     */
     gain.gain.exponentialRampToValueAtTime(
         .025,
         now + .15
@@ -1298,6 +654,9 @@ function playRocketFlightSound() {
     );
 
 
+    /*
+     * 폭발 직전에 다시 살짝 감소합니다.
+     */
     gain.gain.exponentialRampToValueAtTime(
         .0001,
         now + 1.42
@@ -1323,17 +682,23 @@ function playRocketFlightSound() {
 
 
     /*
-     * 상승음에 약간의 tonal 요소를 추가합니다.
+     * -----------------------------------------------------
+     * 2. 상승음을 조금 더 선명하게 만들어주는
+     *    고주파 Oscillator
+     * -----------------------------------------------------
      */
+
     const oscillator =
-        audioContext
-            .createOscillator();
+        audioContext.createOscillator();
 
 
     oscillator.type =
         "sine";
 
 
+    /*
+     * 240Hz → 1250Hz
+     */
     oscillator.frequency.setValueAtTime(
         240,
         now
@@ -1347,8 +712,7 @@ function playRocketFlightSound() {
 
 
     const oscillatorGain =
-        audioContext
-            .createGain();
+        audioContext.createGain();
 
 
     oscillatorGain.gain.setValueAtTime(
@@ -1392,17 +756,112 @@ function playRocketFlightSound() {
     );
 
 
+    /*
+     * 오디오 객체를 반환합니다.
+     *
+     * 필요하면 나중에 로켓 폭발 순간에
+     * 소리를 강제로 끊을 수도 있습니다.
+     */
     return {
-
         source,
-
         oscillator,
-
         gain,
-
         oscillatorGain
-
     };
+}
+
+
+/* =========================================================
+   발사음
+   ========================================================= */
+
+function playLaunchSound() {
+
+    if (
+        !audioContext
+    ) {
+
+        return;
+    }
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const source =
+        audioContext.createBufferSource();
+
+
+    source.buffer =
+        getNoiseBuffer();
+
+
+    const filter =
+        audioContext.createBiquadFilter();
+
+
+    filter.type =
+        "bandpass";
+
+
+    /*
+     * 발사 순간의 짧은 저음
+     */
+    filter.frequency.setValueAtTime(
+        260,
+        now
+    );
+
+
+    filter.frequency.exponentialRampToValueAtTime(
+        1500,
+        now + .28
+    );
+
+
+    filter.Q.value =
+        1.1;
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .09,
+        now + .015
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        now + .3
+    );
+
+
+    source
+        .connect(filter)
+        .connect(gain)
+        .connect(
+            audioContext.destination
+        );
+
+
+    source.start(
+        now
+    );
+
+
+    source.stop(
+        now + .35
+    );
 }
 
 
@@ -1428,8 +887,7 @@ function playExplosionSound() {
      * 저역 Sine
      */
     const oscillator =
-        audioContext
-            .createOscillator();
+        audioContext.createOscillator();
 
 
     oscillator.type =
@@ -1449,8 +907,7 @@ function playExplosionSound() {
 
 
     const bassGain =
-        audioContext
-            .createGain();
+        audioContext.createGain();
 
 
     bassGain.gain.setValueAtTime(
@@ -1492,8 +949,7 @@ function playExplosionSound() {
      * 폭발 Noise
      */
     const noise =
-        audioContext
-            .createBufferSource();
+        audioContext.createBufferSource();
 
 
     noise.buffer =
@@ -1504,8 +960,7 @@ function playExplosionSound() {
      * Low-pass
      */
     const filter =
-        audioContext
-            .createBiquadFilter();
+        audioContext.createBiquadFilter();
 
 
     filter.type =
@@ -1532,8 +987,7 @@ function playExplosionSound() {
      * Noise 볼륨
      */
     const gain =
-        audioContext
-            .createGain();
+        audioContext.createGain();
 
 
     gain.gain.setValueAtTime(
@@ -1585,7 +1039,7 @@ class Rocket {
     ) {
 
         /*
-         * 지상 랜덤 위치에서 시작
+         * 지상에서 랜덤한 위치에서 발사합니다.
          */
         this.startX =
             random(
@@ -1598,39 +1052,33 @@ class Rocket {
             height + 10;
 
 
-        /*
-         * 현재 위치
-         */
         this.x =
             this.startX;
+
 
         this.y =
             this.startY;
 
 
-        /*
-         * 목표 위치
-         */
         this.targetX =
             targetX;
+
 
         this.targetY =
             targetY;
 
 
         /*
-         * 상승 시간
+         * 약 1.4초 상승
          */
         this.elapsed =
             0;
+
 
         this.duration =
             1400;
 
 
-        /*
-         * 종료 여부
-         */
         this.dead =
             false;
 
@@ -1643,7 +1091,7 @@ class Rocket {
 
 
         /*
-         * 로켓 색상
+         * 불꽃 색상
          */
         this.color =
             COLORS[
@@ -1655,27 +1103,22 @@ class Rocket {
 
 
         /*
-         * 상승음
+         * 해당 로켓의 비행음
          */
         this.flightSound =
             null;
     }
 
 
-    /*
-     * 로켓 업데이트
-     */
     update(dt) {
 
         /*
+         * 오디오 초기화 이후
          * 비행음을 한 번만 생성합니다.
          */
         if (
-
             !this.flightSound &&
-
             audioContext
-
         ) {
 
             this.flightSound =
@@ -1690,9 +1133,6 @@ class Rocket {
             dt;
 
 
-        /*
-         * 0 → 1
-         */
         const t =
             clamp(
                 this.elapsed /
@@ -1702,13 +1142,8 @@ class Rocket {
             );
 
 
-        /*
-         * 부드러운 상승
-         */
         const progress =
-            easeOutCubic(
-                t
-            );
+            easeOutCubic(t);
 
 
         /*
@@ -1736,19 +1171,16 @@ class Rocket {
 
 
         /*
-         * 상승 궤적 추가
+         * 궤적
          */
         this.trail.push({
-
             x: this.x,
-
             y: this.y
-
         });
 
 
         /*
-         * 최대 10개만 유지
+         * 최대 10개
          */
         if (
             this.trail.length >
@@ -1760,7 +1192,7 @@ class Rocket {
 
 
         /*
-         * 목표 도착
+         * 목표 지점 도착
          */
         if (
             t >= 1
@@ -1782,13 +1214,10 @@ class Rocket {
     }
 
 
-    /*
-     * 로켓 렌더링
-     */
     draw() {
 
         /*
-         * 궤적
+         * 상승 궤적
          */
         for (
             let i = 0;
@@ -1796,7 +1225,7 @@ class Rocket {
             i++
         ) {
 
-            const point =
+            const p =
                 this.trail[i];
 
 
@@ -1804,8 +1233,7 @@ class Rocket {
                 (
                     i /
                     this.trail.length
-                ) *
-                .65;
+                ) * .65;
 
 
             ctx.fillStyle =
@@ -1813,8 +1241,8 @@ class Rocket {
 
 
             ctx.fillRect(
-                point.x,
-                point.y,
+                p.x,
+                p.y,
                 1.5,
                 1.5
             );
@@ -1843,14 +1271,6 @@ class Rocket {
 
 
 /* =========================================================
-   로켓 배열
-   ========================================================= */
-
-const rockets =
-    [];
-
-
-/* =========================================================
    폭발
    ========================================================= */
 
@@ -1865,7 +1285,7 @@ function explode(
 ) {
 
     /*
-     * 순간적인 화면 섬광
+     * 화면 섬광
      */
     flash =
         1;
@@ -1891,9 +1311,6 @@ function explode(
             getParticle();
 
 
-        /*
-         * Pool이 가득 찼다면 종료
-         */
         if (
             !particle
         ) {
@@ -1902,18 +1319,11 @@ function explode(
         }
 
 
-        /*
-         * 360도 방향
-         */
         const angle =
             Math.random() *
             TAU;
 
 
-        /*
-         * 중심부는 빠르고
-         * 외곽은 조금 느리게 퍼집니다.
-         */
         const speed =
             Math.pow(
                 Math.random(),
@@ -1925,13 +1335,8 @@ function explode(
             );
 
 
-        /*
-         * 메인 파티클
-         */
         particle.reset(
-
             x,
-
             y,
 
             Math.cos(angle) *
@@ -1951,13 +1356,12 @@ function explode(
                 .7,
                 1.8
             )
-
         );
     }
 
 
     /*
-     * 폭발 중심의 흰색 파티클
+     * 하얀 중심부
      */
     for (
         let i = 0;
@@ -1989,13 +1393,8 @@ function explode(
             );
 
 
-        /*
-         * 처음부터 흰색인 중심부
-         */
         particle.reset(
-
             x,
-
             y,
 
             Math.cos(angle) *
@@ -2015,7 +1414,6 @@ function explode(
                 .8,
                 2
             )
-
         );
     }
 
@@ -2024,211 +1422,6 @@ function explode(
      * 폭발음
      */
     playExplosionSound();
-}
-
-
-/* =========================================================
-   자동 발사
-   ========================================================= */
-
-let autoTimer =
-    800;
-
-
-function automaticFireworks(
-    dt
-) {
-
-    autoTimer -=
-        dt;
-
-
-    if (
-        autoTimer > 0
-    ) {
-
-        return;
-    }
-
-
-    /*
-     * 다음 발사까지 시간
-     */
-    autoTimer =
-        random(
-            850,
-            1800
-        );
-
-
-    /*
-     * 동시에 너무 많은 로켓 방지
-     */
-    if (
-        rockets.length >= 5
-    ) {
-
-        return;
-    }
-
-
-    launch(
-
-        random(
-            width * .12,
-            width * .88
-        ),
-
-        random(
-            height * .15,
-            height * .53
-        )
-
-    );
-}
-
-
-/* =========================================================
-   불꽃 발사
-   ========================================================= */
-
-function launch(
-    targetX,
-    targetY
-) {
-
-    /*
-     * Web Audio 활성화
-     */
-    initAudio();
-
-
-    /*
-     * 최대 5개의 로켓
-     */
-    if (
-        rockets.length >= 5
-    ) {
-
-        return;
-    }
-
-
-    /*
-     * 발사음
-     */
-    playLaunchSound();
-
-
-    /*
-     * 로켓 생성
-     */
-    rockets.push(
-
-        new Rocket(
-            targetX,
-            targetY
-        )
-
-    );
-}
-
-
-/* =========================================================
-   마우스 / 터치
-   ========================================================= */
-
-canvas.addEventListener(
-
-    "pointerdown",
-
-    event => {
-
-        /*
-         * 첫 사용자 입력에서
-         * AudioContext를 활성화합니다.
-         */
-        initAudio();
-
-
-        /*
-         * 클릭 위치에서 폭발
-         */
-        launch(
-
-            event.clientX,
-
-            event.clientY
-
-        );
-    },
-
-    {
-        passive: true
-    }
-
-);
-
-
-/* =========================================================
-   화면 섬광
-   ========================================================= */
-
-function drawFlash() {
-
-    if (
-        flash <= 0
-    ) {
-
-        return;
-    }
-
-
-    /*
-     * 매우 약한 전체 화면 섬광
-     *
-     * 투명 배경에서도
-     * 폭발 순간의 밝기를 표현합니다.
-     */
-    ctx.globalAlpha =
-        flash * .055;
-
-
-    ctx.fillStyle =
-        "#fff3d0";
-
-
-    ctx.fillRect(
-
-        0,
-
-        0,
-
-        width,
-
-        height
-
-    );
-
-
-    /*
-     * 빠르게 감소
-     */
-    flash *=
-        .78;
-
-
-    if (
-        flash < .01
-    ) {
-
-        flash =
-            0;
-    }
-
-
-    ctx.globalAlpha =
-        1;
 }
 
 
@@ -2264,12 +1457,6 @@ function updateParticles() {
 
 function drawParticles() {
 
-    /*
-     * save() / restore()를 사용하지 않습니다.
-     *
-     * Canvas 상태 저장/복원 호출을 줄여
-     * 성능을 확보합니다.
-     */
     for (
         let i = 0;
         i < particlePool.length;
@@ -2286,20 +1473,182 @@ function drawParticles() {
 
 
 /* =========================================================
-   메인 렌더링 루프
+   불꽃 발사
+   ========================================================= */
+
+const rockets = [];
+
+
+function launch(
+    targetX,
+    targetY
+) {
+
+    /*
+     * 브라우저의 Audio autoplay 정책 때문에
+     * 사용자 입력 이후 AudioContext를 활성화합니다.
+     */
+    initAudio();
+
+
+    /*
+     * 동시에 최대 5개의 로켓
+     */
+    if (
+        rockets.length >= 5
+    ) {
+
+        return;
+    }
+
+
+    /*
+     * 발사음
+     */
+    playLaunchSound();
+
+
+    /*
+     * 로켓 생성
+     *
+     * Rocket.update()에서
+     * 1.4초짜리 비행음도 시작됩니다.
+     */
+    rockets.push(
+        new Rocket(
+            targetX,
+            targetY
+        )
+    );
+}
+
+
+/* =========================================================
+   클릭 발사
+   ========================================================= */
+
+canvas.addEventListener(
+    "pointerdown",
+    event => {
+
+        /*
+         * 클릭 즉시 AudioContext 활성화
+         */
+        initAudio();
+
+
+        launch(
+            event.clientX,
+            event.clientY
+        );
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   자동 불꽃
+   ========================================================= */
+
+let autoTimer =
+    800;
+
+
+function automaticFireworks(dt) {
+
+    autoTimer -=
+        dt;
+
+
+    if (
+        autoTimer > 0
+    ) {
+
+        return;
+    }
+
+
+    autoTimer =
+        random(
+            850,
+            1800
+        );
+
+
+    launch(
+        random(
+            width * .12,
+            width * .88
+        ),
+
+        random(
+            height * .15,
+            height * .53
+        )
+    );
+}
+
+
+/* =========================================================
+   화면 섬광
+   ========================================================= */
+
+function drawFlash() {
+
+    if (
+        flash <= 0
+    ) {
+
+        return;
+    }
+
+
+    ctx.globalAlpha =
+        flash * .055;
+
+
+    ctx.fillStyle =
+        "#fff3d0";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    flash *=
+        .78;
+
+
+    if (
+        flash < .01
+    ) {
+
+        flash =
+            0;
+    }
+
+
+    ctx.globalAlpha =
+        1;
+}
+
+
+/* =========================================================
+   메인 렌더링
    ========================================================= */
 
 let lastTime =
     performance.now();
 
 
-function render(
-    time
-) {
+function render(time) {
 
-    /*
-     * 프레임 시간
-     */
     const dt =
         Math.min(
             time - lastTime,
@@ -2312,21 +1661,13 @@ function render(
 
 
     /*
-     * 이전 프레임을 제거합니다.
-     *
-     * 배경이 투명이므로
-     * clearRect 이후 그대로 투명합니다.
+     * 투명 Canvas 초기화
      */
     ctx.clearRect(
-
         0,
-
         0,
-
         width,
-
         height
-
     );
 
 
@@ -2338,16 +1679,13 @@ function render(
     );
 
 
-    /* -----------------------------------------------------
-       로켓
-       ----------------------------------------------------- */
-
+    /*
+     * 로켓
+     */
     for (
         let i =
             rockets.length - 1;
-
         i >= 0;
-
         i--
     ) {
 
@@ -2355,23 +1693,14 @@ function render(
             rockets[i];
 
 
-        /*
-         * 로켓 업데이트
-         */
         rocket.update(
             dt
         );
 
 
-        /*
-         * 로켓 렌더링
-         */
         rocket.draw();
 
 
-        /*
-         * 폭발했다면 배열에서 제거
-         */
         if (
             rocket.dead
         ) {
@@ -2384,19 +1713,17 @@ function render(
     }
 
 
-    /* -----------------------------------------------------
-       파티클
-       ----------------------------------------------------- */
-
+    /*
+     * 파티클
+     */
     updateParticles();
 
     drawParticles();
 
 
-    /* -----------------------------------------------------
-       폭발 섬광
-       ----------------------------------------------------- */
-
+    /*
+     * 섬광
+     */
     drawFlash();
 
 
@@ -2423,59 +1750,41 @@ requestAnimationFrame(
    ========================================================= */
 
 setTimeout(
-
     () => {
 
         launch(
-
             width * .50,
-
             height * .30
-
         );
 
     },
-
     700
-
 );
 
 
 setTimeout(
-
     () => {
 
         launch(
-
             width * .30,
-
             height * .42
-
         );
 
     },
-
     1600
-
 );
 
 
 setTimeout(
-
     () => {
 
         launch(
-
             width * .70,
-
             height * .34
-
         );
 
     },
-
     2400
-
 );
 
 </script>
