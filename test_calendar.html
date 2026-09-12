@@ -110,38 +110,96 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-        /* ------------------ 백그라운드 캡처 전용 스타일 (사용자 화면 변화 없음) ------------------ */
+        /* ------------------ 백그라운드 캡처 전용 스타일 (1480x1309 완벽 비율 & 투명) ------------------ */
+        #hidden-capture-container {
+            padding: 50px 40px 40px 40px !important; /* 위쪽 스프링 여백 추가 */
+            background-color: transparent !important;
+            align-items: center !important;
+        }
         #hidden-capture-container .diary-paper {
-            flex: 1 !important; display: flex !important; flex-direction: column !important;
-            height: 100% !important; margin: 0 !important; padding: 25px 30px 15px 30px !important;
-            box-shadow: none !important; border-radius: 16px !important; border: 2px solid rgba(169, 68, 66, 0.2) !important;
+            width: 1400px !important; 
+            height: 1219px !important; /* 1309 - (50+40) */
+            flex: none !important;
+            margin: 0 !important; 
+            padding: 50px 50px 40px 50px !important;
+            border-radius: 20px !important; 
+            border: 2px solid rgba(169, 68, 66, 0.2) !important;
             background-color: #FAF8F5 !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
         }
+        
+        /* 캡처 시 스프링 크기 최적화 */
+        #hidden-capture-container .spring-wrapper { top: -30px !important; }
+        #hidden-capture-container .spring { width: 24px !important; height: 60px !important; border-radius: 12px !important; }
+        #hidden-capture-container .spring::after { width: 20px !important; height: 20px !important; bottom: -10px !important; left: 2px !important; }
+        
+        /* 캡처 시 폰트 및 간격 조정 (레퍼런스 이미지와 동일하게) */
+        #hidden-capture-container .mb-4, #hidden-capture-container .mb-6 { margin-bottom: 25px !important; }
+        #hidden-capture-container .text-3xl, #hidden-capture-container .md\:text-5xl { font-size: 56px !important; line-height: 1 !important; }
+        #hidden-capture-container #calendar-title { font-size: 48px !important; }
+        
+        /* 캡처 시 캘린더 격자 선 굵기/색상 일치 */
         #hidden-capture-container .calendar-grid {
-            flex: 1 !important; display: flex !important; flex-direction: column !important; min-height: 0 !important;
-            border: 2px solid #A94442 !important; border-radius: 8px !important; background-color: white !important; overflow: hidden !important;
+            flex: 1 !important; 
+            border: 4px solid #A94442 !important; 
+            border-radius: 12px !important;
+            background-color: white !important;
+            overflow: hidden !important;
+            display: flex !important; flex-direction: column !important; min-height: 0 !important;
         }
+        #hidden-capture-container .grid-cols-7 > div.calendar-header-cell {
+            font-size: 24px !important;
+            padding: 12px 0 !important;
+            border-bottom: 4px solid #A94442 !important;
+            border-right: 1px solid #A94442 !important; /* 헤더 사이 선은 빨간색 */
+        }
+        #hidden-capture-container .grid-cols-7 > div.calendar-header-cell:last-child { border-right: none !important; }
+        
         #hidden-capture-container #calendar-days {
             flex: 1 !important; display: grid !important; 
             grid-template-rows: repeat(var(--row-count, 5), minmax(0, 1fr)) !important; min-height: 0 !important;
         }
         #hidden-capture-container .calendar-cell {
-            min-height: 0 !important; height: auto !important; padding: 4px !important;
+            border-bottom: 1px solid #bbbbbb !important;
+            border-right: 1px solid #bbbbbb !important; /* 본문 사이 선은 얇은 회색 */
+            padding: 8px !important;
+            min-height: 0 !important; height: auto !important;
             display: flex !important; flex-direction: column !important;
         }
-        #hidden-capture-container .desktop-memo { display: flex !important; margin-top: 15px !important; padding: 10px 15px !important; background-color: rgba(253, 242, 248, 0.5) !important; border: 2px solid #A94442 !important; border-radius: 0.75rem !important;}
-        #hidden-capture-container .calendar-cell img { max-height: 40px !important; margin: 0 auto 2px auto !important; display: inline-block !important; }
-        #hidden-capture-container .calendar-cell .text-base { font-size: 1.1rem !important; line-height: 1.2 !important; }
+        
+        /* 캡처 시 셀 내부 콘텐츠 크기 */
+        #hidden-capture-container .calendar-cell .text-sm,
+        #hidden-capture-container .calendar-cell .md\:text-lg,
+        #hidden-capture-container .calendar-cell .text-lg {
+            font-size: 22px !important;
+            margin-bottom: 8px !important;
+        }
+        #hidden-capture-container .calendar-cell img { max-height: 80px !important; margin-bottom: 6px !important; display: inline-block !important; }
+        #hidden-capture-container .calendar-cell .text-base { font-size: 22px !important; line-height: 1.3 !important; }
+        
+        /* 캡처 시 메모 영역 */
+        #hidden-capture-container .desktop-memo { 
+            display: flex !important; flex-direction: column !important;
+            margin-top: 30px !important; 
+            padding: 25px 30px !important; 
+            background-color: #FDF4F5 !important; 
+            border: 4px solid #A94442 !important; 
+            border-radius: 12px !important; 
+            height: 180px !important;
+        }
+        #hidden-capture-container .desktop-memo > span.absolute {
+            top: -24px !important; left: 20px !important; font-size: 32px !important; padding: 0 15px !important;
+        }
         #hidden-capture-container #global-memo-render {
-            min-height: 2.5rem !important; font-size: 1.2rem !important; padding: 0 !important; line-height: 1.4 !important; display: block !important;
+            min-height: 2.5rem !important; font-size: 24px !important; padding: 0 !important; line-height: 1.5 !important; display: block !important;
         }
     </style>
 </head>
 <body class="font-sans text-diary-text min-h-screen md:p-8 flex flex-col items-center">
 
-    <!-- 백그라운드 캡처 전용 완벽 숨김 래퍼 (화면 저 멀리 배치하여 사용자에게 절대 보이지 않음) -->
-    <div style="position: absolute; top: -9999px; left: -9999px; width: 1480px; height: 1309px; z-index: -9999; overflow: hidden;">
-        <div id="hidden-capture-container" class="bg-[#e5e7eb] flex-col p-[15px_30px]" style="width: 1480px; height: 1309px; display: none; box-sizing: border-box;"></div>
+    <!-- 백그라운드 캡처 전용 완벽 숨김 래퍼 (화면 저 멀리 배치하여 사용자에게 절대 보이지 않음, 배경 투명) -->
+    <div style="position: absolute; top: -9999px; left: -9999px; width: 1480px; height: 1309px; z-index: -9999; overflow: hidden; background-color: transparent;">
+        <div id="hidden-capture-container" class="flex-col" style="width: 1480px; height: 1309px; display: none; box-sizing: border-box; background-color: transparent;"></div>
     </div>
 
     <!-- [MOBILE] 상단 네비게이션 헤더 -->
@@ -617,27 +675,27 @@
                 await new Promise(r => setTimeout(r, 200));
 
                 // 6. html2canvas로 보이지 않는 영역 캡처! (스마트폰 크기 무시)
+                // 4. 숨겨진 영역에 1480x1309 크기로 복제본 조립
+                hiddenContainer.innerHTML = '';
+                hiddenContainer.appendChild(clone);
+
+                // 5. 브라우저가 보이지 않는 영역을 그릴 시간 0.2초 부여
+                await new Promise(r => setTimeout(r, 200));
+
+                // 6. html2canvas로 보이지 않는 영역 캡처! (스마트폰 크기 무시, 배경 투명화)
                 const canvas = await html2canvas(hiddenContainer, {
                     width: 1480,
                     height: 1309,
                     windowWidth: 1480,
                     windowHeight: 1309,
                     scale: 1, 
-                    backgroundColor: '#e5e7eb', 
+                    backgroundColor: null, /* 투명 배경의 핵심 옵션 */
                     logging: false,
                     useCORS: true 
                 });
 
-                // 안전망 캔버스
-                const finalCanvas = document.createElement('canvas');
-                finalCanvas.width = 1480;
-                finalCanvas.height = 1309;
-                const ctx = finalCanvas.getContext('2d');
-                ctx.fillStyle = "#e5e7eb";
-                ctx.fillRect(0, 0, 1480, 1309);
-                ctx.drawImage(canvas, 0, 0, 1480, 1309);
-
-                const image = finalCanvas.toDataURL("image/png");
+                // 투명 배경이 유지된 캔버스를 그대로 이미지로 추출
+                const image = canvas.toDataURL("image/png");
                 const link = document.createElement('a');
 
                 const titleStr = document.getElementById('calendar-title').textContent.replace('.', '_');
