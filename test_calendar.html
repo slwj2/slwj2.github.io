@@ -114,7 +114,7 @@
 
         /* ------------------ 백그라운드 캡처 전용 스타일 (1480x1309 완벽 비율 & 투명) ------------------ */
         #hidden-capture-container {
-            padding: 50px 40px 40px 40px !important;
+            padding: 40px !important;
             background-color: transparent !important;
             align-items: center !important;
             display: flex !important;
@@ -122,32 +122,39 @@
         }
         #hidden-capture-container .diary-paper {
             width: 1400px !important; 
-            height: 1219px !important; /* 1309 - (50+40) */
-            display: flex !important; /* 위아래로 꽉 채우기 위해 flex 활성화 */
+            height: 1229px !important; /* 1309 - 80 */
+            display: flex !important;
             flex-direction: column !important;
             flex: none !important;
             margin: 0 !important; 
-            padding: 70px 50px 50px 50px !important;
-            border-radius: 20px !important; 
-            border: 2px solid rgba(169, 68, 66, 0.2) !important;
+            padding: 60px 50px 50px 50px !important;
+            border-radius: 24px !important; 
+            /* rgba 반투명을 쓰면 캡처 시 까맣게 타는 현상 발생 -> 100% 불투명한 동일 색상 헥스코드로 대체 */
+            border: 2px solid #EDD9D9 !important; 
             background-color: #FAF8F5 !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+            box-shadow: none !important; /* 투명 배경 캡처 시 가장자리 까만 그림자 띠 제거 */
         }
         
         /* 캡처 시 스프링 크기 최적화 */
-        #hidden-capture-container .spring-wrapper { top: -30px !important; }
-        #hidden-capture-container .spring { width: 24px !important; height: 60px !important; border-radius: 12px !important; }
-        #hidden-capture-container .spring::after { width: 20px !important; height: 20px !important; bottom: -10px !important; left: 2px !important; }
+        #hidden-capture-container .spring-wrapper { top: -25px !important; }
+        #hidden-capture-container .spring { width: 20px !important; height: 50px !important; border-radius: 10px !important; box-shadow: 2px 3px 5px rgba(0,0,0,0.1) !important; }
+        #hidden-capture-container .spring::after { width: 16px !important; height: 16px !important; bottom: -8px !important; left: 2px !important; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.5) !important; }
         
+        /* 캡처 시 글자색 100% 강제 (색상 탁해짐 방지) */
+        #hidden-capture-container .text-diary-sun { color: #D9534F !important; }
+        #hidden-capture-container .text-diary-sat { color: #5BC0DE !important; }
+        #hidden-capture-container .text-diary-text { color: #333333 !important; }
+        #hidden-capture-container .text-diary-line { color: #A94442 !important; }
+
         /* 캡처 시 폰트 및 간격 조정 */
         #hidden-capture-container .mb-4, #hidden-capture-container .mb-6 { margin-bottom: 25px !important; }
-        #hidden-capture-container .text-3xl, #hidden-capture-container .md\:text-5xl { font-size: 56px !important; line-height: 1 !important; }
-        #hidden-capture-container #calendar-title { font-size: 48px !important; }
+        #hidden-capture-container .text-3xl, #hidden-capture-container .md\:text-5xl { font-size: 56px !important; line-height: 1 !important; color: #A94442 !important; }
+        #hidden-capture-container #calendar-title { font-size: 52px !important; color: #A94442 !important; }
         
-        /* 캡처 시 캘린더 격자가 남은 공간을 완벽하게 꽉 채우도록 설정 */
+        /* 캡처 시 캘린더 격자 */
         #hidden-capture-container .calendar-grid {
-            flex: 1 1 0 !important; /* 달력이 남는 공간 전체 차지 */
-            border: 3px solid #A94442 !important; 
+            flex: 1 1 0 !important;
+            border: 3px solid #A94442 !important; /* 진하고 선명한 테두리 */
             border-radius: 12px !important;
             background-color: white !important;
             overflow: hidden !important;
@@ -159,40 +166,56 @@
             font-size: 32px !important;
             padding: 16px 0 !important;
             border-bottom: 3px solid #A94442 !important;
-            border-right: 1px solid rgba(169, 68, 66, 0.3) !important;
+            border-right: 1px solid #EDD9D9 !important; /* rgba 대신 단색 */
+            background-color: #FDF4F5 !important;
         }
         #hidden-capture-container .grid-cols-7 > div.calendar-header-cell:last-child { border-right: none !important; }
         
         #hidden-capture-container #calendar-days {
-            flex: 1 1 0 !important; /* 달력 내부도 꽉 채우기 */
+            flex: 1 1 0 !important;
             display: grid !important; 
             grid-template-rows: repeat(var(--row-count, 5), minmax(0, 1fr)) !important; 
             min-height: 0 !important;
+            background-color: white !important;
         }
         #hidden-capture-container .calendar-cell {
-            border-bottom: 1px solid rgba(169, 68, 66, 0.3) !important;
-            border-right: 1px solid rgba(169, 68, 66, 0.3) !important;
+            border-bottom: 1px solid #EDD9D9 !important; /* rgba 대신 단색 */
+            border-right: 1px solid #EDD9D9 !important; /* rgba 대신 단색 */
             padding: 16px !important;
-            height: 100% !important; /* 격자 크기에 맞춰 셀 확장 */
+            height: 100% !important;
             display: flex !important; 
             flex-direction: column !important;
+            background-color: white !important;
         }
         
         /* 캡처 시 셀 내부 텍스트 및 이미지 큼직하게 키우기 */
         #hidden-capture-container .day-number {
             font-size: 32px !important;
-            margin-bottom: 12px !important;
+            margin-bottom: 8px !important;
+            font-weight: 700 !important;
         }
         #hidden-capture-container .day-content {
             gap: 12px !important;
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
         }
-        #hidden-capture-container .day-content img { 
-            max-height: 110px !important; 
-            object-fit: contain !important;
+        #hidden-capture-container .day-img { 
+            max-height: 120px !important; 
+            max-width: 95% !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: unset !important; /* 블랙박스 오류 방지를 위해 강제 해제 */
+            display: block !important;
         }
         #hidden-capture-container .schedule-text { 
-            font-size: 44px !important; /* 글자 크기 대폭 상향 */
+            font-size: 46px !important; /* 텍스트 크기 확대 및 강제 고정 */
             line-height: 1.2 !important; 
+            width: 100% !important;
+            text-align: center !important;
+            font-family: 'Nanum Pen Script', cursive !important; /* 캡처 시 폰트 풀림 방지 */
         }
         
         /* 캡처 시 메모 영역 */
@@ -203,14 +226,15 @@
             background-color: #FDF4F5 !important; 
             border: 3px solid #A94442 !important; 
             border-radius: 12px !important; 
-            height: 220px !important; /* 고정 높이 */
-            flex-shrink: 0 !important; /* 압축 방지 */
+            height: 220px !important;
+            flex-shrink: 0 !important;
         }
         #hidden-capture-container .desktop-memo > span.absolute {
             top: -30px !important; left: 24px !important; font-size: 42px !important; padding: 0 15px !important;
+            color: #A94442 !important; background-color: #FAF8F5 !important;
         }
         #hidden-capture-container #global-memo-render {
-            min-height: 2.5rem !important; font-size: 38px !important; padding: 0 !important; line-height: 1.5 !important; display: block !important;
+            min-height: 2.5rem !important; font-size: 40px !important; padding: 0 !important; line-height: 1.5 !important; display: block !important;
         }
     </style>
 </head>
@@ -548,7 +572,7 @@
                         <div class="${cellClasses}" onclick="openModal('${dateStr}')">
                             <div class="${textClass} text-sm md:text-lg font-sans ml-1 day-number">${dayNumber}</div>
                             <div class="w-full mt-1 flex-1 flex flex-col items-center justify-start gap-1 overflow-hidden pointer-events-none day-content">
-                                ${dayData.image ? `<img src="${dayData.image}" class="max-w-[95%] max-h-[60px] md:max-h-[80px] object-contain">` : ''}
+                                ${dayData.image ? `<img src="${dayData.image}" class="day-img max-w-[95%] max-h-[60px] md:max-h-[80px] object-contain">` : ''}
                                 ${formattedText ? `<div style="color: ${dayData.color};" class="font-handwriting text-base md:text-xl leading-tight break-words text-center w-full schedule-text">${formattedText}</div>` : ''}
                             </div>
                         </div>
