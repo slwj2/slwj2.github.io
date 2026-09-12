@@ -112,16 +112,20 @@
 
         /* ------------------ 백그라운드 캡처 전용 스타일 (1480x1309 완벽 비율 & 투명) ------------------ */
         #hidden-capture-container {
-            padding: 50px 40px 40px 40px !important; /* 위쪽 스프링 여백 추가 */
+            padding: 50px 40px 40px 40px !important;
             background-color: transparent !important;
             align-items: center !important;
+            display: flex !important;
+            justify-content: center !important;
         }
         #hidden-capture-container .diary-paper {
             width: 1400px !important; 
             height: 1219px !important; /* 1309 - (50+40) */
+            display: flex !important; /* 위아래로 꽉 채우기 위해 flex 활성화 */
+            flex-direction: column !important;
             flex: none !important;
             margin: 0 !important; 
-            padding: 50px 50px 40px 50px !important;
+            padding: 70px 50px 50px 50px !important;
             border-radius: 20px !important; 
             border: 2px solid rgba(169, 68, 66, 0.2) !important;
             background-color: #FAF8F5 !important;
@@ -133,37 +137,41 @@
         #hidden-capture-container .spring { width: 24px !important; height: 60px !important; border-radius: 12px !important; }
         #hidden-capture-container .spring::after { width: 20px !important; height: 20px !important; bottom: -10px !important; left: 2px !important; }
         
-        /* 캡처 시 폰트 및 간격 조정 (레퍼런스 이미지와 동일하게) */
+        /* 캡처 시 폰트 및 간격 조정 */
         #hidden-capture-container .mb-4, #hidden-capture-container .mb-6 { margin-bottom: 25px !important; }
         #hidden-capture-container .text-3xl, #hidden-capture-container .md\:text-5xl { font-size: 56px !important; line-height: 1 !important; }
         #hidden-capture-container #calendar-title { font-size: 48px !important; }
         
-        /* 캡처 시 캘린더 격자 선 굵기/색상 일치 */
+        /* 캡처 시 캘린더 격자가 남은 공간을 완벽하게 꽉 채우도록 설정 */
         #hidden-capture-container .calendar-grid {
-            flex: 1 !important; 
+            flex: 1 1 0 !important; /* 달력이 남는 공간 전체 차지 */
             border: 4px solid #A94442 !important; 
             border-radius: 12px !important;
             background-color: white !important;
             overflow: hidden !important;
-            display: flex !important; flex-direction: column !important; min-height: 0 !important;
+            display: flex !important; 
+            flex-direction: column !important; 
+            min-height: 0 !important;
         }
         #hidden-capture-container .grid-cols-7 > div.calendar-header-cell {
-            font-size: 24px !important;
-            padding: 12px 0 !important;
+            font-size: 26px !important;
+            padding: 16px 0 !important;
             border-bottom: 4px solid #A94442 !important;
-            border-right: 1px solid #A94442 !important; /* 헤더 사이 선은 빨간색 */
+            border-right: 1px solid #A94442 !important;
         }
         #hidden-capture-container .grid-cols-7 > div.calendar-header-cell:last-child { border-right: none !important; }
         
         #hidden-capture-container #calendar-days {
-            flex: 1 !important; display: grid !important; 
-            grid-template-rows: repeat(var(--row-count, 5), minmax(0, 1fr)) !important; min-height: 0 !important;
+            flex: 1 1 0 !important; /* 달력 내부도 꽉 채우기 */
+            display: grid !important; 
+            grid-template-rows: repeat(var(--row-count, 5), minmax(0, 1fr)) !important; 
+            min-height: 0 !important;
         }
         #hidden-capture-container .calendar-cell {
             border-bottom: 1px solid #bbbbbb !important;
-            border-right: 1px solid #bbbbbb !important; /* 본문 사이 선은 얇은 회색 */
-            padding: 8px !important;
-            min-height: 0 !important; height: auto !important;
+            border-right: 1px solid #bbbbbb !important;
+            padding: 12px !important;
+            height: 100% !important; /* 격자 크기에 맞춰 셀 확장 */
             display: flex !important; flex-direction: column !important;
         }
         
@@ -171,27 +179,28 @@
         #hidden-capture-container .calendar-cell .text-sm,
         #hidden-capture-container .calendar-cell .md\:text-lg,
         #hidden-capture-container .calendar-cell .text-lg {
-            font-size: 22px !important;
-            margin-bottom: 8px !important;
+            font-size: 24px !important;
+            margin-bottom: 10px !important;
         }
-        #hidden-capture-container .calendar-cell img { max-height: 80px !important; margin-bottom: 6px !important; display: inline-block !important; }
-        #hidden-capture-container .calendar-cell .text-base { font-size: 22px !important; line-height: 1.3 !important; }
+        #hidden-capture-container .calendar-cell img { max-height: 90px !important; margin-bottom: 6px !important; display: inline-block !important; }
+        #hidden-capture-container .calendar-cell .text-base { font-size: 24px !important; line-height: 1.3 !important; }
         
         /* 캡처 시 메모 영역 */
         #hidden-capture-container .desktop-memo { 
             display: flex !important; flex-direction: column !important;
-            margin-top: 30px !important; 
-            padding: 25px 30px !important; 
+            margin-top: 35px !important; 
+            padding: 30px 35px !important; 
             background-color: #FDF4F5 !important; 
             border: 4px solid #A94442 !important; 
             border-radius: 12px !important; 
-            height: 180px !important;
+            height: 200px !important; /* 고정 높이 */
+            flex-shrink: 0 !important; /* 압축 방지 */
         }
         #hidden-capture-container .desktop-memo > span.absolute {
-            top: -24px !important; left: 20px !important; font-size: 32px !important; padding: 0 15px !important;
+            top: -26px !important; left: 24px !important; font-size: 34px !important; padding: 0 15px !important;
         }
         #hidden-capture-container #global-memo-render {
-            min-height: 2.5rem !important; font-size: 24px !important; padding: 0 !important; line-height: 1.5 !important; display: block !important;
+            min-height: 2.5rem !important; font-size: 26px !important; padding: 0 !important; line-height: 1.5 !important; display: block !important;
         }
     </style>
 </head>
@@ -645,56 +654,60 @@
         async function downloadCalendar() {
             const liveArea = document.getElementById('capture-area');
             const hiddenContainer = document.getElementById('hidden-capture-container');
-            const mobileMemo = document.getElementById('mobile-memo');
+            
+            // 저장 시 PC 메모장과 모바일 메모장 내용 중 작성된 것을 가져옵니다.
+            let memoText = document.getElementById('global-memo').value;
+            if (!memoText && document.getElementById('mobile-memo')) {
+                memoText = document.getElementById('mobile-memo').value;
+            }
             
             try {
-                // 1. 화면 밖에 있는 숨겨진 컨테이너 켜기 (사용자 화면엔 변화 없음)
+                // 1. 화면 밖에 있는 숨겨진 컨테이너 켜기
                 hiddenContainer.style.display = 'flex';
 
                 // 2. 현재 달력을 통째로 복제
                 const clone = liveArea.cloneNode(true);
                 clone.id = 'cloned-capture-area';
-                clone.className = 'w-full h-full'; // 기존 마진/패딩 리셋
+                clone.className = 'w-full h-full'; 
                 
                 // 3. 복제본 내 텍스트 메모 동기화
                 const textarea = clone.querySelector('#global-memo');
                 const renderDiv = clone.querySelector('#global-memo-render');
+                const desktopMemo = clone.querySelector('.desktop-memo');
                 
-                renderDiv.textContent = mobileMemo.value || "여기에 중요한 메모나 공지를 적어보세요...";
-                if(!mobileMemo.value) renderDiv.classList.add('text-pink-300');
+                // 모바일에서 캡처하더라도 PC용 하단 메모장이 무조건 표시되도록 설정
+                if (desktopMemo) {
+                    desktopMemo.classList.remove('hidden', 'md:flex');
+                    desktopMemo.style.display = 'flex';
+                }
+                
+                renderDiv.textContent = memoText || "여기에 중요한 메모나 공지를 적어보세요...";
+                if(!memoText) renderDiv.classList.add('text-pink-300');
                 else renderDiv.classList.remove('text-pink-300');
                 
-                textarea.style.display = 'none';
-                renderDiv.classList.remove('hidden');
+                if(textarea) textarea.style.display = 'none';
+                if(renderDiv) renderDiv.classList.remove('hidden');
 
-                // 4. 숨겨진 영역에 1980x720 크기로 복제본 조립
-                hiddenContainer.innerHTML = '';
-                hiddenContainer.appendChild(clone);
-
-                // 5. 브라우저가 보이지 않는 영역을 그릴 시간 0.2초 부여
-                await new Promise(r => setTimeout(r, 200));
-
-                // 6. html2canvas로 보이지 않는 영역 캡처! (스마트폰 크기 무시)
                 // 4. 숨겨진 영역에 1480x1309 크기로 복제본 조립
                 hiddenContainer.innerHTML = '';
                 hiddenContainer.appendChild(clone);
 
-                // 5. 브라우저가 보이지 않는 영역을 그릴 시간 0.2초 부여
-                await new Promise(r => setTimeout(r, 200));
+                // 5. CSS Flexbox 레이아웃이 꽉 차게 계산될 시간 0.3초 대기
+                await new Promise(r => setTimeout(r, 300));
 
-                // 6. html2canvas로 보이지 않는 영역 캡처! (스마트폰 크기 무시, 배경 투명화)
+                // 6. html2canvas로 캡처! (투명 배경 지원)
                 const canvas = await html2canvas(hiddenContainer, {
                     width: 1480,
                     height: 1309,
                     windowWidth: 1480,
                     windowHeight: 1309,
                     scale: 1, 
-                    backgroundColor: null, /* 투명 배경의 핵심 옵션 */
+                    backgroundColor: null, 
                     logging: false,
                     useCORS: true 
                 });
 
-                // 투명 배경이 유지된 캔버스를 그대로 이미지로 추출
+                // PNG 다운로드 트리거
                 const image = canvas.toDataURL("image/png");
                 const link = document.createElement('a');
 
@@ -707,7 +720,7 @@
                 console.error("Capture failed:", error);
                 alert("이미지 저장 중 오류가 발생했습니다.");
             } finally {
-                // 7. 흔적 지우기 (초기 상태 복구)
+                // 7. 흔적 지우기
                 hiddenContainer.style.display = 'none';
                 hiddenContainer.innerHTML = '';
             }
