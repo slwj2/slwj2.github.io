@@ -62,14 +62,17 @@
         .calendar-header-cell:last-child { border-right: none; }
         
         .calendar-cell {
-            border-bottom: 1px solid #e5e5e5;
-            border-right: 1px solid #A94442;
-            min-height: 100px; /* Base height for cells */
+            /* 격자선을 모두 일정하고 뚜렷한 색상으로 통일합니다 */
+            border-bottom: 1px solid #bbbbbb;
+            border-right: 1px solid #bbbbbb;
+            min-height: 120px; /* 텍스트 잘림 방지를 위해 최소 높이를 조금 더 늘립니다 */
             position: relative;
+            background-color: white;
             transition: background-color 0.2s;
         }
         .calendar-cell:nth-child(7n) { border-right: none; }
-        /* Add bottom border to last row elements to close the grid if needed, handled in JS */
+        /* 마지막 줄은 바닥 테두리를 제거하여 캘린더 외곽선과 겹치지 않게 합니다 */
+        .calendar-cell.last-row { border-bottom: none; }
         
         /* Spring binding styles */
         .spring-wrapper {
@@ -337,11 +340,11 @@
                     else textClass = 'text-diary-text font-bold'; // Weekday
                 }
 
-                // Cell styling
-                let cellClasses = 'calendar-cell p-1.5 cursor-pointer hover:bg-pink-50 flex flex-col group';
-                // Add bottom border only if it's NOT the last row
-                if (i <= totalCells - 7) {
-                    cellClasses += ' border-b border-gray-200';
+                // Cell styling - html2canvas 오류 방지를 위해 복잡한 flex 클래스 제거
+                let cellClasses = 'calendar-cell p-1.5 cursor-pointer hover:bg-pink-50 group';
+                // 마지막 줄 확인
+                if (i > totalCells - 7) {
+                    cellClasses += ' last-row';
                 }
 
                 // Get data for this day if it exists
@@ -356,10 +359,10 @@
                         <div class="${cellClasses}" onclick="openModal('${dateStr}')" data-date="${dateStr}">
                             <div class="${textClass} text-lg font-sans ml-1">${dayNumber}</div>
                             
-                            <!-- Content Area (Text & Image) -->
-                            <div class="flex-1 flex flex-col gap-1 mt-1 overflow-hidden pointer-events-none">
-                                ${dayData.image ? `<div class="flex justify-center mb-1"><img src="${dayData.image}" class="h-12 w-auto object-contain drop-shadow-sm" onerror="this.style.display='none'"></div>` : ''}
-                                ${formattedText ? `<div class="text-sm font-handwriting leading-tight text-center" style="color: ${dayData.color}">${formattedText}</div>` : ''}
+                            <!-- Content Area (Text & Image) - html2canvas 버그 해결을 위해 flex 대신 block 요소 사용 -->
+                            <div class="w-full mt-1 pointer-events-none text-center">
+                                ${dayData.image ? `<img src="${dayData.image}" style="max-width: 90%; max-height: 60px; display: inline-block; margin-bottom: 4px; object-fit: contain;">` : ''}
+                                ${formattedText ? `<div class="text-base font-handwriting leading-tight break-words" style="color: ${dayData.color};">${formattedText}</div>` : ''}
                             </div>
                             
                             <!-- Hover indicator -->
@@ -371,7 +374,7 @@
                 } else {
                     // Empty/faded cells for prev/next month
                     daysHtml += `
-                        <div class="calendar-cell p-1.5 bg-gray-50/50 ${i <= totalCells - 7 ? 'border-b border-gray-200' : ''}">
+                        <div class="${cellClasses} bg-gray-50/50">
                             <div class="${textClass} ml-1">${dayNumber}</div>
                         </div>
                     `;
