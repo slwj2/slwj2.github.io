@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- 모바일/OBS 브라우저 크기에 맞게 화면을 사용 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fireworks Confetti Overlay</title>
+
+    <style>
+        /* 모든 요소의 크기 계산 방식을 통일 */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* HTML 전체 영역 */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+
+            /* OBS에서 완전 투명 배경 */
+            background: transparent;
+        }
+
+        /* 폭죽과 파티션을 그리는 Canvas */
+        canvas {
+            display: block;
+
+            width: 100vw;
+            height: 100vh;
+
+            /* 클릭을 방해하지 않도록 설정 */
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 모든 효과를 하나의 Canvas에서 처리 -->
+    <canvas id="canvas"></canvas>
+
+    <script>
+        "use strict";
+
+        /* =========================================================
+           기본 설정
+        ========================================================= */
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d", {
+            alpha: true
+        });
+
+        /* 실제 렌더링 해상도 */
+        let width = 0;
+        let height = 0;
+
+        /* 장치 픽셀 비율 */
+        let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        /* =========================================================
+           사용자 설정
+           ========================================================= */
+
+        const CONFIG = {
+
+            /* 화면 전체에 자연스럽게 떨어지는 파티션 수 */
+            ambientConfetti: 120,
+
+            /* 폭죽이 생성되는 최소 간격(ms) */
+            fireworkMinDelay: 1000,
+
+            /* 폭죽이 생성되는 최대 간격(ms) */
+            fireworkMaxDelay: 2200,
+
+            /* 폭죽 하나에서 생성되는 파티션 수 */
+            burstParticles: 70,
+
+            /* 일반 파티션 크기 */
+            confettiMinSize: 3,
+            confettiMaxSize: 9,
+
+            /* 낙하 속도 */
+            fallMinSpeed: 0.7,
+            fallMaxSpeed: 2.5,
+
+            /* 폭죽 파티션 속도 */
+            burstMinSpeed: 1.5,
+            burstMaxSpeed: 5.5,
+
+            /* 중력 */
+            gravity: 0.025,
+
+            /* 바람 세기 */
+            wind: 0.015,
+
+            /* 화면 밖으로 사라지는 시간 */
+            fadeDistance: 120
+        };
+
+        /* =========================================================
+           파티션 색상
+        ========================================================= */
+
+        const COLORS = [
+            "#ff3b30",
+            "#ff9500",
+            "#ffcc00",
+            "#34c759",
+            "#00c7be",
+            "#32ade6",
+            "#007aff",
+            "#5856d6",
+            "#af52de",
+            "#ff2d55",
+            "#ffffff"
+        ];
+
+        /* =========================================================
+           유틸리티
+        ========================================================= */
+
+        /* 최소값과 최대값 사이의 랜덤 숫자 */
+        function random(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        /* 배열에서 랜덤 색상 선택 */
+        function randomColor() {
+            return COLORS[
+                Math.floor(Math.random() * COLORS.length)
+            ];
+        }
+
+        /* 배열에서 랜덤 요소 선택 */
+        function randomItem(array) {
+            return array[
+                Math.floor(Math.random() * array.length)
+            ];
+        }
+
+        /* 값 제한 */
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
+        }
+
+        /* =========================================================
+           Canvas 크기 조절
+        ========================================================= */
+
+        function resizeCanvas() {
+
+            /* 현재 브라우저 크기 */
+            width = window.innerWidth;
+            height = window.innerHeight;
+
+            /* 장치 픽셀 비율 */
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            /* 실제 Canvas 해상도 */
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
+
+            /* CSS상 크기 */
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+
+            /* 논리 좌표계 */
+            ctx.setTransform(
+                dpr,
+                0,
+                0,
+                dpr,
+                0,
+                0
+            );
+        }
+
+        /* 브라우저 크기 변경 감지 */
+        window.addEventListener(
+            "resize",
+            resizeCanvas,
+            { passive: true }
+        );
+
+        /* 최초 크기 설정 */
+        resizeCanvas();
+
+        /* =========================================================
+           일반 파티션
+        ========================================================= */
+
+        class Confetti {
+
+            constructor(x = null, y = null, burst = false) {
+
+                /* 폭죽에서 생성된 파티션인지 확인 */
+                this.burst = burst;
+
+                /* 시작 위치 */
+                this.x =
+                    x === null
+                        ? random(-20, width + 20)
+                        : x;
+
+                this.y =
+                    y === null
+                        ? random(-height * 0.2, 0)
+                        : y;
+
+                /* 파티션 크기 */
+                this.width = random(
+                    CONFIG.confettiMinSize,
+                    CONFIG.confettiMaxSize
+                );
+
+                this.height = random(
+                    CONFIG.confettiMinSize,
+                    CONFIG.confettiMaxSize * 1.8
+                );
+
+                /* 폭죽 파티션과 일반 파티션의 속도 차이 */
+                if (burst) {
+
+                    const angle = random(
+                        0,
+                        Math.PI * 2
+                    );
+
+                    const speed = random(
+                        CONFIG.burstMinSpeed,
+                        CONFIG.burstMaxSpeed
+                    );
+
+                    this.vx =
+                        Math.cos(angle) * speed;
+
+                    this.vy =
+                        Math.sin(angle) * speed;
+
+                } else {
+
+                    this.vx = random(-0.5, 0.5);
+
+                    this.vy = random(
+                        CONFIG.fallMinSpeed,
+                        CONFIG.fallMaxSpeed
+                    );
+                }
+
+                /* 회전 */
+                this.rotation = random(
+                    0,
+                    Math.PI * 2
+                );
+
+                /* 회전 속도 */
+                this.rotationSpeed = random(
+                    -0.12,
+                    0.12
+                );
+
+                /* 좌우 흔들림 */
+                this.swing = random(
+                    0,
+                    Math.PI * 2
+                );
+
+                this.swingSpeed = random(
+                    0.01,
+                    0.04
+                );
+
+                /* 색상 */
+                this.color = randomColor();
+
+                /* 투명도 */
+                this.alpha = random(
+                    0.65,
+                    1
+                );
+
+                /* 폭죽 파티션은 시간이 지나면서 투명해짐 */
+                this.life = burst
+                    ? random(80, 150)
+                    : Infinity;
+
+                this.maxLife = this.life;
+            }
+
+            /* =====================================================
+               파티션 업데이트
+            ===================================================== */
+
+            update() {
+
+                /* 폭죽 파티션 */
+                if (this.burst) {
+
+                    /* 중력 */
+                    this.vy += CONFIG.gravity;
+
+                    /* 속도 적용 */
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    /* 약한 공기 저항 */
+                    this.vx *= 0.992;
+                    this.vy *= 0.992;
+
+                    /* 회전 */
+                    this.rotation += this.rotationSpeed;
+
+                    /* 수명 감소 */
+                    this.life--;
+
+                    /* 자연스러운 페이드 */
+                    this.alpha =
+                        clamp(
+                            this.life / this.maxLife,
+                            0,
+                            1
+                        );
+
+                } else {
+
+                    /* 일반 파티션 낙하 */
+
+                    this.swing += this.swingSpeed;
+
+                    /* 좌우 흔들림 */
+                    this.x +=
+                        this.vx +
+                        Math.sin(this.swing) * 0.35;
+
+                    /* 낙하 */
+                    this.y += this.vy;
+
+                    /* 바람 */
+                    this.x += CONFIG.wind;
+
+                    /* 회전 */
+                    this.rotation += this.rotationSpeed;
+
+                    /* 화면 아래쪽에서 자연스럽게 사라짐 */
+                    if (this.y > height - CONFIG.fadeDistance) {
+
+                        const distance =
+                            height - this.y;
+
+                        this.alpha =
+                            clamp(
+                                distance / CONFIG.fadeDistance,
+                                0,
+                                1
+                            );
+                    }
+
+                    /* 화면 밖으로 나가면 다시 위에서 생성 */
+                    if (
+                        this.y > height + 30 ||
+                        this.x < -50 ||
+                        this.x > width + 50
+                    ) {
+                        this.reset();
+                    }
+                }
+            }
+
+            /* =====================================================
+               일반 파티션 재생성
+            ===================================================== */
+
+            reset() {
+
+                this.x = random(
+                    -20,
+                    width + 20
+                );
+
+                this.y = random(
+                    -100,
+                    -10
+                );
+
+                this.vx = random(
+                    -0.5,
+                    0.5
+                );
+
+                this.vy = random(
+                    CONFIG.fallMinSpeed,
+                    CONFIG.fallMaxSpeed
+                );
+
+                this.alpha = random(
+                    0.65,
+                    1
+                );
+
+                this.rotation = random(
+                    0,
+                    Math.PI * 2
+                );
+
+                this.color = randomColor();
+            }
+
+            /* =====================================================
+               파티션 그리기
+            ===================================================== */
+
+            draw() {
+
+                ctx.save();
+
+                /* 위치 이동 */
+                ctx.translate(
+                    this.x,
+                    this.y
+                );
+
+                /* 회전 */
+                ctx.rotate(
+                    this.rotation
+                );
+
+                /* 투명도 */
+                ctx.globalAlpha = this.alpha;
+
+                /*
+                    파티션이 납작하게 펄럭이는 느낌을
+                    만들기 위한 스케일 변화
+                */
+                const flutter =
+                    0.65 +
+                    Math.abs(
+                        Math.sin(
+                            this.rotation * 2
+                        )
+                    ) * 0.35;
+
+                ctx.scale(
+                    flutter,
+                    1
+                );
+
+                /* =================================================
+                   그라데이션
+                ================================================= */
+
+                const gradient =
+                    ctx.createLinearGradient(
+                        -this.width,
+                        -this.height,
+                        this.width,
+                        this.height
+                    );
+
+                gradient.addColorStop(
+                    0,
+                    "#ffffff"
+                );
+
+                gradient.addColorStop(
+                    0.25,
+                    this.color
+                );
+
+                gradient.addColorStop(
+                    1,
+                    this.color
+                );
+
+                /* 색상 적용 */
+                ctx.fillStyle = gradient;
+
+                /* 살짝 둥근 사각형 */
+                const w = this.width;
+                const h = this.height;
+
+                const radius = Math.min(
+                    2,
+                    w / 2
+                );
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    -w / 2 + radius,
+                    -h / 2
+                );
+
+                ctx.lineTo(
+                    w / 2 - radius,
+                    -h / 2
+                );
+
+                ctx.quadraticCurveTo(
+                    w / 2,
+                    -h / 2,
+                    w / 2,
+                    -h / 2 + radius
+                );
+
+                ctx.lineTo(
+                    w / 2,
+                    h / 2 - radius
+                );
+
+                ctx.quadraticCurveTo(
+                    w / 2,
+                    h / 2,
+                    w / 2 - radius,
+                    h / 2
+                );
+
+                ctx.lineTo(
+                    -w / 2 + radius,
+                    h / 2
+                );
+
+                ctx.quadraticCurveTo(
+                    -w / 2,
+                    h / 2,
+                    -w / 2,
+                    h / 2 - radius
+                );
+
+                ctx.lineTo(
+                    -w / 2,
+                    -h / 2 + radius
+                );
+
+                ctx.quadraticCurveTo(
+                    -w / 2,
+                    -h / 2,
+                    -w / 2 + radius,
+                    -h / 2
+                );
+
+                ctx.closePath();
+
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        /* =========================================================
+           폭죽 섬광
+        ========================================================= */
+
+        class Flash {
+
+            constructor(x, y) {
+
+                this.x = x;
+                this.y = y;
+
+                this.radius = 5;
+
+                this.life = 20;
+
+                this.maxLife = 20;
+            }
+
+            update() {
+
+                this.radius += 2;
+
+                this.life--;
+            }
+
+            draw() {
+
+                const alpha =
+                    this.life / this.maxLife;
+
+                const gradient =
+                    ctx.createRadialGradient(
+                        this.x,
+                        this.y,
+                        0,
+                        this.x,
+                        this.y,
+                        this.radius
+                    );
+
+                gradient.addColorStop(
+                    0,
+                    `rgba(255,255,255,${alpha})`
+                );
+
+                gradient.addColorStop(
+                    0.3,
+                    `rgba(255,255,255,${alpha * 0.7})`
+                );
+
+                gradient.addColorStop(
+                    1,
+                    "rgba(255,255,255,0)"
+                );
+
+                ctx.fillStyle = gradient;
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    this.x,
+                    this.y,
+                    this.radius,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+            }
+        }
+
+        /* =========================================================
+           파티션 배열
+        ========================================================= */
+
+        const confetti = [];
+
+        /* 화면 전체에 떨어지는 기본 파티션 생성 */
+        for (
+            let i = 0;
+            i < CONFIG.ambientConfetti;
+            i++
+        ) {
+
+            const particle =
+                new Confetti();
+
+            particle.y =
+                random(
+                    -height,
+                    height
+                );
+
+            confetti.push(
+                particle
+            );
+        }
+
+        /* =========================================================
+           폭죽 섬광 배열
+        ========================================================= */
+
+        const flashes = [];
+
+        /* =========================================================
+           폭죽 생성
+        ========================================================= */
+
+        function createFirework() {
+
+            /* 화면 상단~중앙에서 폭발 */
+            const x =
+                random(
+                    width * 0.12,
+                    width * 0.88
+                );
+
+            const y =
+                random(
+                    height * 0.12,
+                    height * 0.55
+                );
+
+            /* 중앙 섬광 */
+            flashes.push(
+                new Flash(x, y)
+            );
+
+            /* 폭죽에서 파티션 생성 */
+            for (
+                let i = 0;
+                i < CONFIG.burstParticles;
+                i++
+            ) {
+
+                confetti.push(
+                    new Confetti(
+                        x,
+                        y,
+                        true
+                    )
+                );
+            }
+
+            /* 다음 폭죽 예약 */
+            scheduleFirework();
+        }
+
+        /* =========================================================
+           폭죽 타이머
+        ========================================================= */
+
+        function scheduleFirework() {
+
+            const delay =
+                random(
+                    CONFIG.fireworkMinDelay,
+                    CONFIG.fireworkMaxDelay
+                );
+
+            setTimeout(
+                createFirework,
+                delay
+            );
+        }
+
+        /* 최초 폭죽 시작 */
+        scheduleFirework();
+
+        /* =========================================================
+           애니메이션
+        ========================================================= */
+
+        function animate() {
+
+            /* Canvas 전체 초기화 */
+            ctx.clearRect(
+                0,
+                0,
+                width,
+                height
+            );
+
+            /* 일반 파티션 + 폭죽 파티션 */
+            for (
+                let i = confetti.length - 1;
+                i >= 0;
+                i--
+            ) {
+
+                const particle =
+                    confetti[i];
+
+                particle.update();
+
+                particle.draw();
+
+                /* 폭죽 파티션 수명이 끝나면 삭제 */
+                if (
+                    particle.burst &&
+                    particle.life <= 0
+                ) {
+
+                    confetti.splice(
+                        i,
+                        1
+                    );
+                }
+            }
+
+            /* 폭죽 섬광 */
+            for (
+                let i = flashes.length - 1;
+                i >= 0;
+                i--
+            ) {
+
+                const flash =
+                    flashes[i];
+
+                flash.update();
+
+                flash.draw();
+
+                if (
+                    flash.life <= 0
+                ) {
+
+                    flashes.splice(
+                        i,
+                        1
+                    );
+                }
+            }
+
+            /* 다음 프레임 */
+            requestAnimationFrame(
+                animate
+            );
+        }
+
+        /* 애니메이션 시작 */
+        animate();
+
+    </script>
+
+</body>
+</html>
