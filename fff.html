@@ -1,0 +1,230 @@
+<!DOCTYPE html><html lang="ko">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>후원 알림 오버레이</title>
+
+<style>
+    /* 전체 페이지 설정 */
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: transparent;
+        font-family:
+            "Pretendard",
+            "Noto Sans KR",
+            Arial,
+            sans-serif;
+    }
+
+    /* 화면 중앙 정렬 영역 */
+    .overlay {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 30px;
+    }
+
+    /* 후원 알림 박스 */
+    .donation-box {
+        width: min(700px, 90vw);
+
+        padding: 28px 40px;
+
+        background: #ffffff;
+
+        border-radius: 14px;
+
+        box-shadow:
+            0 10px 35px rgba(0, 0, 0, 0.18);
+
+        text-align: center;
+
+        animation:
+            donation-in 0.45s ease-out forwards;
+    }
+
+    /* 후원 감사 문구 */
+    .donation-title {
+        margin: 0;
+
+        font-size: 30px;
+        font-weight: 800;
+
+        line-height: 1.4;
+
+        color: #111111;
+    }
+
+    /* 닉네임 */
+    .nickname {
+        color: #111111;
+        font-weight: 900;
+    }
+
+    /* 후원 금액 */
+    .amount {
+        color: #ff5c8a;
+        font-weight: 900;
+    }
+
+    /* 후원자가 작성한 채팅 */
+    .donation-message {
+        margin-top: 18px;
+
+        padding: 18px 22px;
+
+        background: #f5f5f5;
+
+        border-radius: 10px;
+
+        font-size: 22px;
+        font-weight: 600;
+
+        line-height: 1.5;
+
+        color: #333333;
+
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
+
+    /* 등장 애니메이션 */
+    @keyframes donation-in {
+        0% {
+            opacity: 0;
+            transform: translateY(25px) scale(0.94);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* 사라지는 애니메이션 */
+    .donation-box.hide {
+        animation:
+            donation-out 0.4s ease-in forwards;
+    }
+
+    @keyframes donation-out {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        100% {
+            opacity: 0;
+            transform: translateY(-15px) scale(0.96);
+        }
+    }
+</style>
+
+</head><body><!-- 화면 중앙 -->
+<div class="overlay">
+
+    <!-- 후원 알림 박스 -->
+    <div class="donation-box" id="donationBox">
+
+        <!-- 후원 감사 문구 -->
+        <div class="donation-title">
+            <span class="nickname">스누피</span>님!
+            치즈 <span class="amount">1,000원</span>
+            후원 감사합니다.
+        </div>
+
+        <!-- 후원자가 작성한 채팅 -->
+        <div class="donation-message">
+            오늘도 방송 잘 보고 있어요! 화이팅하세요 😊
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    /*
+     * 테스트용 후원 알림
+     *
+     * 실제 치지직 후원 시스템과 연결할 경우
+     * 아래 데이터를 API/WebSocket 등으로 전달받아
+     * 닉네임, 금액, 메시지를 변경하면 됩니다.
+     */
+
+    const donation = {
+        nickname: "스누피",
+        amount: "1,000원",
+        message: "오늘도 방송 잘 보고 있어요! 화이팅하세요 😊"
+    };
+
+    /*
+     * 후원 알림 내용을 화면에 적용하는 함수
+     */
+    function showDonation(nickname, amount, message) {
+
+        const box = document.getElementById("donationBox");
+
+        /*
+         * 후원자 닉네임 변경
+         */
+        box.querySelector(".nickname").textContent = nickname;
+
+        /*
+         * 후원 금액 변경
+         */
+        box.querySelector(".amount").textContent = amount;
+
+        /*
+         * 후원 메시지 변경
+         */
+        box.querySelector(".donation-message").textContent = message;
+
+        /*
+         * 기존 사라짐 애니메이션 제거
+         */
+        box.classList.remove("hide");
+
+        /*
+         * 애니메이션을 다시 실행하기 위한 강제 리플로우
+         */
+        void box.offsetWidth;
+
+        /*
+         * 등장 애니메이션 실행
+         */
+        box.style.animation = "donation-in 0.45s ease-out forwards";
+
+        /*
+         * 5초 후 사라짐
+         */
+        setTimeout(() => {
+
+            box.classList.add("hide");
+
+        }, 5000);
+    }
+
+    /*
+     * 페이지가 열렸을 때 테스트 후원 표시
+     */
+    showDonation(
+        donation.nickname,
+        donation.amount,
+        donation.message
+    );
+</script>
+
+</body>
+</html>
