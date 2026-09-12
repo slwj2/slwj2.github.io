@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
 
@@ -10,6 +9,10 @@
     >
 
     <title>다이어리 캘린더</title>
+
+    <!-- =========================================================
+         외부 라이브러리
+    ========================================================== -->
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,11 +49,11 @@
                     },
 
                     colors: {
-                        diaryBg: '#FAF8F5',
-                        diaryLine: '#A94442',
-                        diarySun: '#D9534F',
-                        diarySat: '#4285D4',
-                        diaryText: '#333333'
+                        'diary-bg': '#FAF8F5',
+                        'diary-line': '#A94442',
+                        'diary-sun': '#D9534F',
+                        'diary-sat': '#4A86D4',
+                        'diary-text': '#333333'
                     }
                 }
             }
@@ -61,7 +64,7 @@
 
         /* =========================================================
            기본
-        ========================================================= */
+        ========================================================== */
 
         * {
             box-sizing: border-box;
@@ -75,9 +78,8 @@
         }
 
         body {
-            background: #000;
+            background: #e5e7eb;
             overflow-x: hidden;
-            font-family: 'Quicksand', sans-serif;
         }
 
         button,
@@ -87,6 +89,7 @@
             font-family: inherit;
         }
 
+        /* 스크롤바 */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -97,80 +100,74 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
+            background: #d1d5db;
+            border-radius: 4px;
         }
 
-
         /* =========================================================
-           다이어리 종이
-        ========================================================= */
+           다이어리 본체
+        ========================================================== */
 
         .diary-paper {
-            position: relative;
-
             width: 100%;
-            max-width: 1400px;
-
-            /*
-             * 세로가 계속 커지는 문제를 방지하기 위해
-             * 캘린더 전체 높이를 기준으로 설계합니다.
-             */
-            min-height: 0;
 
             background: #FAF8F5;
 
-            border: 2px solid #E8DADA;
+            border: 2px solid #EDD9D9;
 
             border-radius: 24px;
 
             box-shadow:
-                0 12px 35px rgba(0, 0, 0, 0.18),
-                inset 0 0 25px rgba(0, 0, 0, 0.015);
+                0 15px 40px rgba(0, 0, 0, 0.10),
+                inset 0 0 20px rgba(0, 0, 0, 0.015);
 
-            overflow: visible;
+            position: relative;
+
+            padding:
+                58px
+                44px
+                42px;
         }
-
 
         /* =========================================================
            스프링
-        ========================================================= */
+        ========================================================== */
 
         .spring-wrapper {
             position: absolute;
 
-            top: -22px;
+            top: -21px;
             left: 0;
 
             width: 100%;
 
-            padding: 0 70px;
-
             display: flex;
-            justify-content: space-between;
+            justify-content: space-evenly;
 
-            z-index: 20;
+            padding: 0 45px;
+
+            z-index: 10;
 
             pointer-events: none;
         }
 
         .spring {
             width: 16px;
-            height: 44px;
-
-            border-radius: 9px;
+            height: 42px;
 
             background:
                 linear-gradient(
                     to right,
-                    #9b9b9b 0%,
-                    #ffffff 35%,
-                    #dddddd 55%,
-                    #8d8d8d 100%
+                    #a8a8a8 0%,
+                    #f7f7f7 40%,
+                    #ffffff 52%,
+                    #a5a5a5 100%
                 );
 
+            border-radius: 8px;
+
             box-shadow:
-                2px 3px 5px rgba(0, 0, 0, 0.3);
+                2px 4px 5px rgba(0, 0, 0, 0.28);
 
             position: relative;
         }
@@ -180,74 +177,56 @@
 
             position: absolute;
 
-            left: 1px;
-            bottom: -7px;
+            width: 13px;
+            height: 13px;
 
-            width: 14px;
-            height: 14px;
+            left: 1.5px;
+            bottom: -6px;
+
+            background: #555;
 
             border-radius: 50%;
 
-            background: #333;
-
             box-shadow:
-                inset 1px 1px 3px rgba(0, 0, 0, 0.8);
+                inset 1px 1px 3px rgba(0, 0, 0, 0.7);
         }
 
-
         /* =========================================================
-           상단 날짜
-        ========================================================= */
-
-        .calendar-title {
-            color: #A94442;
-
-            font-size: clamp(
-                28px,
-                4vw,
-                52px
-            );
-
-            font-weight: 700;
-
-            letter-spacing: 0.04em;
-
-            line-height: 1;
-        }
-
-
-        /* =========================================================
-           달력
-        ========================================================= */
+           캘린더
+        ========================================================== */
 
         .calendar-grid {
             width: 100%;
 
-            border: 3px solid #A94442;
+            height: 720px;
 
-            border-radius: 14px;
+            border:
+                2px solid #A94442;
+
+            border-radius: 12px;
 
             overflow: hidden;
 
             background: white;
+
+            display: flex;
+            flex-direction: column;
         }
 
+        /* 요일 */
+        .calendar-week-header {
+            flex:
+                0 0 48px;
 
-        /* =========================================================
-           요일
-        ========================================================= */
-
-        .calendar-week {
             display: grid;
 
             grid-template-columns:
                 repeat(7, minmax(0, 1fr));
 
-            height: 52px;
-
             background: #FDF0F1;
 
-            border-bottom: 3px solid #A94442;
+            border-bottom:
+                2px solid #A94442;
         }
 
         .calendar-header-cell {
@@ -256,18 +235,18 @@
             align-items: center;
             justify-content: center;
 
+            border-right:
+                1px solid #EDD9D9;
+
             font-family:
                 'Nanum Pen Script',
                 cursive;
 
-            font-size: 25px;
+            font-size: 23px;
 
-            font-weight: 700;
+            font-weight: bold;
 
             color: #A94442;
-
-            border-right:
-                1px solid #EBDADA;
         }
 
         .calendar-header-cell:last-child {
@@ -279,69 +258,59 @@
         }
 
         .calendar-header-cell.sat {
-            color: #4285D4;
+            color: #4A86D4;
         }
 
-
-        /* =========================================================
-           날짜 영역
-        ========================================================= */
-
+        /* 날짜 영역 */
         #calendar-days {
+            flex: 1;
+
+            min-height: 0;
+
             display: grid;
 
             grid-template-columns:
                 repeat(7, minmax(0, 1fr));
 
-            /*
-             * JS에서 자동으로 5행 / 6행 설정
-             */
             grid-template-rows:
                 repeat(
                     var(--row-count, 5),
                     minmax(0, 1fr)
                 );
 
-            /*
-             * 전체 캘린더 높이를 제한합니다.
-             * 이 부분이 기존 세로가 계속 커지는 문제를 막습니다.
-             */
-            height: 780px;
-
             background: white;
         }
 
-
-        /* =========================================================
-           날짜 한 칸
-        ========================================================= */
-
+        /* 날짜 한 칸 */
         .calendar-cell {
-            position: relative;
-
             min-width: 0;
             min-height: 0;
 
+            position: relative;
+
             padding: 8px;
 
-            background: #fff;
+            background: white;
 
             border-right:
-                1px solid #E9E2E2;
+                1px solid #E8E8E8;
 
             border-bottom:
-                1px solid #E9E2E2;
-
-            overflow: hidden;
+                1px solid #E8E8E8;
 
             cursor: pointer;
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
 
             transition:
                 background-color 0.15s ease;
         }
 
         .calendar-cell:hover {
-            background: #FFF9FA;
+            background: #FFF8F9;
         }
 
         .calendar-cell:nth-child(7n) {
@@ -352,261 +321,218 @@
             border-bottom: none;
         }
 
+        .calendar-cell.other-month {
+            background: #FCFCFC;
+
+            cursor: default;
+        }
 
         /* =========================================================
            날짜 번호
-        ========================================================= */
+           
+           중요:
+           오늘 날짜를 별도로 표시하지 않습니다.
+           .today 스타일 자체를 사용하지 않습니다.
+        ========================================================== */
+
+        .day-number-wrapper {
+            height: 30px;
+
+            flex:
+                0 0 30px;
+
+            display: flex;
+
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
 
         .day-number {
-            width: fit-content;
-
-            min-width: 26px;
-            height: 26px;
+            width: auto;
+            height: 28px;
 
             display: flex;
 
             align-items: center;
             justify-content: center;
 
-            margin-bottom: 4px;
+            font-family:
+                'Quicksand',
+                sans-serif;
 
-            font-size: 20px;
+            font-size: 18px;
+
+            font-weight: 700;
 
             line-height: 1;
 
-            font-weight: 700;
+            padding: 0 2px;
         }
 
-        .other-month {
-            color: #C7C7C7 !important;
+        .other-month .day-number {
+            color: #C9C9C9;
         }
 
-        .sun-number {
+        .day-number.sun {
             color: #D9534F;
         }
 
-        .sat-number {
-            color: #4285D4;
+        .day-number.sat {
+            color: #4A86D4;
         }
-
-        .normal-number {
-            color: #333;
-        }
-
-
-        /* =========================================================
-           오늘 날짜 표시
-        ========================================================= */
-
-        .today-number {
-            width: 34px;
-            height: 34px;
-
-            min-width: 34px;
-
-            border-radius: 50%;
-
-            background: #7057E8;
-
-            color: white !important;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            font-weight: 700;
-
-            box-shadow:
-                0 2px 5px rgba(112, 87, 232, 0.25);
-        }
-
 
         /* =========================================================
            날짜 내용
-        ========================================================= */
+        ========================================================== */
 
         .day-content {
-            width: 100%;
-            height: calc(100% - 32px);
-
             min-width: 0;
             min-height: 0;
+
+            flex: 1;
 
             display: flex;
 
             flex-direction: column;
 
-            align-items: flex-start;
-
-            justify-content: flex-start;
-
-            overflow: hidden;
-
-            pointer-events: none;
-        }
-
-
-        /* =========================================================
-           일정 한 줄 그룹
-        ========================================================= */
-
-        .schedule-line {
-            width: 100%;
-
-            display: flex;
-
             align-items: center;
 
             justify-content: flex-start;
 
-            gap: 3px;
-
-            /*
-             * 이모지 + 글자가 하나의 그룹으로 움직이게 합니다.
-             */
-            flex-wrap: nowrap;
-
-            /*
-             * 한 줄에서 이모지가 따로 떨어지거나
-             * 강제로 다음 줄로 넘어가지 않게 합니다.
-             */
-            white-space: nowrap;
+            padding:
+                2px;
 
             overflow: hidden;
-
-            min-width: 0;
-
-            margin-bottom: 2px;
         }
 
+        /*
+            일정 전체 그룹
 
-        /* =========================================================
-           일정 텍스트
-        ========================================================= */
+            텍스트와 이모지를 하나의 흐름으로 표시합니다.
+        */
+
+        .schedule-group {
+            width: 100%;
+
+            display: block;
+
+            text-align: center;
+
+            line-height: 1.12;
+
+            word-break: keep-all;
+
+            overflow-wrap: normal;
+
+            white-space: normal;
+        }
+
+        /*
+            이모지와 텍스트를 inline 형태로 유지
+        */
+
+        .inline-emoji-group {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            vertical-align: middle;
+
+            white-space: nowrap;
+
+            break-inside: avoid;
+
+            page-break-inside: avoid;
+
+            margin:
+                0 1px;
+        }
+
+        /*
+            캘린더에 표시되는 치지직 이모지
+
+            스티커처럼 크게 나오지 않고
+            채팅 이모지처럼 작게 표시합니다.
+        */
+
+        .calendar-emoji {
+            width: 26px;
+            height: 26px;
+
+            max-width: 26px;
+            max-height: 26px;
+
+            object-fit: contain;
+
+            display: inline-block;
+
+            vertical-align: middle;
+
+            flex:
+                0 0 auto;
+        }
+
+        /*
+            일정 텍스트
+        */
 
         .schedule-text {
-            min-width: 0;
-
             font-family:
                 'Nanum Pen Script',
                 cursive;
 
             font-size: 23px;
 
-            line-height: 1.15;
+            line-height: 1.1;
 
-            font-weight: 400;
+            white-space: pre-wrap;
 
-            white-space: nowrap;
+            word-break: keep-all;
 
-            overflow: hidden;
+            overflow-wrap: normal;
 
-            text-overflow: ellipsis;
-
-            /*
-             * 이모지와 글자가 같은 span 그룹에 들어가도록
-             * inline-flex를 사용합니다.
-             */
-            display: inline-flex;
-
-            align-items: center;
-
-            flex-wrap: nowrap;
-
-            max-width: 100%;
+            text-align: center;
         }
-
 
         /* =========================================================
-           치지직 이모지
-        ========================================================= */
-
-        .inline-emoji {
-            display: inline-block;
-
-            width: 28px;
-            height: 28px;
-
-            min-width: 28px;
-            min-height: 28px;
-
-            object-fit: contain;
-
-            vertical-align: middle;
-
-            margin: 0 1px;
-
-            /*
-             * 이미지 때문에 줄바꿈되는 것을 방지합니다.
-             */
-            flex: 0 0 auto;
-        }
-
-
-        /*
-         * 이모지 하나 또는 여러 개를
-         * 하나의 그룹으로 취급합니다.
-         */
-        .emoji-group {
-            display: inline-flex;
-
-            align-items: center;
-
-            flex-wrap: nowrap;
-
-            white-space: nowrap;
-
-            vertical-align: middle;
-
-            flex: 0 0 auto;
-        }
-
-
-        /* =========================================================
-           일정 내용이 길 경우
-        ========================================================= */
-
-        .schedule-text.compact {
-            font-size: 19px;
-        }
-
-        .schedule-text.tiny {
-            font-size: 16px;
-        }
-
-        .schedule-text.micro {
-            font-size: 14px;
-        }
-
-
-        /* =========================================================
-           하단 메모
-        ========================================================= */
+           메모
+        ========================================================== */
 
         .desktop-memo {
             position: relative;
 
             margin-top: 18px;
 
-            min-height: 145px;
+            width: 100%;
 
-            padding: 25px 28px 18px;
+            min-height: 118px;
 
-            background: #FDF0F1;
+            padding:
+                25px
+                24px
+                15px;
 
-            border: 3px solid #A94442;
+            background: #FDF1F2;
 
-            border-radius: 13px;
+            border:
+                2px solid #A94442;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            flex-direction: column;
         }
 
         .memo-title {
             position: absolute;
 
-            top: -20px;
-            left: 20px;
+            top: -18px;
+            left: 18px;
 
-            padding: 0 12px;
+            padding:
+                0 12px;
 
             background: #FAF8F5;
 
@@ -616,45 +542,41 @@
                 'Nanum Pen Script',
                 cursive;
 
-            font-size: 32px;
+            font-size: 29px;
 
-            font-weight: 700;
-
-            line-height: 1;
+            font-weight: bold;
         }
 
         #global-memo {
             width: 100%;
 
-            min-height: 90px;
-
-            resize: none;
-
-            outline: none;
-
-            border: none;
+            min-height: 70px;
 
             background: transparent;
 
-            color: #A94442;
+            border: none;
+            outline: none;
+
+            resize: none;
 
             font-family:
                 'Nanum Pen Script',
                 cursive;
 
-            font-size: 25px;
+            font-size: 23px;
 
-            line-height: 1.35;
+            line-height: 1.4;
+
+            color: #3D5F9E;
         }
 
         #global-memo::placeholder {
-            color: #D7A6A6;
+            color: #D6A9AD;
         }
-
 
         /* =========================================================
            모바일
-        ========================================================= */
+        ========================================================== */
 
         @media (max-width: 767px) {
 
@@ -669,138 +591,141 @@
                 border-right: none;
 
                 padding:
-                    45px 8px 15px;
+                    48px
+                    8px
+                    20px;
             }
 
             .spring-wrapper {
-                padding: 0 25px;
+                padding: 0 10px;
             }
 
             .spring {
-                width: 10px;
+                width: 11px;
                 height: 32px;
             }
 
             .spring::after {
-                width: 9px;
-                height: 9px;
+                width: 10px;
+                height: 10px;
+
+                left: 0.5px;
 
                 bottom: -5px;
-                left: 0;
             }
 
-            .calendar-week {
-                height: 38px;
+            .calendar-grid {
+                height: 540px;
+
+                border-radius: 9px;
+            }
+
+            .calendar-week-header {
+                flex-basis: 38px;
             }
 
             .calendar-header-cell {
-                font-size: 17px;
-            }
-
-            #calendar-days {
-                /*
-                 * 모바일에서는 화면 폭에 맞춰
-                 * 지나치게 세로로 길어지지 않도록 합니다.
-                 */
-                height: 520px;
+                font-size: 18px;
             }
 
             .calendar-cell {
                 padding: 5px;
             }
 
+            .day-number-wrapper {
+                height: 24px;
+
+                flex-basis: 24px;
+            }
+
             .day-number {
-                min-width: 21px;
-                height: 21px;
+                height: 23px;
 
-                font-size: 15px;
-            }
-
-            .today-number {
-                width: 25px;
-                height: 25px;
-
-                min-width: 25px;
-            }
-
-            .inline-emoji {
-                width: 20px;
-                height: 20px;
-
-                min-width: 20px;
-                min-height: 20px;
-            }
-
-            .schedule-text {
-                font-size: 16px;
-            }
-
-            .schedule-text.compact {
                 font-size: 14px;
             }
 
-            .schedule-text.tiny {
-                font-size: 12px;
+            .calendar-emoji {
+                width: 21px;
+                height: 21px;
+
+                max-width: 21px;
+                max-height: 21px;
             }
 
-            .schedule-text.micro {
-                font-size: 11px;
+            .schedule-text {
+                font-size: 18px;
             }
 
             .desktop-memo {
-                min-height: 120px;
-
-                margin-top: 15px;
+                min-height: 110px;
 
                 padding:
-                    22px 16px 10px;
-            }
-
-            .memo-title {
-                font-size: 26px;
-
-                top: -16px;
+                    23px
+                    16px
+                    12px;
             }
 
             #global-memo {
                 font-size: 20px;
             }
+
         }
 
-
         /* =========================================================
-           이모지 선택 모달
-        ========================================================= */
+           이모지 선택기
+        ========================================================== */
 
-        .emoji-board {
-            display: grid;
+        .emoji-picker {
+            border:
+                1px solid #E5E7EB;
 
-            grid-template-columns:
-                repeat(8, minmax(0, 1fr));
+            border-radius: 12px;
 
-            gap: 4px;
+            background: #FAFAFA;
 
-            max-height: 260px;
+            overflow: hidden;
+        }
+
+        .emoji-toolbar {
+            padding: 10px;
+
+            background: white;
+
+            border-bottom:
+                1px solid #E5E7EB;
+        }
+
+        .emoji-grid {
+            height: 220px;
 
             overflow-y: auto;
 
-            padding: 6px;
+            padding: 10px;
 
-            background: #F8F8F8;
+            display: grid;
 
-            border-radius: 10px;
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(44px, 1fr)
+                );
+
+            gap: 5px;
+
+            align-content: start;
         }
 
-        .emoji-button {
-            width: 100%;
+        .emoji-item {
+            width: 44px;
+            height: 44px;
 
-            aspect-ratio: 1 / 1;
+            margin: 0 auto;
 
-            border: none;
+            border: 1px solid transparent;
 
-            border-radius: 7px;
+            border-radius: 8px;
 
-            background: white;
+            background: transparent;
 
             display: flex;
 
@@ -811,43 +736,99 @@
 
             transition:
                 background-color 0.12s ease,
+                border-color 0.12s ease,
                 transform 0.12s ease;
         }
 
-        .emoji-button:hover {
-            background: #FFF0F2;
+        .emoji-item:hover {
+            background: #FCECEF;
 
-            transform: scale(1.05);
+            border-color: #F2C7CD;
+
+            transform: scale(1.04);
         }
 
-        .emoji-button.selected {
-            background: #FBD5DB;
+        .emoji-item.selected {
+            background: #FDE7EA;
 
-            box-shadow:
-                inset 0 0 0 2px #E77788;
+            border-color: #D95363;
         }
 
-        .emoji-button img {
-            width: 30px;
-            height: 30px;
+        .emoji-item img {
+            width: 34px;
+            height: 34px;
 
             object-fit: contain;
         }
 
-        .emoji-code {
-            display: none;
+        .emoji-empty {
+            grid-column: 1 / -1;
+
+            text-align: center;
+
+            padding: 35px 10px;
+
+            color: #9CA3AF;
+
+            font-size: 13px;
         }
 
+        .emoji-loading {
+            grid-column: 1 / -1;
+
+            text-align: center;
+
+            padding: 35px 10px;
+
+            color: #9CA3AF;
+
+            font-size: 13px;
+        }
+
+        /* 선택된 이모지 미리보기 */
+        .selected-emoji-preview {
+            min-height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                7px
+                10px;
+
+            background: #FFF7F8;
+
+            border:
+                1px solid #F4D6DA;
+
+            border-radius: 8px;
+        }
+
+        .selected-emoji-preview img {
+            width: 28px;
+            height: 28px;
+
+            object-fit: contain;
+        }
+
+        .selected-emoji-code {
+            font-size: 12px;
+
+            color: #9CA3AF;
+        }
 
         /* =========================================================
-           캡처용 영역
-        ========================================================= */
+           캡처용
+        ========================================================== */
 
         #hidden-capture-container {
-            position: fixed;
+            position: absolute;
 
             left: -99999px;
-            top: 0;
+            top: -99999px;
 
             width: 1480px;
             height: 1309px;
@@ -855,177 +836,414 @@
             overflow: hidden;
 
             background: transparent;
-
-            z-index: -9999;
         }
 
-        #hidden-capture-container .capture-paper {
+        #hidden-capture-container .diary-paper {
             width: 1400px;
             height: 1229px;
 
-            margin: 40px;
+            margin: 0;
 
             padding:
-                58px 50px 38px;
-
-            background: #FAF8F5;
-
-            border:
-                2px solid #E8DADA;
+                55px
+                45px
+                35px;
 
             border-radius: 24px;
 
             box-shadow: none;
-
-            position: relative;
-
-            display: flex;
-
-            flex-direction: column;
         }
 
-        #hidden-capture-container .calendar-title {
-            font-size: 52px;
+        #hidden-capture-container .calendar-grid {
+            height: 720px;
+
+            border-width: 3px;
+
+            border-radius: 12px;
         }
 
-        #hidden-capture-container .calendar-week {
-            height: 48px;
+        #hidden-capture-container .calendar-week-header {
+            flex-basis: 52px;
         }
 
         #hidden-capture-container .calendar-header-cell {
-            font-size: 25px;
-        }
-
-        #hidden-capture-container #calendar-days {
-            /*
-             * 1229px 종이 안에서
-             * 헤더 / 달력 / 메모가 정확하게 들어가도록
-             * 고정 높이를 사용합니다.
-             */
-            height: 760px;
+            font-size: 30px;
         }
 
         #hidden-capture-container .calendar-cell {
             padding: 8px;
         }
 
+        #hidden-capture-container .day-number-wrapper {
+            height: 34px;
+
+            flex-basis: 34px;
+        }
+
         #hidden-capture-container .day-number {
-            font-size: 20px;
+            font-size: 25px;
+
+            height: 28px;
         }
 
-        #hidden-capture-container .today-number {
-            width: 32px;
-            height: 32px;
-
-            min-width: 32px;
-        }
-
-        #hidden-capture-container .inline-emoji {
+        #hidden-capture-container .calendar-emoji {
             width: 28px;
             height: 28px;
 
-            min-width: 28px;
-            min-height: 28px;
+            max-width: 28px;
+            max-height: 28px;
         }
 
         #hidden-capture-container .schedule-text {
-            font-size: 22px;
-        }
-
-        #hidden-capture-container .schedule-text.compact {
-            font-size: 18px;
-        }
-
-        #hidden-capture-container .schedule-text.tiny {
-            font-size: 15px;
-        }
-
-        #hidden-capture-container .schedule-text.micro {
-            font-size: 13px;
+            font-size: 30px;
         }
 
         #hidden-capture-container .desktop-memo {
-            height: 150px;
-
-            min-height: 150px;
-
             margin-top: 18px;
 
-            padding:
-                24px 28px 12px;
+            min-height: 130px;
 
-            flex-shrink: 0;
+            padding:
+                28px
+                30px
+                15px;
         }
 
         #hidden-capture-container .memo-title {
-            font-size: 32px;
+            top: -22px;
+
+            font-size: 38px;
         }
 
-        #hidden-capture-container #global-memo {
-            display: none;
-        }
-
-        #hidden-capture-container #capture-memo-render {
+        #hidden-capture-container #global-memo-render {
             display: block;
 
-            width: 100%;
-
-            color: #A94442;
+            min-height: 70px;
 
             font-family:
                 'Nanum Pen Script',
                 cursive;
 
-            font-size: 27px;
+            font-size: 34px;
 
             line-height: 1.4;
 
             white-space: pre-wrap;
 
             word-break: break-word;
+
+            color: #3D5F9E;
+        }
+
+        /* =========================================================
+           인쇄/캡처 보조
+        ========================================================== */
+
+        .capture-only {
+            display: none !important;
         }
 
     </style>
 </head>
 
-
-<body>
+<body
+    class="
+        font-sans
+        text-diary-text
+        min-h-screen
+        md:p-8
+        flex
+        flex-col
+        items-center
+    "
+>
 
     <!-- =========================================================
-         모바일 상단
-    ========================================================= -->
+         캡처 전용 영역
+    ========================================================== -->
+
+    <div id="hidden-capture-container"></div>
+
+    <!-- =========================================================
+         모바일 상단 헤더
+    ========================================================== -->
 
     <div
-        class="md:hidden w-full bg-white p-3 flex items-center justify-between shadow-sm"
+        class="
+            md:hidden
+            w-full
+            flex
+            justify-between
+            items-center
+            bg-white
+            p-4
+            shadow-sm
+            relative
+            z-20
+        "
     >
 
         <button
-            onclick="changeMonth(-1)"
-            class="p-2 rounded-lg bg-gray-100"
+            onclick="toggleLeftMenu()"
+            class="
+                p-2
+                bg-gray-100
+                rounded-lg
+                hover:bg-gray-200
+            "
         >
-            <i class="ph ph-caret-left text-xl"></i>
+            <i class="ph ph-list text-2xl text-gray-700"></i>
         </button>
 
-        <div
-            id="mobile-title"
-            class="font-bold text-gray-700"
+        <h1
+            class="
+                font-bold
+                text-lg
+                text-gray-700
+            "
         >
-            2026.09
-        </div>
+            다이어리
+        </h1>
 
         <button
-            onclick="changeMonth(1)"
-            class="p-2 rounded-lg bg-gray-100"
+            onclick="toggleRightMenu()"
+            class="
+                p-2
+                bg-pink-100
+                rounded-lg
+                hover:bg-pink-200
+            "
         >
-            <i class="ph ph-caret-right text-xl"></i>
+            <i
+                class="
+                    ph
+                    ph-note-pencil
+                    text-2xl
+                    text-pink-600
+                "
+            ></i>
         </button>
 
     </div>
 
+    <!-- =========================================================
+         모바일 왼쪽 메뉴
+    ========================================================== -->
+
+    <div
+        id="left-drawer"
+        class="
+            fixed
+            inset-y-0
+            left-0
+            w-64
+            bg-white
+            shadow-2xl
+            transform
+            -translate-x-full
+            transition-transform
+            duration-300
+            z-40
+            p-6
+            flex
+            flex-col
+            md:hidden
+        "
+    >
+
+        <h2
+            class="
+                text-xl
+                font-bold
+                text-gray-800
+                mb-8
+                border-b
+                pb-4
+            "
+        >
+            메뉴
+        </h2>
+
+        <div class="flex flex-col gap-4">
+
+            <button
+                onclick="changeMonth(-1); toggleLeftMenu();"
+                class="
+                    flex
+                    items-center
+                    gap-3
+                    p-3
+                    bg-gray-50
+                    rounded-lg
+                "
+            >
+                <i class="ph ph-caret-left text-xl"></i>
+                이전 달
+            </button>
+
+            <button
+                onclick="goToToday(); toggleLeftMenu();"
+                class="
+                    flex
+                    items-center
+                    gap-3
+                    p-3
+                    bg-gray-50
+                    rounded-lg
+                "
+            >
+                <i class="ph ph-calendar-check text-xl"></i>
+                오늘
+            </button>
+
+            <button
+                onclick="changeMonth(1); toggleLeftMenu();"
+                class="
+                    flex
+                    items-center
+                    gap-3
+                    p-3
+                    bg-gray-50
+                    rounded-lg
+                "
+            >
+                <i class="ph ph-caret-right text-xl"></i>
+                다음 달
+            </button>
+
+        </div>
+
+        <div class="mt-auto">
+
+            <button
+                onclick="downloadCalendar(); toggleLeftMenu();"
+                class="
+                    w-full
+                    py-3
+                    bg-pink-500
+                    text-white
+                    rounded-xl
+                    font-bold
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                    shadow-md
+                "
+            >
+                <i class="ph ph-download-simple text-xl"></i>
+                이미지로 저장
+            </button>
+
+        </div>
+
+    </div>
 
     <!-- =========================================================
-         PC 네비게이션
-    ========================================================= -->
+         모바일 오른쪽 메모
+    ========================================================== -->
+
+    <div
+        id="right-drawer"
+        class="
+            fixed
+            inset-y-0
+            right-0
+            w-72
+            bg-pink-50
+            shadow-2xl
+            transform
+            translate-x-full
+            transition-transform
+            duration-300
+            z-40
+            p-6
+            flex
+            flex-col
+            md:hidden
+            border-l
+            border-pink-200
+        "
+    >
+
+        <h2
+            class="
+                text-xl
+                font-handwriting
+                text-diary-line
+                font-bold
+                mb-4
+                flex
+                items-center
+                gap-2
+            "
+        >
+            <i
+                class="
+                    ph-fill
+                    ph-push-pin
+                    text-pink-500
+                "
+            ></i>
+            Memo
+        </h2>
+
+        <textarea
+            id="mobile-memo"
+            class="
+                flex-1
+                w-full
+                bg-transparent
+                resize-none
+                outline-none
+                font-handwriting
+                text-xl
+                leading-relaxed
+                text-diary-line
+            "
+            placeholder="여기에 중요한 메모나 공지를 적어보세요..."
+            oninput="syncMemos('mobile-memo', 'global-memo')"
+        ></textarea>
+
+        <button
+            onclick="toggleRightMenu()"
+            class="
+                mt-4
+                py-3
+                bg-white
+                text-gray-700
+                rounded-xl
+                font-bold
+                shadow-sm
+                border
+                border-gray-200
+            "
+        >
+            닫기
+        </button>
+
+    </div>
+
+    <!-- =========================================================
+         모바일 배경
+    ========================================================== -->
+
+    <div
+        id="drawer-backdrop"
+        class="
+            fixed
+            inset-0
+            bg-black/50
+            hidden
+            z-30
+            md:hidden
+        "
+        onclick="closeAllDrawers()"
+    ></div>
+
+    <!-- =========================================================
+         PC 상단 메뉴
+    ========================================================== -->
 
     <div
         class="
@@ -1033,46 +1251,62 @@
             md:flex
             w-full
             max-w-5xl
-            mx-auto
-            mt-5
-            mb-5
-            px-5
-            items-center
             justify-between
+            items-center
+            mb-8
             bg-white
+            p-4
             rounded-2xl
             shadow-sm
-            py-3
         "
     >
 
-        <div
-            class="font-bold text-gray-700 text-lg"
+        <h1
+            class="
+                text-2xl
+                font-bold
+                text-gray-700
+            "
         >
-            다이어리 캘린더
-        </div>
+            나만의 다이어리
+        </h1>
 
-        <div
-            class="flex items-center gap-2"
-        >
+        <div class="flex gap-3">
 
             <button
                 onclick="changeMonth(-1)"
-                class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
+                class="
+                    p-2
+                    bg-gray-100
+                    hover:bg-gray-200
+                    rounded-full
+                "
             >
                 <i class="ph ph-caret-left text-xl"></i>
             </button>
 
             <button
                 onclick="goToToday()"
-                class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 font-bold"
+                class="
+                    px-4
+                    py-2
+                    bg-gray-100
+                    hover:bg-gray-200
+                    rounded-lg
+                    font-bold
+                "
             >
                 오늘
             </button>
 
             <button
                 onclick="changeMonth(1)"
-                class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
+                class="
+                    p-2
+                    bg-gray-100
+                    hover:bg-gray-200
+                    rounded-full
+                "
             >
                 <i class="ph ph-caret-right text-xl"></i>
             </button>
@@ -1080,82 +1314,86 @@
             <button
                 onclick="downloadCalendar()"
                 class="
-                    ml-2
+                    ml-3
                     px-5
                     py-2
-                    rounded-lg
                     bg-pink-500
                     hover:bg-pink-600
                     text-white
+                    rounded-lg
                     font-bold
+                    shadow-md
                     flex
                     items-center
                     gap-2
                 "
             >
                 <i class="ph ph-download-simple text-xl"></i>
-                이미지 저장
+                이미지로 저장
             </button>
 
         </div>
 
     </div>
 
-
     <!-- =========================================================
-         캘린더 본체
-    ========================================================= -->
+         실제 캘린더
+    ========================================================== -->
 
-    <main
+    <div
         id="capture-area"
-        class="w-full max-w-[1400px] mx-auto p-2 md:p-0"
+        class="
+            w-full
+            max-w-5xl
+        "
     >
 
-        <div
-            id="diary-paper"
-            class="diary-paper p-3 md:p-10 pt-12 md:pt-16"
-        >
+        <div class="diary-paper">
 
             <!-- 스프링 -->
             <div
-                id="springs-container"
                 class="spring-wrapper"
+                id="springs-container"
             ></div>
 
-
             <!-- =================================================
-                 날짜 제목
-            ================================================= -->
+                 상단 날짜
+            ================================================== -->
 
             <div
                 class="
                     flex
                     justify-end
-                    items-center
-                    mb-4
-                    md:mb-5
+                    items-end
+                    mb-5
                     px-1
                 "
             >
 
                 <div
                     id="calendar-title"
-                    class="calendar-title"
+                    class="
+                        font-sans
+                        text-3xl
+                        md:text-4xl
+                        font-bold
+                        tracking-wider
+                        text-diary-line
+                    "
                 >
                     2026.09
                 </div>
 
             </div>
 
-
             <!-- =================================================
                  달력
-            ================================================= -->
+            ================================================== -->
 
             <div class="calendar-grid">
 
                 <!-- 요일 -->
-                <div class="calendar-week">
+                <div class="calendar-week-header">
 
                     <div class="calendar-header-cell sun">
                         Sun
@@ -1187,19 +1425,14 @@
 
                 </div>
 
-
                 <!-- 날짜 -->
-                <div
-                    id="calendar-days"
-                    style="--row-count: 5;"
-                ></div>
+                <div id="calendar-days"></div>
 
             </div>
 
-
             <!-- =================================================
                  메모
-            ================================================= -->
+            ================================================== -->
 
             <div class="desktop-memo">
 
@@ -1213,22 +1446,21 @@
                     oninput="saveMemo()"
                 ></textarea>
 
-                <!-- 이미지 저장용 -->
+                <!-- 이미지 저장 전용 -->
                 <div
-                    id="capture-memo-render"
-                    style="display:none;"
+                    id="global-memo-render"
+                    class="hidden"
                 ></div>
 
             </div>
 
         </div>
 
-    </main>
-
+    </div>
 
     <!-- =========================================================
-         일정 수정 모달
-    ========================================================= -->
+         일정 편집 모달
+    ========================================================== -->
 
     <div
         id="edit-modal"
@@ -1238,6 +1470,7 @@
             inset-0
             bg-black/60
             backdrop-blur-sm
+            flex
             items-center
             justify-center
             z-50
@@ -1251,49 +1484,73 @@
                 rounded-2xl
                 shadow-2xl
                 w-full
-                max-w-lg
+                max-w-md
                 overflow-hidden
             "
         >
 
             <!-- 모달 헤더 -->
+
             <div
                 class="
                     bg-pink-100
-                    px-5
-                    py-4
-                    flex
-                    items-center
-                    justify-between
+                    p-4
                     border-b
                     border-pink-200
+                    flex
+                    justify-between
+                    items-center
                 "
             >
 
-                <div
-                    class="font-bold text-lg text-gray-800"
+                <h3
+                    class="
+                        font-bold
+                        text-xl
+                        text-gray-800
+                        flex
+                        items-center
+                        gap-2
+                    "
                 >
-                    <i class="ph-fill ph-calendar-blank text-pink-500"></i>
+                    <i
+                        class="
+                            ph-fill
+                            ph-pencil-simple
+                            text-pink-500
+                        "
+                    ></i>
 
-                    <span id="modal-date-title">
-                        일정
-                    </span>
-                </div>
+                    <span id="modal-date-title"></span>
+                </h3>
 
                 <button
                     onclick="closeModal()"
-                    class="p-2 text-gray-500 hover:text-gray-800"
+                    class="
+                        text-gray-500
+                        hover:text-gray-800
+                        p-2
+                    "
                 >
                     <i class="ph ph-x text-2xl"></i>
                 </button>
 
             </div>
 
+            <!-- =================================================
+                 모달 내용
+            ================================================== -->
 
-            <!-- 모달 내용 -->
-            <div class="p-5 space-y-5">
+            <div
+                class="
+                    p-4
+                    md:p-6
+                    space-y-5
+                "
+            >
 
-                <!-- 일정 -->
+                <!-- 일정 내용 -->
+
                 <div>
 
                     <label
@@ -1302,7 +1559,7 @@
                             text-sm
                             font-bold
                             text-gray-700
-                            mb-2
+                            mb-1
                         "
                     >
                         일정 내용
@@ -1310,35 +1567,39 @@
 
                     <textarea
                         id="modal-text"
-                        rows="4"
+                        rows="3"
                         class="
                             w-full
                             border
                             border-gray-300
-                            rounded-xl
+                            rounded-lg
                             p-3
-                            outline-none
+                            focus:outline-none
                             focus:ring-2
                             focus:ring-pink-300
                             font-handwriting
                             text-xl
                             resize-none
                         "
-                        placeholder="{sub_01} 오늘 방송합니다"
+                        placeholder="{sub_01} 오늘 방송&#10;{ag_01} 오후 8시 시작"
                     ></textarea>
 
-                    <div
-                        class="mt-2 text-xs text-gray-400"
+                    <p
+                        class="
+                            mt-1
+                            text-xs
+                            text-gray-400
+                        "
                     >
                         이모지를 선택하면
                         <b>{sub_01}</b>
-                        형태로 입력됩니다.
-                    </div>
+                        형식으로 입력됩니다.
+                    </p>
 
                 </div>
 
+                <!-- 글자 색상 -->
 
-                <!-- 글자 색 -->
                 <div>
 
                     <label
@@ -1353,129 +1614,168 @@
                         글자 색상
                     </label>
 
-                    <div
-                        class="flex items-center gap-3"
-                    >
+                    <div class="flex gap-2">
 
                         <input
                             type="color"
                             id="modal-color"
                             value="#333333"
                             class="
-                                w-14
                                 h-10
+                                w-14
                                 rounded
+                                cursor-pointer
                                 border
                                 border-gray-200
-                                cursor-pointer
                             "
                         >
 
-                        <span
-                            class="text-sm text-gray-500"
+                        <div
+                            class="
+                                flex-1
+                                text-sm
+                                text-gray-500
+                                flex
+                                items-center
+                            "
                         >
                             일정 글자의 색상을 선택하세요.
-                        </span>
+                        </div>
 
                     </div>
 
                 </div>
 
-
                 <!-- =================================================
                      치지직 이모지
-                ================================================= -->
+                ================================================== -->
 
                 <div>
 
-                    <div
+                    <label
                         class="
-                            flex
-                            items-center
-                            justify-between
+                            block
+                            text-sm
+                            font-bold
+                            text-gray-700
                             mb-2
                         "
                     >
+                        치지직 이모지
+                    </label>
 
-                        <label
-                            class="
-                                text-sm
-                                font-bold
-                                text-gray-700
-                            "
-                        >
-                            치지직 이모지
-                        </label>
+                    <div class="emoji-picker">
 
-                        <span
-                            id="emoji-count-label"
-                            class="text-xs text-gray-400"
-                        >
-                            불러오는 중...
-                        </span>
+                        <!-- 검색/팩 -->
+                        <div class="emoji-toolbar">
 
-                    </div>
+                            <div class="flex gap-2">
 
+                                <div class="relative flex-1">
 
-                    <!-- 검색 -->
-                    <input
-                        id="emoji-search"
-                        type="text"
-                        placeholder="이모지 검색..."
-                        class="
-                            w-full
-                            border
-                            border-gray-300
-                            rounded-lg
-                            px-3
-                            py-2
-                            mb-2
-                            outline-none
-                            focus:ring-2
-                            focus:ring-pink-300
-                        "
-                        oninput="renderEmojiBoard()"
-                    >
+                                    <i
+                                        class="
+                                            ph
+                                            ph-magnifying-glass
+                                            absolute
+                                            left-3
+                                            top-1/2
+                                            -translate-y-1/2
+                                            text-gray-400
+                                        "
+                                    ></i>
 
+                                    <input
+                                        id="emoji-search"
+                                        type="text"
+                                        placeholder="이모지 검색"
+                                        class="
+                                            w-full
+                                            pl-9
+                                            pr-3
+                                            py-2
+                                            border
+                                            border-gray-200
+                                            rounded-lg
+                                            text-sm
+                                            outline-none
+                                            focus:ring-2
+                                            focus:ring-pink-200
+                                        "
+                                        oninput="renderEmojiBoard()"
+                                    >
 
-                    <!-- 팩 -->
-                    <select
-                        id="emoji-pack"
-                        class="
-                            w-full
-                            border
-                            border-gray-300
-                            rounded-lg
-                            px-3
-                            py-2
-                            mb-2
-                            outline-none
-                        "
-                        onchange="renderEmojiBoard()"
-                    >
+                                </div>
 
-                        <option value="">
-                            전체 이모지
-                        </option>
+                                <select
+                                    id="emoji-pack"
+                                    class="
+                                        w-36
+                                        border
+                                        border-gray-200
+                                        rounded-lg
+                                        text-sm
+                                        px-2
+                                        outline-none
+                                    "
+                                    onchange="renderEmojiBoard()"
+                                >
+                                    <option value="">
+                                        전체 이모지
+                                    </option>
+                                </select>
 
-                    </select>
+                            </div>
 
+                            <!-- 선택 미리보기 -->
 
-                    <!-- 이모지 보드 -->
-                    <div
-                        id="emoji-board"
-                        class="emoji-board"
-                    >
+                            <div
+                                id="selected-emoji-preview"
+                                class="
+                                    selected-emoji-preview
+                                    mt-2
+                                    hidden
+                                "
+                            >
+
+                                <img
+                                    id="selected-emoji-image"
+                                    src=""
+                                    alt=""
+                                >
+
+                                <span
+                                    id="selected-emoji-code"
+                                    class="selected-emoji-code"
+                                ></span>
+
+                                <button
+                                    onclick="clearSelectedEmoji()"
+                                    class="
+                                        ml-auto
+                                        text-gray-400
+                                        hover:text-red-500
+                                    "
+                                    title="이모지 제거"
+                                >
+                                    <i class="ph ph-x"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- 이모지 목록 -->
 
                         <div
-                            class="
-                                col-span-full
-                                text-center
-                                text-gray-400
-                                py-8
-                            "
+                            id="emoji-board"
+                            class="emoji-grid"
                         >
-                            이모지를 불러오는 중...
+
+                            <div class="emoji-loading">
+                                치지직 이모지를 불러오는 중...
+                            </div>
+
                         </div>
 
                     </div>
@@ -1484,66 +1784,50 @@
 
             </div>
 
+            <!-- =================================================
+                 모달 하단
+            ================================================== -->
 
-            <!-- 버튼 -->
             <div
                 class="
-                    px-5
-                    py-4
+                    p-4
                     bg-gray-50
-                    border-t
                     flex
-                    justify-between
-                    items-center
+                    justify-end
+                    gap-2
+                    border-t
+                    border-gray-100
                 "
             >
 
                 <button
-                    onclick="deleteDayData()"
+                    onclick="closeModal()"
                     class="
                         px-4
                         py-2
                         rounded-lg
-                        text-red-500
-                        hover:bg-red-50
                         font-bold
+                        text-gray-600
+                        hover:bg-gray-200
                     "
                 >
-                    삭제
+                    취소
                 </button>
 
-                <div class="flex gap-2">
-
-                    <button
-                        onclick="closeModal()"
-                        class="
-                            px-4
-                            py-2
-                            rounded-lg
-                            font-bold
-                            text-gray-600
-                            hover:bg-gray-200
-                        "
-                    >
-                        취소
-                    </button>
-
-                    <button
-                        onclick="saveDayData()"
-                        class="
-                            px-6
-                            py-2
-                            rounded-lg
-                            font-bold
-                            text-white
-                            bg-pink-500
-                            hover:bg-pink-600
-                        "
-                    >
-                        저장
-                    </button>
-
-                </div>
+                <button
+                    onclick="saveDayData()"
+                    class="
+                        px-6
+                        py-2
+                        rounded-lg
+                        font-bold
+                        text-white
+                        bg-pink-500
+                        hover:bg-pink-600
+                    "
+                >
+                    저장하기
+                </button>
 
             </div>
 
@@ -1551,42 +1835,42 @@
 
     </div>
 
-
     <!-- =========================================================
-         캡처용 컨테이너
-    ========================================================= -->
-
-    <div id="hidden-capture-container"></div>
-
+         JavaScript
+    ========================================================== -->
 
     <script>
 
         /* =========================================================
-           전역 변수
-        ========================================================= */
-
-        let currentDate = new Date();
-
-        let calendarData = {};
-
-        let editingDateStr = null;
-
-        let selectedEmoji = null;
-
-        let emojis = [];
+           기본 변수
+        ========================================================== */
 
         const EMOJI_API_URL =
             'https://chzzk.dico.page/emojipacks';
 
         const STORAGE_KEY =
-            'cute_diary_calendar_v3';
+            'cute_diary_calendar_v4';
 
+        let currentDate =
+            new Date();
+
+        let calendarData = {};
+
+        let globalMemo = '';
+
+        let editingDateStr = null;
+
+        let selectedEmoji = null;
+
+        let emojiList = [];
+
+        let emojiPacks = [];
 
         /* =========================================================
            초기화
-        ========================================================= */
+        ========================================================== */
 
-        async function init() {
+        function init() {
 
             loadSavedData();
 
@@ -1594,26 +1878,26 @@
 
             renderCalendar();
 
-            await loadEmojis();
+            loadEmojis();
 
-            initSwipe();
+            initSwipeGestures();
 
         }
 
-
         /* =========================================================
            저장 데이터 불러오기
-        ========================================================= */
+        ========================================================== */
 
         function loadSavedData() {
 
             try {
 
                 const saved =
-                    localStorage.getItem(STORAGE_KEY);
+                    localStorage.getItem(
+                        STORAGE_KEY
+                    );
 
                 if (!saved) {
-                    calendarData = {};
                     return;
                 }
 
@@ -1623,16 +1907,25 @@
                 calendarData =
                     parsed.calendarData || {};
 
-                const memo =
-                    parsed.memo || '';
+                globalMemo =
+                    parsed.globalMemo || '';
 
-                const memoElement =
+                const memo =
                     document.getElementById(
                         'global-memo'
                     );
 
-                if (memoElement) {
-                    memoElement.value = memo;
+                const mobileMemo =
+                    document.getElementById(
+                        'mobile-memo'
+                    );
+
+                if (memo) {
+                    memo.value = globalMemo;
+                }
+
+                if (mobileMemo) {
+                    mobileMemo.value = globalMemo;
                 }
 
             } catch (error) {
@@ -1644,45 +1937,106 @@
 
                 calendarData = {};
 
+                globalMemo = '';
+
             }
 
         }
 
-
         /* =========================================================
-           전체 저장
-        ========================================================= */
+           전체 데이터 저장
+        ========================================================== */
 
         function saveAllData() {
+
+            try {
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify({
+                        calendarData:
+                            calendarData,
+
+                        globalMemo:
+                            globalMemo
+                    })
+                );
+
+            } catch (error) {
+
+                console.error(
+                    '저장 실패:',
+                    error
+                );
+
+            }
+
+        }
+
+        /* =========================================================
+           메모 저장
+        ========================================================== */
+
+        function saveMemo() {
 
             const memo =
                 document.getElementById(
                     'global-memo'
-                ).value;
+                );
 
-            localStorage.setItem(
-                STORAGE_KEY,
-                JSON.stringify({
-                    calendarData,
-                    memo
-                })
-            );
+            globalMemo =
+                memo.value;
+
+            const mobileMemo =
+                document.getElementById(
+                    'mobile-memo'
+                );
+
+            if (mobileMemo) {
+                mobileMemo.value =
+                    globalMemo;
+            }
+
+            saveAllData();
 
         }
-
 
         /* =========================================================
-           메모 저장
-        ========================================================= */
+           메모 동기화
+        ========================================================== */
 
-        function saveMemo() {
+        function syncMemos(
+            sourceId,
+            targetId
+        ) {
+
+            const source =
+                document.getElementById(
+                    sourceId
+                );
+
+            const target =
+                document.getElementById(
+                    targetId
+                );
+
+            if (!source || !target) {
+                return;
+            }
+
+            target.value =
+                source.value;
+
+            globalMemo =
+                source.value;
+
             saveAllData();
-        }
 
+        }
 
         /* =========================================================
            스프링 생성
-        ========================================================= */
+        ========================================================== */
 
         function generateSprings() {
 
@@ -1700,7 +2054,9 @@
             ) {
 
                 const spring =
-                    document.createElement('div');
+                    document.createElement(
+                        'div'
+                    );
 
                 spring.className =
                     'spring';
@@ -1713,29 +2069,36 @@
 
         }
 
-
         /* =========================================================
-           날짜 포맷
-        ========================================================= */
+           오늘 날짜 문자열
+           
+           현재 날짜를 비교하기 위한 용도입니다.
+           단, 오늘 날짜에 특별한 CSS는 적용하지 않습니다.
+        ========================================================== */
 
-        function makeDateString(
-            year,
-            month,
-            day
-        ) {
+        function getTodayString() {
 
-            return `${year}-${String(
-                month + 1
-            ).padStart(2, '0')}-${String(
-                day
-            ).padStart(2, '0')}`;
+            const today =
+                new Date();
+
+            return [
+                today.getFullYear(),
+
+                String(
+                    today.getMonth() + 1
+                ).padStart(2, '0'),
+
+                String(
+                    today.getDate()
+                ).padStart(2, '0')
+
+            ].join('-');
 
         }
 
-
         /* =========================================================
            캘린더 렌더링
-        ========================================================= */
+        ========================================================== */
 
         function renderCalendar() {
 
@@ -1745,6 +2108,8 @@
             const month =
                 currentDate.getMonth();
 
+            /* 상단 날짜 */
+
             const title =
                 `${year}.${String(
                     month + 1
@@ -1752,29 +2117,20 @@
 
             document.getElementById(
                 'calendar-title'
-            ).textContent = title;
+            ).textContent =
+                title;
 
-            const mobileTitle =
-                document.getElementById(
-                    'mobile-title'
-                );
+            /* 해당 월 첫 요일 */
 
-            if (mobileTitle) {
-                mobileTitle.textContent =
-                    title;
-            }
-
-
-            /* 첫 번째 요일 */
-            const firstDay =
+            const firstDayIndex =
                 new Date(
                     year,
                     month,
                     1
                 ).getDay();
 
+            /* 해당 월 마지막 날짜 */
 
-            /* 이번 달 마지막 날짜 */
             const lastDay =
                 new Date(
                     year,
@@ -1782,15 +2138,14 @@
                     0
                 ).getDate();
 
+            /* 이전 달 마지막 날짜 */
 
-            /*
-             * 필요한 주 수 계산
-             */
-            const rowCount =
-                Math.ceil(
-                    (firstDay + lastDay) / 7
-                );
-
+            const prevLastDay =
+                new Date(
+                    year,
+                    month,
+                    0
+                ).getDate();
 
             const daysContainer =
                 document.getElementById(
@@ -1799,460 +2154,673 @@
 
             daysContainer.innerHTML = '';
 
+            /*
+                5주 또는 6주
+            */
+
+            const totalCells =
+                Math.ceil(
+                    (
+                        firstDayIndex +
+                        lastDay
+                    ) / 7
+                ) * 7;
+
+            const rowCount =
+                totalCells / 7;
+
             daysContainer.style.setProperty(
                 '--row-count',
                 rowCount
             );
 
-
-            /*
-             * 이전 달 마지막 날짜
-             */
-            const previousLastDay =
-                new Date(
-                    year,
-                    month,
-                    0
-                ).getDate();
-
-
-            const totalCells =
-                rowCount * 7;
-
-
-            /*
-             * 오늘 날짜
-             */
-            const today =
-                new Date();
-
             const todayString =
-                makeDateString(
-                    today.getFullYear(),
-                    today.getMonth(),
-                    today.getDate()
-                );
-
-
-            let html = '';
-
+                getTodayString();
 
             /* =====================================================
-               날짜 셀
-            ===================================================== */
+               날짜 생성
+            ====================================================== */
 
             for (
-                let index = 0;
-                index < totalCells;
-                index++
+                let i = 1;
+                i <= totalCells;
+                i++
             ) {
 
                 let dayNumber;
 
-                let dateString = '';
+                let isCurrentMonth =
+                    true;
 
-                let currentMonth = true;
-
-
-                /*
-                 * 이전 달
-                 */
-                if (index < firstDay) {
-
-                    dayNumber =
-                        previousLastDay -
-                        firstDay +
-                        index +
-                        1;
-
-                    currentMonth = false;
-
-                }
+                let dateStr = '';
 
                 /*
-                 * 이번 달
-                 */
-                else if (
-                    index <
-                    firstDay + lastDay
+                    이전 달
+                */
+
+                if (
+                    i <= firstDayIndex
                 ) {
 
                     dayNumber =
-                        index -
-                        firstDay +
-                        1;
+                        prevLastDay -
+                        firstDayIndex +
+                        i;
 
-                    dateString =
-                        makeDateString(
-                            year,
-                            month,
-                            dayNumber
-                        );
+                    isCurrentMonth =
+                        false;
 
                 }
 
                 /*
-                 * 다음 달
-                 */
+                    현재 달
+                */
+
+                else if (
+                    i <=
+                    firstDayIndex +
+                    lastDay
+                ) {
+
+                    dayNumber =
+                        i -
+                        firstDayIndex;
+
+                    dateStr =
+                        `${year}-${String(
+                            month + 1
+                        ).padStart(2, '0')}-${String(
+                            dayNumber
+                        ).padStart(2, '0')}`;
+
+                }
+
+                /*
+                    다음 달
+                */
+
                 else {
 
                     dayNumber =
-                        index -
-                        firstDay -
-                        lastDay +
-                        1;
-
-                    currentMonth = false;
-
-                }
-
-
-                const column =
-                    index % 7;
-
-
-                let numberClass =
-                    'normal-number';
-
-
-                if (!currentMonth) {
-
-                    numberClass =
-                        'other-month';
-
-                } else if (column === 0) {
-
-                    numberClass =
-                        'sun-number';
-
-                } else if (column === 6) {
-
-                    numberClass =
-                        'sat-number';
-
-                }
-
-
-                /*
-                 * 오늘이면 원형 표시
-                 */
-                const isToday =
-                    currentMonth &&
-                    dateString === todayString;
-
-
-                if (isToday) {
-                    numberClass =
-                        'today-number';
-                }
-
-
-                const isLastRow =
-                    index >=
-                    totalCells - 7;
-
-
-                const data =
-                    currentMonth
-                        ? (
-                            calendarData[
-                                dateString
-                            ] || {}
-                        )
-                        : {};
-
-
-                /*
-                 * 일정 내용
-                 */
-                const text =
-                    data.text || '';
-
-
-                /*
-                 * 일정 렌더링
-                 */
-                const contentHtml =
-                    currentMonth
-                        ? renderScheduleContent(
-                            text,
-                            data.color ||
-                                '#333333'
-                        )
-                        : '';
-
-
-                html += `
-                    <div
-                        class="
-                            calendar-cell
-                            ${isLastRow ? 'last-row' : ''}
-                        "
-                        ${
-                            currentMonth
-                                ? `onclick="openModal('${dateString}')"`
-                                : ''
-                        }
-                    >
-
-                        <div
-                            class="
-                                day-number
-                                ${numberClass}
-                            "
-                        >
-                            ${dayNumber}
-                        </div>
-
-                        <div
-                            class="day-content"
-                        >
-                            ${contentHtml}
-                        </div>
-
-                    </div>
-                `;
-
-            }
-
-
-            daysContainer.innerHTML =
-                html;
-
-        }
-
-
-        /* =========================================================
-           일정 텍스트 + 이모지 렌더링
-        ========================================================= */
-
-        function renderScheduleContent(
-            text,
-            color
-        ) {
-
-            if (!text) {
-                return '';
-            }
-
-
-            /*
-             * 줄바꿈 기준으로 먼저 분리합니다.
-             *
-             * 각 줄은 하나의 schedule-line 그룹입니다.
-             */
-            const lines =
-                text.split(/\r?\n/);
-
-
-            return lines
-                .map(line => {
-
-                    if (!line.trim()) {
-                        return '';
-                    }
-
-
-                    const content =
-                        parseEmojiText(
-                            line,
-                            color
+                        i -
+                        (
+                            firstDayIndex +
+                            lastDay
                         );
 
+                    isCurrentMonth =
+                        false;
 
-                    return `
-                        <div class="schedule-line">
-                            <span
-                                class="
-                                    schedule-text
-                                    ${getTextSizeClass(line)}
-                                "
-                                style="color:${escapeHtml(color)};"
-                            >
-                                ${content}
-                            </span>
-                        </div>
-                    `;
+                }
 
-                })
-                .join('');
+                const colIndex =
+                    (i - 1) % 7;
+
+                let dayNumberClass =
+                    'day-number';
+
+                /*
+                    일요일
+                */
+
+                if (
+                    isCurrentMonth &&
+                    colIndex === 0
+                ) {
+
+                    dayNumberClass +=
+                        ' sun';
+
+                }
+
+                /*
+                    토요일
+                */
+
+                else if (
+                    isCurrentMonth &&
+                    colIndex === 6
+                ) {
+
+                    dayNumberClass +=
+                        ' sat';
+
+                }
+
+                /*
+                    중요:
+                    여기에서는 오늘 날짜를 확인해도
+                    "today" 클래스를 절대로 추가하지 않습니다.
+                    
+                    따라서 오늘 날짜 역시
+                    일반 날짜와 동일하게 표시됩니다.
+                */
+
+                let cellClasses =
+                    'calendar-cell';
+
+                if (
+                    !isCurrentMonth
+                ) {
+
+                    cellClasses +=
+                        ' other-month';
+
+                }
+
+                if (
+                    i > totalCells - 7
+                ) {
+
+                    cellClasses +=
+                        ' last-row';
+
+                }
+
+                /*
+                    현재 달 일정 데이터
+                */
+
+                const dayData =
+                    calendarData[dateStr] || {
+                        text: '',
+                        color: '#333333',
+                        emoji: null
+                    };
+
+                const cell =
+                    document.createElement(
+                        'div'
+                    );
+
+                cell.className =
+                    cellClasses;
+
+                /*
+                    날짜 번호
+                */
+
+                const numberWrapper =
+                    document.createElement(
+                        'div'
+                    );
+
+                numberWrapper.className =
+                    'day-number-wrapper';
+
+                const number =
+                    document.createElement(
+                        'div'
+                    );
+
+                number.className =
+                    dayNumberClass;
+
+                number.textContent =
+                    dayNumber;
+
+                numberWrapper.appendChild(
+                    number
+                );
+
+                cell.appendChild(
+                    numberWrapper
+                );
+
+                /*
+                    현재 달이면 일정 표시
+                */
+
+                if (isCurrentMonth) {
+
+                    cell.onclick =
+                        function() {
+                            openModal(
+                                dateStr
+                            );
+                        };
+
+                    const content =
+                        document.createElement(
+                            'div'
+                        );
+
+                    content.className =
+                        'day-content';
+
+                    if (
+                        dayData.text
+                    ) {
+
+                        const scheduleGroup =
+                            createScheduleHTML(
+                                dayData.text,
+                                dayData.color
+                            );
+
+                        content.appendChild(
+                            scheduleGroup
+                        );
+
+                    }
+
+                    cell.appendChild(
+                        content
+                    );
+
+                }
+
+                daysContainer.appendChild(
+                    cell
+                );
+
+            }
 
         }
 
-
         /* =========================================================
-           일정 글자 크기 자동
-        ========================================================= */
+           일정 텍스트 + 치지직 이모지 변환
+        ========================================================== */
 
-        function getTextSizeClass(text) {
-
-            /*
-             * 코드 길이를 기준으로
-             * 긴 일정은 작게 표시합니다.
-             */
-
-            if (text.length > 42) {
-                return 'micro';
-            }
-
-            if (text.length > 30) {
-                return 'tiny';
-            }
-
-            if (text.length > 20) {
-                return 'compact';
-            }
-
-            return '';
-
-        }
-
-
-        /* =========================================================
-           이모지 코드 파싱
-        ========================================================= */
-
-        function parseEmojiText(
+        function createScheduleHTML(
             text,
             color
         ) {
 
+            const group =
+                document.createElement(
+                    'div'
+                );
+
+            group.className =
+                'schedule-group';
+
+            group.style.color =
+                color || '#333333';
+
             /*
-             * {sub_01}
-             * {ag_01}
-             * {mlb_01}
-             * 같은 형식을 찾습니다.
-             */
+                {sub_01}
+                {ag_01}
+                {mlb_01}
 
-            const regex =
+                같은 코드 찾기
+            */
+
+            const tokenRegex =
                 /\{([a-zA-Z0-9_]+)\}/g;
-
-
-            let result = '';
 
             let lastIndex = 0;
 
             let match;
 
-
             while (
-                (match =
-                    regex.exec(text))
-                !== null
+                (
+                    match =
+                    tokenRegex.exec(text)
+                ) !== null
             ) {
 
                 /*
-                 * 이모지 앞쪽 일반 텍스트
-                 */
-                result +=
-                    escapeHtml(
-                        text.slice(
+                    이모지 코드 앞 일반 텍스트
+                */
+
+                if (
+                    match.index >
+                    lastIndex
+                ) {
+
+                    const plainText =
+                        text.substring(
                             lastIndex,
                             match.index
+                        );
+
+                    group.appendChild(
+                        document.createTextNode(
+                            plainText
                         )
                     );
 
+                }
 
                 const code =
                     match[1];
 
-
                 /*
-                 * 실제 이모지 찾기
-                 */
-                const emoji =
-                    findEmoji(code);
+                    실제 이모지 검색
+                */
 
+                const emoji =
+                    findEmojiByCode(
+                        code
+                    );
 
                 if (emoji) {
 
-                    /*
-                     * 이모지를 별도의 이미지가 아닌
-                     * 같은 inline 그룹으로 묶습니다.
-                     */
-                    result += `
-                        <span
-                            class="emoji-group"
-                            title="{${escapeHtml(code)}}"
-                        >
-                            <img
-                                class="inline-emoji"
-                                src="${escapeHtml(emoji.image)}"
-                                alt="{${escapeHtml(code)}}"
-                            >
-                        </span>
-                    `;
+                    const emojiSpan =
+                        document.createElement(
+                            'span'
+                        );
+
+                    emojiSpan.className =
+                        'inline-emoji-group';
+
+                    const img =
+                        document.createElement(
+                            'img'
+                        );
+
+                    img.className =
+                        'calendar-emoji';
+
+                    img.src =
+                        emoji.image;
+
+                    img.alt =
+                        `{${emoji.name}}`;
+
+                    img.title =
+                        `{${emoji.name}}`;
+
+                    img.crossOrigin =
+                        'anonymous';
+
+                    emojiSpan.appendChild(
+                        img
+                    );
+
+                    group.appendChild(
+                        emojiSpan
+                    );
 
                 } else {
 
                     /*
-                     * API에 없는 코드라면
-                     * 코드 자체를 표시합니다.
-                     */
-                    result +=
-                        escapeHtml(
-                            match[0]
+                        API에서 아직 이모지를
+                        찾지 못한 경우 코드 그대로 표시
+                    */
+
+                    const codeText =
+                        document.createTextNode(
+                            `{${code}}`
                         );
+
+                    group.appendChild(
+                        codeText
+                    );
 
                 }
 
-
                 lastIndex =
-                    regex.lastIndex;
+                    tokenRegex.lastIndex;
 
             }
 
-
             /*
-             * 마지막 텍스트
-             */
-            result +=
-                escapeHtml(
-                    text.slice(lastIndex)
+                마지막 일반 텍스트
+            */
+
+            if (
+                lastIndex <
+                text.length
+            ) {
+
+                group.appendChild(
+                    document.createTextNode(
+                        text.substring(
+                            lastIndex
+                        )
+                    )
                 );
 
+            }
 
-            return result;
+            return group;
 
         }
 
+        /* =========================================================
+           이모지 코드 검색
+        ========================================================== */
+
+        function findEmojiByCode(
+            code
+        ) {
+
+            const normalized =
+                String(code)
+                    .replace(
+                        /^\{|\}$/g,
+                        ''
+                    )
+                    .toLowerCase();
+
+            return emojiList.find(
+                emoji =>
+                    emoji.name.toLowerCase() ===
+                    normalized
+            ) || null;
+
+        }
 
         /* =========================================================
-           이모지 찾기
-        ========================================================= */
+           월 변경
+        ========================================================== */
 
-        function findEmoji(code) {
+        function changeMonth(
+            delta
+        ) {
 
-            return emojis.find(
-                emoji =>
-                    emoji.code === code
+            currentDate.setMonth(
+                currentDate.getMonth() +
+                delta
+            );
+
+            renderCalendar();
+
+        }
+
+        /* =========================================================
+           오늘로 이동
+        ========================================================== */
+
+        function goToToday() {
+
+            currentDate =
+                new Date();
+
+            renderCalendar();
+
+        }
+
+        /* =========================================================
+           일정 모달 열기
+        ========================================================== */
+
+        function openModal(
+            dateStr
+        ) {
+
+            editingDateStr =
+                dateStr;
+
+            const data =
+                calendarData[dateStr] || {
+                    text: '',
+                    color: '#333333',
+                    emoji: null
+                };
+
+            const [
+                year,
+                month,
+                day
+            ] =
+                dateStr.split('-');
+
+            document.getElementById(
+                'modal-date-title'
+            ).textContent =
+                `${year}년 ${parseInt(
+                    month
+                )}월 ${parseInt(
+                    day
+                )}일`;
+
+            document.getElementById(
+                'modal-text'
+            ).value =
+                data.text || '';
+
+            document.getElementById(
+                'modal-color'
+            ).value =
+                data.color ||
+                '#333333';
+
+            /*
+                기존 선택 이모지
+            */
+
+            selectedEmoji =
+                data.emoji || null;
+
+            updateSelectedEmojiUI();
+
+            document.getElementById(
+                'edit-modal'
+            ).classList.remove(
+                'hidden'
             );
 
         }
 
+        /* =========================================================
+           모달 닫기
+        ========================================================== */
+
+        function closeModal() {
+
+            document.getElementById(
+                'edit-modal'
+            ).classList.add(
+                'hidden'
+            );
+
+            editingDateStr =
+                null;
+
+            selectedEmoji =
+                null;
+
+            updateSelectedEmojiUI();
+
+        }
 
         /* =========================================================
-           치지직 이모지 API 로딩
-        ========================================================= */
+           일정 저장
+        ========================================================== */
+
+        function saveDayData() {
+
+            if (
+                !editingDateStr
+            ) {
+                return;
+            }
+
+            const text =
+                document.getElementById(
+                    'modal-text'
+                ).value.trim();
+
+            const color =
+                document.getElementById(
+                    'modal-color'
+                ).value;
+
+            /*
+                아무것도 없으면 삭제
+            */
+
+            if (
+                !text
+            ) {
+
+                delete calendarData[
+                    editingDateStr
+                ];
+
+            } else {
+
+                calendarData[
+                    editingDateStr
+                ] = {
+
+                    text:
+                        text,
+
+                    color:
+                        color,
+
+                    emoji:
+                        selectedEmoji
+                        ? {
+                            code:
+                                selectedEmoji.code,
+
+                            name:
+                                selectedEmoji.name,
+
+                            image:
+                                selectedEmoji.image,
+
+                            pack:
+                                selectedEmoji.pack
+                        }
+                        : null
+
+                };
+
+            }
+
+            saveAllData();
+
+            closeModal();
+
+            renderCalendar();
+
+        }
+
+        /* =========================================================
+           치지직 이모지 API 불러오기
+           
+           실제 API 구조:
+
+           emojis: {
+               "{:ag_1:}": {
+                   "ag_1":
+                   "https://..."
+               }
+           }
+
+           중첩 객체이므로 2단계로 파싱합니다.
+        ========================================================== */
 
         async function loadEmojis() {
-
-            const countLabel =
-                document.getElementById(
-                    'emoji-count-label'
-                );
 
             const board =
                 document.getElementById(
                     'emoji-board'
                 );
 
+            board.innerHTML = `
+                <div class="emoji-loading">
+                    치지직 이모지를 불러오는 중...
+                </div>
+            `;
 
             try {
-
-                countLabel.textContent =
-                    '불러오는 중...';
-
 
                 const response =
                     await fetch(
@@ -2262,8 +2830,9 @@
                         }
                     );
 
-
-                if (!response.ok) {
+                if (
+                    !response.ok
+                ) {
 
                     throw new Error(
                         `HTTP ${response.status}`
@@ -2271,46 +2840,37 @@
 
                 }
 
-
                 const json =
                     await response.json();
-
-
-                /*
-                 * 실제 API 구조:
-                 *
-                 * {
-                 *   "emojis": {
-                 *      "{:ag_1:}": {
-                 *          "ag_1":
-                 *          "https://..."
-                 *      }
-                 *   }
-                 * }
-                 */
 
                 const source =
                     json.emojis || {};
 
-
-                const loaded = [];
-
+                const result = [];
 
                 /*
-                 * 중복 방지
-                 */
+                    중복 방지
+                */
+
                 const seen =
                     new Set();
 
+                /*
+                    첫 번째 객체
+                */
 
                 Object.entries(
                     source
                 ).forEach(
-                    ([outerCode, emojiData]) => {
+                    ([
+                        outerCode,
+                        emojiData
+                    ]) => {
 
                         /*
-                         * API 값이 객체인지 확인
-                         */
+                            실제 이미지 객체
+                        */
+
                         if (
                             !emojiData ||
                             typeof emojiData !==
@@ -2319,11 +2879,17 @@
                             return;
                         }
 
+                        /*
+                            두 번째 객체
+                        */
 
                         Object.entries(
                             emojiData
                         ).forEach(
-                            ([name, image]) => {
+                            ([
+                                name,
+                                image
+                            ]) => {
 
                                 if (
                                     typeof image !==
@@ -2331,7 +2897,6 @@
                                 ) {
                                     return;
                                 }
-
 
                                 if (
                                     !image.startsWith(
@@ -2341,61 +2906,56 @@
                                     return;
                                 }
 
-
                                 /*
-                                 * API 이름에서
-                                 * 팩 이름 추출
-                                 *
-                                 * sub_01
-                                 * ->
-                                 * sub
-                                 */
-                                const parts =
-                                    name.split('_');
+                                    중복 방지
+                                */
 
-
-                                const pack =
-                                    parts[0] ||
-                                    '기타';
-
-
-                                /*
-                                 * 코드에는
-                                 * { }를 넣지 않습니다.
-                                 *
-                                 * 저장:
-                                 * sub_01
-                                 *
-                                 * 표시:
-                                 * {sub_01}
-                                 */
-                                const code =
-                                    name;
-
+                                const key =
+                                    `${name}|${image}`;
 
                                 if (
-                                    seen.has(code)
+                                    seen.has(key)
                                 ) {
                                     return;
                                 }
 
+                                seen.add(key);
 
-                                seen.add(code);
+                                /*
+                                    pack 추출
 
+                                    ag_01
+                                    sub_01
+                                    mlb_01
 
-                                loaded.push({
+                                    -> ag
+                                    -> sub
+                                    -> mlb
+                                */
 
-                                    code,
+                                const pack =
+                                    name.includes('_')
+                                        ? name.split(
+                                            '_'
+                                        )[0]
+                                        : name;
 
-                                    name,
+                                result.push({
 
-                                    image,
+                                    code:
+                                        `{${name}}`,
 
-                                    pack,
+                                    name:
+                                        name,
+
+                                    image:
+                                        image,
+
+                                    pack:
+                                        pack,
 
                                     search:
-                                        `${name} ${pack}`
-                                            .toLowerCase()
+                                        name.toLowerCase()
 
                                 });
 
@@ -2405,61 +2965,47 @@
                     }
                 );
 
-
                 /*
-                 * 이름 순 정렬
-                 */
-                loaded.sort(
+                    이름순 정렬
+                */
+
+                result.sort(
                     (a, b) =>
                         a.name.localeCompare(
                             b.name,
-                            undefined,
-                            {
-                                numeric: true
-                            }
+                            'ko'
                         )
                 );
 
+                emojiList =
+                    result;
 
-                emojis = loaded;
-
-
-                countLabel.textContent =
-                    `${emojis.length}개`;
-
+                /*
+                    팩 목록
+                */
 
                 buildEmojiPackList();
 
+                /*
+                    이모지 표시
+                */
+
                 renderEmojiBoard();
 
-
                 console.log(
-                    `치지직 이모지 ${emojis.length}개 로드 완료`
+                    `치지직 이모지 ${emojiList.length}개 로드 완료`
                 );
-
 
             } catch (error) {
 
                 console.error(
-                    '치지직 이모지 로딩 실패:',
+                    '치지직 이모지 로드 실패:',
                     error
                 );
 
-
-                countLabel.textContent =
-                    '로드 실패';
-
-
                 board.innerHTML = `
-                    <div
-                        class="
-                            col-span-full
-                            text-center
-                            text-red-400
-                            py-8
-                        "
-                    >
-                        이모지를 불러오지 못했습니다.<br>
+                    <div class="emoji-empty">
+                        치지직 이모지를 불러오지 못했습니다.<br>
                         <span class="text-xs">
                             ${escapeHtml(
                                 error.message
@@ -2472,10 +3018,9 @@
 
         }
 
-
         /* =========================================================
-           이모지팩 목록
-        ========================================================= */
+           이모지팩 목록 생성
+        ========================================================== */
 
         function buildEmojiPackList() {
 
@@ -2484,50 +3029,65 @@
                     'emoji-pack'
                 );
 
+            select.innerHTML = '';
 
-            const counts =
+            /*
+                전체
+            */
+
+            const allOption =
+                document.createElement(
+                    'option'
+                );
+
+            allOption.value = '';
+
+            allOption.textContent =
+                `전체 이모지 (${emojiList.length})`;
+
+            select.appendChild(
+                allOption
+            );
+
+            /*
+                팩별 개수
+            */
+
+            const packMap =
                 new Map();
 
-
-            emojis.forEach(
+            emojiList.forEach(
                 emoji => {
 
-                    counts.set(
+                    const count =
+                        packMap.get(
+                            emoji.pack
+                        ) || 0;
+
+                    packMap.set(
                         emoji.pack,
-                        (
-                            counts.get(
-                                emoji.pack
-                            ) || 0
-                        ) + 1
+                        count + 1
                     );
 
                 }
             );
 
+            emojiPacks =
+                Array.from(
+                    packMap.entries()
+                ).sort(
+                    (a, b) =>
+                        a[0].localeCompare(
+                            b[0],
+                            'ko'
+                        )
+                );
 
-            const packs =
-                [...counts.entries()]
-                    .sort(
-                        (a, b) =>
-                            a[0].localeCompare(
-                                b[0],
-                                undefined,
-                                {
-                                    numeric: true
-                                }
-                            )
-                    );
-
-
-            select.innerHTML = `
-                <option value="">
-                    전체 이모지 (${emojis.length})
-                </option>
-            `;
-
-
-            packs.forEach(
-                ([pack, count]) => {
+            emojiPacks.forEach(
+                ([
+                    pack,
+                    count
+                ]) => {
 
                     const option =
                         document.createElement(
@@ -2549,10 +3109,9 @@
 
         }
 
-
         /* =========================================================
-           이모지 보드
-        ========================================================= */
+           이모지 보드 렌더링
+        ========================================================== */
 
         function renderEmojiBoard() {
 
@@ -2561,167 +3120,199 @@
                     'emoji-board'
                 );
 
-
-            const search =
-                document.getElementById(
-                    'emoji-search'
-                ).value
-                    .trim()
-                    .toLowerCase();
-
-
-            const pack =
-                document.getElementById(
-                    'emoji-pack'
-                ).value;
-
-
-            let filtered =
-                emojis.filter(
-                    emoji => {
-
-                        const matchesSearch =
-                            !search ||
-                            emoji.search.includes(
-                                search
-                            );
-
-                        const matchesPack =
-                            !pack ||
-                            emoji.pack === pack;
-
-                        return (
-                            matchesSearch &&
-                            matchesPack
-                        );
-
-                    }
-                );
-
-
-            if (!filtered.length) {
+            if (
+                !emojiList.length
+            ) {
 
                 board.innerHTML = `
-                    <div
-                        class="
-                            col-span-full
-                            text-center
-                            text-gray-400
-                            py-8
-                        "
-                    >
+                    <div class="emoji-empty">
                         이모지가 없습니다.
                     </div>
                 `;
 
                 return;
+
             }
 
+            const searchInput =
+                document.getElementById(
+                    'emoji-search'
+                );
 
-            board.innerHTML =
-                filtered
-                    .map(
-                        emoji => `
-                            <button
-                                type="button"
-                                class="
-                                    emoji-button
-                                    ${
-                                        selectedEmoji &&
-                                        selectedEmoji.code ===
-                                            emoji.code
-                                            ? 'selected'
-                                            : ''
-                                    }
-                                "
-                                onclick="selectEmoji('${escapeJs(
-                                    emoji.code
-                                )}')"
-                                title="{${escapeHtml(
-                                    emoji.code
-                                )}}"
-                            >
+            const packSelect =
+                document.getElementById(
+                    'emoji-pack'
+                );
 
-                                <img
-                                    src="${escapeHtml(
-                                        emoji.image
-                                    )}"
-                                    alt="{${escapeHtml(
-                                        emoji.code
-                                    )}}"
-                                    loading="lazy"
-                                >
+            const search =
+                (
+                    searchInput?.value ||
+                    ''
+                )
+                .trim()
+                .toLowerCase();
 
-                            </button>
-                        `
-                    )
-                    .join('');
+            const pack =
+                packSelect?.value ||
+                '';
+
+            const filtered =
+                emojiList.filter(
+                    emoji => {
+
+                        const matchSearch =
+                            !search ||
+                            emoji.search.includes(
+                                search
+                            );
+
+                        const matchPack =
+                            !pack ||
+                            emoji.pack === pack;
+
+                        return (
+                            matchSearch &&
+                            matchPack
+                        );
+
+                    }
+                );
+
+            board.innerHTML = '';
+
+            if (
+                !filtered.length
+            ) {
+
+                board.innerHTML = `
+                    <div class="emoji-empty">
+                        검색 결과가 없습니다.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+            filtered.forEach(
+                emoji => {
+
+                    const button =
+                        document.createElement(
+                            'button'
+                        );
+
+                    button.type =
+                        'button';
+
+                    button.className =
+                        'emoji-item';
+
+                    if (
+                        selectedEmoji &&
+                        selectedEmoji.name ===
+                        emoji.name
+                    ) {
+
+                        button.classList.add(
+                            'selected'
+                        );
+
+                    }
+
+                    button.title =
+                        emoji.code;
+
+                    button.onclick =
+                        function() {
+                            selectEmoji(
+                                emoji
+                            );
+                        };
+
+                    const img =
+                        document.createElement(
+                            'img'
+                        );
+
+                    img.src =
+                        emoji.image;
+
+                    img.alt =
+                        emoji.name;
+
+                    img.loading =
+                        'lazy';
+
+                    img.crossOrigin =
+                        'anonymous';
+
+                    button.appendChild(
+                        img
+                    );
+
+                    board.appendChild(
+                        button
+                    );
+
+                }
+            );
 
         }
 
-
         /* =========================================================
            이모지 선택
-        ========================================================= */
+        ========================================================== */
 
-        function selectEmoji(code) {
+        function selectEmoji(
+            emoji
+        ) {
 
-            const emoji =
-                findEmoji(code);
+            selectedEmoji =
+                emoji;
 
-
-            if (!emoji) {
-                return;
-            }
-
-
-            selectedEmoji = emoji;
-
+            updateSelectedEmojiUI();
 
             /*
-             * textarea에 실제로
-             *
-             * {sub_01}
-             *
-             * 형태로 삽입합니다.
-             */
-            insertEmojiCode(
-                `{${emoji.code}}`
-            );
+                현재 커서 위치에
+                {sub_01}
+                같은 형태로 삽입
+            */
 
+            insertEmojiCode(
+                emoji.code
+            );
 
             renderEmojiBoard();
 
         }
 
-
         /* =========================================================
-           textarea에 이모지 코드 삽입
-        ========================================================= */
+           이모지 코드 삽입
+        ========================================================== */
 
-        function insertEmojiCode(code) {
+        function insertEmojiCode(
+            code
+        ) {
 
             const textarea =
                 document.getElementById(
                     'modal-text'
                 );
 
+            if (!textarea) {
+                return;
+            }
 
             const start =
                 textarea.selectionStart;
 
-
             const end =
                 textarea.selectionEnd;
-
 
             const value =
                 textarea.value;
 
-
-            /*
-             * 선택된 부분을 이모지 코드로 교체
-             */
             textarea.value =
                 value.substring(
                     0,
@@ -2732,581 +3323,92 @@
                     end
                 );
 
-
-            /*
-             * 커서를 이모지 코드 뒤로 이동
-             */
-            const newPosition =
-                start + code.length;
-
+            const cursor =
+                start +
+                code.length;
 
             textarea.focus();
 
-
             textarea.setSelectionRange(
-                newPosition,
-                newPosition
+                cursor,
+                cursor
             );
 
         }
 
-
         /* =========================================================
-           일정 모달 열기
-        ========================================================= */
+           선택된 이모지 UI
+        ========================================================== */
 
-        function openModal(dateStr) {
+        function updateSelectedEmojiUI() {
 
-            editingDateStr =
-                dateStr;
-
-
-            const data =
-                calendarData[
-                    dateStr
-                ] || {
-                    text: '',
-                    color: '#333333'
-                };
-
-
-            const [
-                year,
-                month,
-                day
-            ] =
-                dateStr.split('-');
-
-
-            document.getElementById(
-                'modal-date-title'
-            ).textContent =
-                `${year}년 ${parseInt(
-                    month
-                )}월 ${parseInt(
-                    day
-                )}일`;
-
-
-            document.getElementById(
-                'modal-text'
-            ).value =
-                data.text || '';
-
-
-            document.getElementById(
-                'modal-color'
-            ).value =
-                data.color ||
-                '#333333';
-
-
-            selectedEmoji = null;
-
-
-            document.getElementById(
-                'emoji-search'
-            ).value = '';
-
-
-            document.getElementById(
-                'emoji-pack'
-            ).value = '';
-
-
-            renderEmojiBoard();
-
-
-            const modal =
+            const preview =
                 document.getElementById(
-                    'edit-modal'
+                    'selected-emoji-preview'
                 );
 
+            const image =
+                document.getElementById(
+                    'selected-emoji-image'
+                );
 
-            modal.classList.remove(
+            const code =
+                document.getElementById(
+                    'selected-emoji-code'
+                );
+
+            if (
+                !selectedEmoji
+            ) {
+
+                preview.classList.add(
+                    'hidden'
+                );
+
+                image.src =
+                    '';
+
+                code.textContent =
+                    '';
+
+                return;
+
+            }
+
+            preview.classList.remove(
                 'hidden'
             );
 
-            modal.classList.add(
-                'flex'
-            );
+            image.src =
+                selectedEmoji.image;
+
+            code.textContent =
+                selectedEmoji.code;
 
         }
 
-
         /* =========================================================
-           모달 닫기
-        ========================================================= */
+           선택 이모지 제거
+        ========================================================== */
 
-        function closeModal() {
-
-            const modal =
-                document.getElementById(
-                    'edit-modal'
-                );
-
-
-            modal.classList.add(
-                'hidden'
-            );
-
-            modal.classList.remove(
-                'flex'
-            );
-
-
-            editingDateStr =
-                null;
+        function clearSelectedEmoji() {
 
             selectedEmoji =
                 null;
 
-        }
+            updateSelectedEmojiUI();
 
-
-        /* =========================================================
-           일정 저장
-        ========================================================= */
-
-        function saveDayData() {
-
-            if (!editingDateStr) {
-                return;
-            }
-
-
-            const text =
-                document.getElementById(
-                    'modal-text'
-                ).value.trim();
-
-
-            const color =
-                document.getElementById(
-                    'modal-color'
-                ).value;
-
-
-            /*
-             * 내용이 없으면 날짜 데이터를 제거합니다.
-             */
-            if (!text) {
-
-                delete calendarData[
-                    editingDateStr
-                ];
-
-            } else {
-
-                calendarData[
-                    editingDateStr
-                ] = {
-
-                    text,
-
-                    color
-
-                };
-
-            }
-
-
-            saveAllData();
-
-            closeModal();
-
-            renderCalendar();
+            renderEmojiBoard();
 
         }
 
-
         /* =========================================================
-           일정 삭제
-        ========================================================= */
-
-        function deleteDayData() {
-
-            if (!editingDateStr) {
-                return;
-            }
-
-
-            delete calendarData[
-                editingDateStr
-            ];
-
-
-            saveAllData();
-
-            closeModal();
-
-            renderCalendar();
-
-        }
-
-
-        /* =========================================================
-           이전 / 다음 달
-        ========================================================= */
-
-        function changeMonth(delta) {
-
-            currentDate.setMonth(
-                currentDate.getMonth() +
-                delta
-            );
-
-
-            renderCalendar();
-
-        }
-
-
-        /* =========================================================
-           오늘
-        ========================================================= */
-
-        function goToToday() {
-
-            currentDate =
-                new Date();
-
-
-            renderCalendar();
-
-        }
-
-
-        /* =========================================================
-           이미지 저장
-        ========================================================= */
-
-        async function downloadCalendar() {
-
-            const hidden =
-                document.getElementById(
-                    'hidden-capture-container'
-                );
-
-
-            try {
-
-                await document.fonts.ready;
-
-
-                /*
-                 * 현재 캘린더를 복제합니다.
-                 */
-                const source =
-                    document.getElementById(
-                        'capture-area'
-                    );
-
-
-                const clone =
-                    source.cloneNode(
-                        true
-                    );
-
-
-                /*
-                 * 캡처용 paper
-                 */
-                const paper =
-                    clone.querySelector(
-                        '.diary-paper'
-                    );
-
-
-                paper.classList.add(
-                    'capture-paper'
-                );
-
-
-                /*
-                 * 메모 textarea 대신
-                 * 텍스트 렌더링용 div 사용
-                 */
-                const textarea =
-                    clone.querySelector(
-                        '#global-memo'
-                    );
-
-
-                const memoRender =
-                    clone.querySelector(
-                        '#capture-memo-render'
-                    );
-
-
-                const memo =
-                    document.getElementById(
-                        'global-memo'
-                    ).value;
-
-
-                if (textarea) {
-
-                    textarea.style.display =
-                        'none';
-
-                }
-
-
-                if (memoRender) {
-
-                    memoRender.style.display =
-                        'block';
-
-                    memoRender.textContent =
-                        memo ||
-                        '';
-
-                }
-
-
-                hidden.innerHTML =
-                    '';
-
-                hidden.appendChild(
-                    clone
-                );
-
-
-                /*
-                 * 브라우저 렌더링 대기
-                 */
-                await new Promise(
-                    resolve =>
-                        setTimeout(
-                            resolve,
-                            300
-                        )
-                );
-
-
-                /*
-                 * 1480 x 1309 PNG
-                 */
-                const canvas =
-                    await html2canvas(
-                        hidden,
-                        {
-                            width: 1480,
-
-                            height: 1309,
-
-                            windowWidth: 1480,
-
-                            windowHeight: 1309,
-
-                            scale: 1,
-
-                            backgroundColor:
-                                null,
-
-                            useCORS: true,
-
-                            allowTaint: false,
-
-                            logging: false
-                        }
-                    );
-
-
-                const image =
-                    canvas.toDataURL(
-                        'image/png'
-                    );
-
-
-                const link =
-                    document.createElement(
-                        'a'
-                    );
-
-
-                const title =
-                    document.getElementById(
-                        'calendar-title'
-                    ).textContent
-                        .replace(
-                            '.',
-                            '_'
-                        );
-
-
-                link.download =
-                    `다이어리_${title}_1480x1309.png`;
-
-
-                link.href =
-                    image;
-
-
-                link.click();
-
-
-            } catch (error) {
-
-                console.error(
-                    '이미지 저장 실패:',
-                    error
-                );
-
-
-                alert(
-                    '이미지 저장 중 오류가 발생했습니다.'
-                );
-
-            } finally {
-
-                hidden.innerHTML =
-                    '';
-
-            }
-
-        }
-
-
-        /* =========================================================
-           모바일 스와이프
-        ========================================================= */
-
-        let touchStartX = 0;
-
-        let touchStartY = 0;
-
-
-        function initSwipe() {
-
-            document.addEventListener(
-                'touchstart',
-                event => {
-
-                    if (
-                        !event.changedTouches
-                            .length
-                    ) {
-                        return;
-                    }
-
-
-                    touchStartX =
-                        event
-                            .changedTouches[0]
-                            .screenX;
-
-
-                    touchStartY =
-                        event
-                            .changedTouches[0]
-                            .screenY;
-
-                },
-                {
-                    passive: true
-                }
-            );
-
-
-            document.addEventListener(
-                'touchend',
-                event => {
-
-                    if (
-                        !event.changedTouches
-                            .length
-                    ) {
-                        return;
-                    }
-
-
-                    const endX =
-                        event
-                            .changedTouches[0]
-                            .screenX;
-
-
-                    const endY =
-                        event
-                            .changedTouches[0]
-                            .screenY;
-
-
-                    const diffX =
-                        endX -
-                        touchStartX;
-
-
-                    const diffY =
-                        endY -
-                        touchStartY;
-
-
-                    /*
-                     * 세로 스크롤이면 무시
-                     */
-                    if (
-                        Math.abs(diffY) >
-                        Math.abs(diffX)
-                    ) {
-                        return;
-                    }
-
-
-                    if (
-                        Math.abs(diffX) <
-                        70
-                    ) {
-                        return;
-                    }
-
-
-                    /*
-                     * 모달이 열려 있으면
-                     * 달을 넘기지 않습니다.
-                     */
-                    if (
-                        !document
-                            .getElementById(
-                                'edit-modal'
-                            )
-                            .classList
-                            .contains(
-                                'hidden'
-                            )
-                    ) {
-                        return;
-                    }
-
-
-                    if (
-                        diffX < 0
-                    ) {
-
-                        changeMonth(1);
-
-                    } else {
-
-                        changeMonth(-1);
-
-                    }
-
-                },
-                {
-                    passive: true
-                }
-            );
-
-        }
-
-
-        /* =========================================================
-           HTML 특수문자 처리
-        ========================================================= */
-
-        function escapeHtml(value) {
+           HTML 이스케이프
+        ========================================================== */
+
+        function escapeHtml(
+            value
+        ) {
 
             return String(value)
                 .replace(
@@ -3332,78 +3434,512 @@
 
         }
 
-
         /* =========================================================
-           JavaScript 문자열용 이스케이프
-        ========================================================= */
+           모바일 메뉴
+        ========================================================== */
 
-        function escapeJs(value) {
+        function toggleLeftMenu() {
 
-            return String(value)
-                .replace(
-                    /\\/g,
-                    '\\\\'
-                )
-                .replace(
-                    /'/g,
-                    "\\'"
-                )
-                .replace(
-                    /"/g,
-                    '\\"'
+            const drawer =
+                document.getElementById(
+                    'left-drawer'
                 );
+
+            const backdrop =
+                document.getElementById(
+                    'drawer-backdrop'
+                );
+
+            if (
+                drawer.classList.contains(
+                    '-translate-x-full'
+                )
+            ) {
+
+                closeAllDrawers();
+
+                drawer.classList.remove(
+                    '-translate-x-full'
+                );
+
+                backdrop.classList.remove(
+                    'hidden'
+                );
+
+            } else {
+
+                drawer.classList.add(
+                    '-translate-x-full'
+                );
+
+                backdrop.classList.add(
+                    'hidden'
+                );
+
+            }
 
         }
 
+        /* =========================================================
+           모바일 메모 메뉴
+        ========================================================== */
+
+        function toggleRightMenu() {
+
+            const drawer =
+                document.getElementById(
+                    'right-drawer'
+                );
+
+            const backdrop =
+                document.getElementById(
+                    'drawer-backdrop'
+                );
+
+            if (
+                drawer.classList.contains(
+                    'translate-x-full'
+                )
+            ) {
+
+                closeAllDrawers();
+
+                drawer.classList.remove(
+                    'translate-x-full'
+                );
+
+                backdrop.classList.remove(
+                    'hidden'
+                );
+
+                /*
+                    열 때 메모 동기화
+                */
+
+                const mobileMemo =
+                    document.getElementById(
+                        'mobile-memo'
+                    );
+
+                mobileMemo.value =
+                    globalMemo;
+
+            } else {
+
+                drawer.classList.add(
+                    'translate-x-full'
+                );
+
+                backdrop.classList.add(
+                    'hidden'
+                );
+
+            }
+
+        }
 
         /* =========================================================
-           페이지 시작
-        ========================================================= */
+           메뉴 닫기
+        ========================================================== */
+
+        function closeAllDrawers() {
+
+            document.getElementById(
+                'left-drawer'
+            ).classList.add(
+                '-translate-x-full'
+            );
+
+            document.getElementById(
+                'right-drawer'
+            ).classList.add(
+                'translate-x-full'
+            );
+
+            document.getElementById(
+                'drawer-backdrop'
+            ).classList.add(
+                'hidden'
+            );
+
+        }
+
+        /* =========================================================
+           모바일 스와이프
+        ========================================================== */
+
+        let touchStartX = 0;
+
+        let touchStartY = 0;
+
+        let touchEndX = 0;
+
+        let touchEndY = 0;
+
+        const SWIPE_THRESHOLD =
+            60;
+
+        function initSwipeGestures() {
+
+            document.addEventListener(
+                'touchstart',
+                event => {
+
+                    touchStartX =
+                        event.changedTouches[0]
+                            .screenX;
+
+                    touchStartY =
+                        event.changedTouches[0]
+                            .screenY;
+
+                },
+                {
+                    passive: true
+                }
+            );
+
+            document.addEventListener(
+                'touchend',
+                event => {
+
+                    touchEndX =
+                        event.changedTouches[0]
+                            .screenX;
+
+                    touchEndY =
+                        event.changedTouches[0]
+                            .screenY;
+
+                    handleSwipe();
+
+                },
+                {
+                    passive: true
+                }
+            );
+
+        }
+
+        function handleSwipe() {
+
+            const modal =
+                document.getElementById(
+                    'edit-modal'
+                );
+
+            if (
+                !modal.classList.contains(
+                    'hidden'
+                )
+            ) {
+                return;
+            }
+
+            const diffX =
+                touchEndX -
+                touchStartX;
+
+            const diffY =
+                touchEndY -
+                touchStartY;
+
+            if (
+                Math.abs(diffY) >
+                Math.abs(diffX)
+            ) {
+                return;
+            }
+
+            const leftDrawer =
+                document.getElementById(
+                    'left-drawer'
+                );
+
+            const rightDrawer =
+                document.getElementById(
+                    'right-drawer'
+                );
+
+            const isLeftOpen =
+                !leftDrawer.classList.contains(
+                    '-translate-x-full'
+                );
+
+            const isRightOpen =
+                !rightDrawer.classList.contains(
+                    'translate-x-full'
+                );
+
+            if (
+                diffX >
+                SWIPE_THRESHOLD
+            ) {
+
+                if (
+                    isRightOpen
+                ) {
+
+                    toggleRightMenu();
+
+                } else if (
+                    !isLeftOpen
+                ) {
+
+                    toggleLeftMenu();
+
+                }
+
+            } else if (
+                diffX <
+                -SWIPE_THRESHOLD
+            ) {
+
+                if (
+                    isLeftOpen
+                ) {
+
+                    toggleLeftMenu();
+
+                } else if (
+                    !isRightOpen
+                ) {
+
+                    toggleRightMenu();
+
+                }
+
+            }
+
+        }
+
+        /* =========================================================
+           이미지 저장
+        ========================================================== */
+
+        async function downloadCalendar() {
+
+            const liveArea =
+                document.getElementById(
+                    'capture-area'
+                );
+
+            const hiddenContainer =
+                document.getElementById(
+                    'hidden-capture-container'
+                );
+
+            try {
+
+                /*
+                    폰트가 모두 로드될 때까지 기다림
+                */
+
+                await document.fonts.ready;
+
+                /*
+                    기존 캘린더 복사
+                */
+
+                const clone =
+                    liveArea.cloneNode(
+                        true
+                    );
+
+                /*
+                    캡처용 스타일
+                */
+
+                clone.style.width =
+                    '1400px';
+
+                clone.style.height =
+                    '1229px';
+
+                clone.style.margin =
+                    '0';
+
+                /*
+                    textarea는 캡처할 수 없으므로
+                    텍스트 표시용 div로 교체
+                */
+
+                const textarea =
+                    clone.querySelector(
+                        '#global-memo'
+                    );
+
+                const memoRender =
+                    clone.querySelector(
+                        '#global-memo-render'
+                    );
+
+                if (
+                    textarea
+                ) {
+
+                    textarea.style.display =
+                        'none';
+
+                }
+
+                if (
+                    memoRender
+                ) {
+
+                    memoRender.classList.remove(
+                        'hidden'
+                    );
+
+                    memoRender.textContent =
+                        globalMemo ||
+                        '';
+
+                }
+
+                /*
+                    기존 hidden 상태 제거
+                */
+
+                const memo =
+                    clone.querySelector(
+                        '.desktop-memo'
+                    );
+
+                if (
+                    memo
+                ) {
+
+                    memo.classList.remove(
+                        'hidden'
+                    );
+
+                    memo.style.display =
+                        'flex';
+
+                }
+
+                /*
+                    캡처 영역 초기화
+                */
+
+                hiddenContainer.innerHTML =
+                    '';
+
+                hiddenContainer.appendChild(
+                    clone
+                );
+
+                /*
+                    브라우저 렌더링 대기
+                */
+
+                await new Promise(
+                    resolve =>
+                        setTimeout(
+                            resolve,
+                            300
+                        )
+                );
+
+                /*
+                    html2canvas
+                */
+
+                const canvas =
+                    await html2canvas(
+                        hiddenContainer,
+                        {
+
+                            width:
+                                1480,
+
+                            height:
+                                1309,
+
+                            windowWidth:
+                                1480,
+
+                            windowHeight:
+                                1309,
+
+                            scale:
+                                1,
+
+                            backgroundColor:
+                                null,
+
+                            useCORS:
+                                true,
+
+                            allowTaint:
+                                false,
+
+                            logging:
+                                false
+
+                        }
+                    );
+
+                const image =
+                    canvas.toDataURL(
+                        'image/png'
+                    );
+
+                const link =
+                    document.createElement(
+                        'a'
+                    );
+
+                const title =
+                    document.getElementById(
+                        'calendar-title'
+                    ).textContent
+                        .replace(
+                            '.',
+                            '_'
+                        );
+
+                link.download =
+                    `다이어리_${title}.png`;
+
+                link.href =
+                    image;
+
+                link.click();
+
+            } catch (
+                error
+            ) {
+
+                console.error(
+                    '이미지 저장 실패:',
+                    error
+                );
+
+                alert(
+                    '이미지 저장 중 오류가 발생했습니다.'
+                );
+
+            } finally {
+
+                hiddenContainer.innerHTML =
+                    '';
+
+            }
+
+        }
+
+        /* =========================================================
+           시작
+        ========================================================== */
 
         window.addEventListener(
             'load',
             init
         );
 
-
-        /* =========================================================
-           ESC로 모달 닫기
-        ========================================================= */
-
-        document.addEventListener(
-            'keydown',
-            event => {
-
-                if (
-                    event.key !==
-                    'Escape'
-                ) {
-                    return;
-                }
-
-
-                const modal =
-                    document.getElementById(
-                        'edit-modal'
-                    );
-
-
-                if (
-                    !modal.classList
-                        .contains(
-                            'hidden'
-                        )
-                ) {
-
-                    closeModal();
-
-                }
-
-            }
-        );
-
     </script>
 
 </body>
-
 </html>
