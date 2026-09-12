@@ -689,27 +689,25 @@
             const liveArea = document.getElementById('capture-area');
             const hiddenContainer = document.getElementById('hidden-capture-container');
             
-            // 저장 시 PC 메모장과 모바일 메모장 내용 중 작성된 것을 가져옵니다.
             let memoText = document.getElementById('global-memo').value;
             if (!memoText && document.getElementById('mobile-memo')) {
                 memoText = document.getElementById('mobile-memo').value;
             }
             
             try {
-                // 1. 화면 밖에 있는 숨겨진 컨테이너 켜기
+                // 폰트가 완벽히 로드될 때까지 강제 대기 (글씨체 풀림 방지 핵심 로직)
+                await document.fonts.ready;
+
                 hiddenContainer.style.display = 'flex';
 
-                // 2. 현재 달력을 통째로 복제
                 const clone = liveArea.cloneNode(true);
                 clone.id = 'cloned-capture-area';
                 clone.className = 'w-full h-full'; 
                 
-                // 3. 복제본 내 텍스트 메모 동기화
                 const textarea = clone.querySelector('#global-memo');
                 const renderDiv = clone.querySelector('#global-memo-render');
                 const desktopMemo = clone.querySelector('.desktop-memo');
                 
-                // 모바일에서 캡처하더라도 PC용 하단 메모장이 무조건 표시되도록 설정
                 if (desktopMemo) {
                     desktopMemo.classList.remove('hidden', 'md:flex');
                     desktopMemo.style.display = 'flex';
@@ -722,14 +720,12 @@
                 if(textarea) textarea.style.display = 'none';
                 if(renderDiv) renderDiv.classList.remove('hidden');
 
-                // 4. 숨겨진 영역에 1480x1309 크기로 복제본 조립
                 hiddenContainer.innerHTML = '';
                 hiddenContainer.appendChild(clone);
 
-                // 5. CSS Flexbox 레이아웃이 꽉 차게 계산될 시간 0.3초 대기
-                await new Promise(r => setTimeout(r, 300));
+                // CSS 렌더링을 위한 대기 시간을 약간 늘림
+                await new Promise(r => setTimeout(r, 400));
 
-                // 6. html2canvas로 캡처! (투명 배경 지원)
                 const canvas = await html2canvas(hiddenContainer, {
                     width: 1480,
                     height: 1309,
@@ -741,7 +737,6 @@
                     useCORS: true 
                 });
 
-                // PNG 다운로드 트리거
                 const image = canvas.toDataURL("image/png");
                 const link = document.createElement('a');
 
@@ -754,7 +749,6 @@
                 console.error("Capture failed:", error);
                 alert("이미지 저장 중 오류가 발생했습니다.");
             } finally {
-                // 7. 흔적 지우기
                 hiddenContainer.style.display = 'none';
                 hiddenContainer.innerHTML = '';
             }
