@@ -37,7 +37,7 @@
     <style>
         body {
             background-color: #e5e7eb; 
-            overflow-x: hidden; /* 좌우 스와이프 시 화면 밀림 방지 */
+            overflow-x: hidden;
         }
 
         /* ------------------ 캘린더 기본 스타일 ------------------ */
@@ -65,7 +65,7 @@
             border-bottom: 1px solid rgba(169, 68, 66, 0.2);
             border-right: 1px solid rgba(169, 68, 66, 0.2);
             box-sizing: border-box; 
-            min-height: 100px; /* 모바일을 위해 기본은 약간 작게 */
+            min-height: 100px;
             position: relative;
             background-color: white;
             transition: background-color 0.2s;
@@ -112,7 +112,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-        /* ------------------ 백그라운드 캡처 전용 스타일 (1480x1309 완벽 비율 & 투명) ------------------ */
+        /* ------------------ 백그라운드 캡처 전용 스타일 (1480x1309) ------------------ */
         #hidden-capture-container {
             padding: 40px !important;
             background-color: transparent !important;
@@ -122,39 +122,34 @@
         }
         #hidden-capture-container .diary-paper {
             width: 1400px !important; 
-            height: 1229px !important; /* 1309 - 80 */
+            height: 1229px !important; 
             display: flex !important;
             flex-direction: column !important;
             flex: none !important;
             margin: 0 !important; 
             padding: 60px 50px 50px 50px !important;
             border-radius: 24px !important; 
-            /* rgba 반투명을 쓰면 캡처 시 까맣게 타는 현상 발생 -> 100% 불투명한 동일 색상 헥스코드로 대체 */
             border: 2px solid #EDD9D9 !important; 
             background-color: #FAF8F5 !important;
-            box-shadow: none !important; /* 투명 배경 캡처 시 가장자리 까만 그림자 띠 제거 */
+            box-shadow: none !important; 
         }
         
-        /* 캡처 시 스프링 크기 최적화 */
         #hidden-capture-container .spring-wrapper { top: -25px !important; }
         #hidden-capture-container .spring { width: 20px !important; height: 50px !important; border-radius: 10px !important; box-shadow: 2px 3px 5px rgba(0,0,0,0.1) !important; }
         #hidden-capture-container .spring::after { width: 16px !important; height: 16px !important; bottom: -8px !important; left: 2px !important; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.5) !important; }
         
-        /* 캡처 시 글자색 100% 강제 (색상 탁해짐 방지) */
         #hidden-capture-container .text-diary-sun { color: #D9534F !important; }
         #hidden-capture-container .text-diary-sat { color: #5BC0DE !important; }
         #hidden-capture-container .text-diary-text { color: #333333 !important; }
         #hidden-capture-container .text-diary-line { color: #A94442 !important; }
 
-        /* 캡처 시 폰트 및 간격 조정 */
         #hidden-capture-container .mb-4, #hidden-capture-container .mb-6 { margin-bottom: 25px !important; }
         #hidden-capture-container .text-3xl, #hidden-capture-container .md\:text-5xl { font-size: 56px !important; line-height: 1 !important; color: #A94442 !important; }
         #hidden-capture-container #calendar-title { font-size: 52px !important; color: #A94442 !important; }
         
-        /* 캡처 시 캘린더 격자 */
         #hidden-capture-container .calendar-grid {
             flex: 1 1 0 !important;
-            border: 3px solid #A94442 !important; /* 진하고 선명한 테두리 */
+            border: 3px solid #A94442 !important; 
             border-radius: 12px !important;
             background-color: white !important;
             overflow: hidden !important;
@@ -166,7 +161,7 @@
             font-size: 32px !important;
             padding: 16px 0 !important;
             border-bottom: 3px solid #A94442 !important;
-            border-right: 1px solid #EDD9D9 !important; /* rgba 대신 단색 */
+            border-right: 1px solid #EDD9D9 !important; 
             background-color: #FDF4F5 !important;
         }
         #hidden-capture-container .grid-cols-7 > div.calendar-header-cell:last-child { border-right: none !important; }
@@ -179,8 +174,8 @@
             background-color: white !important;
         }
         #hidden-capture-container .calendar-cell {
-            border-bottom: 1px solid #EDD9D9 !important; /* rgba 대신 단색 */
-            border-right: 1px solid #EDD9D9 !important; /* rgba 대신 단색 */
+            border-bottom: 1px solid #EDD9D9 !important; 
+            border-right: 1px solid #EDD9D9 !important; 
             padding: 16px !important;
             height: 100% !important;
             display: flex !important; 
@@ -188,37 +183,40 @@
             background-color: white !important;
         }
         
-        /* 캡처 시 셀 내부 텍스트 및 이미지 큼직하게 키우기 */
         #hidden-capture-container .day-number {
             font-size: 32px !important;
             margin-bottom: 8px !important;
             font-weight: 700 !important;
         }
+        
+        /* 캡처 시 내부 콘텐츠 레이아웃 버그 수정 */
         #hidden-capture-container .day-content {
-            gap: 12px !important;
+            gap: 8px !important;
             flex: 1 !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
             justify-content: flex-start !important;
+            overflow: visible !important; /* 강제 잘림 방지 */
         }
         #hidden-capture-container .day-img { 
-            max-height: 120px !important; 
+            max-height: 90px !important; /* 이미지가 너무 커서 글자를 밀어내지 않도록 조정 */
             max-width: 95% !important;
             width: auto !important;
             height: auto !important;
-            object-fit: unset !important; /* 블랙박스 오류 방지를 위해 강제 해제 */
+            object-fit: unset !important;
             display: block !important;
         }
         #hidden-capture-container .schedule-text { 
-            font-size: 46px !important; /* 텍스트 크기 확대 및 강제 고정 */
-            line-height: 1.2 !important; 
+            font-size: 28px !important; /* 다중 줄 바꿈 시 잘리지 않도록 최적화된 폰트 크기 */
+            line-height: 1.3 !important; 
             width: 100% !important;
             text-align: center !important;
-            font-family: 'Nanum Pen Script', cursive !important; /* 캡처 시 폰트 풀림 방지 */
+            font-family: 'Nanum Pen Script', cursive !important; 
+            display: block !important; /* html2canvas 줄바꿈 버그 해결의 핵심 */
+            word-break: keep-all !important;
         }
         
-        /* 캡처 시 메모 영역 */
         #hidden-capture-container .desktop-memo { 
             display: flex !important; flex-direction: column !important;
             margin-top: 35px !important; 
@@ -240,7 +238,7 @@
 </head>
 <body class="font-sans text-diary-text min-h-screen md:p-8 flex flex-col items-center">
 
-    <!-- 백그라운드 캡처 전용 완벽 숨김 래퍼 (화면 저 멀리 배치하여 사용자에게 절대 보이지 않음, 배경 투명) -->
+    <!-- 백그라운드 캡처 전용 완벽 숨김 래퍼 -->
     <div style="position: absolute; top: -9999px; left: -9999px; width: 1480px; height: 1309px; z-index: -9999; overflow: hidden; background-color: transparent;">
         <div id="hidden-capture-container" class="flex-col" style="width: 1480px; height: 1309px; display: none; box-sizing: border-box; background-color: transparent;"></div>
     </div>
@@ -323,7 +321,7 @@
 
             <!-- 다이어리 헤더 -->
             <div class="flex justify-between items-end mb-4 md:mb-6 text-diary-line px-1 md:px-2">
-                <div class="font-handwriting text-3xl md:text-5xl tracking-wide flex items-center gap-2">
+                <div class="font-handwriting text-4xl md:text-5xl tracking-wide flex items-center gap-2">
                     Monthly Schedule
                 </div>
                 <div class="font-sans text-2xl md:text-4xl font-bold tracking-wider" id="calendar-title">
@@ -348,13 +346,12 @@
                 </div>
             </div>
 
-            <!-- [PC/캡처 공용] 하단 메모 영역 (모바일 화면에선 숨겨져 있다가 오른쪽 스와이프나 캡처 시에만 연동) -->
-            <div class="desktop-memo mt-6 border-2 border-diary-line rounded-xl p-4 relative bg-pink-50/50 flex-col hidden md:flex">
+            <!-- 하단 메모 영역 -->
+            <div class="desktop-memo mt-6 border-2 border-diary-line rounded-xl p-4 relative bg-pink-50/50 flex flex-col hidden md:flex">
                 <span class="absolute -top-3 left-4 bg-diary-bg px-2 font-handwriting text-2xl text-diary-line font-bold">
                     Memo
                 </span>
                 <textarea id="global-memo" class="w-full h-24 bg-transparent resize-none outline-none mt-2 font-handwriting text-xl leading-relaxed text-diary-line placeholder-pink-300" placeholder="여기에 중요한 메모나 공지를 적어보세요..." oninput="syncMemos('global-memo', 'mobile-memo')"></textarea>
-                <!-- html2canvas 캡처용 렌더링 텍스트블록 -->
                 <div id="global-memo-render" class="hidden w-full min-h-[6rem] mt-2 font-handwriting text-xl leading-relaxed text-diary-line whitespace-pre-wrap break-words"></div>
             </div>
 
@@ -377,7 +374,7 @@
             <div class="p-4 md:p-6 space-y-4 md:space-y-5">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">일정 내용</label>
-                    <textarea id="modal-text" rows="3" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-pink-300 font-handwriting text-xl resize-none" placeholder="일정을 적어주세요!"></textarea>
+                    <textarea id="modal-text" rows="3" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-pink-300 font-handwriting text-xl resize-none" placeholder="여러 줄로 일정을 적어보세요!"></textarea>
                 </div>
 
                 <div>
@@ -425,12 +422,11 @@
             initSwipeGestures();
         }
 
-        // ---------- 스와이프 제스처 로직 (모바일 디스코드 느낌) ----------
         let touchStartX = 0;
         let touchStartY = 0;
         let touchEndX = 0;
         let touchEndY = 0;
-        const SWIPE_THRESHOLD = 60; // 스와이프 민감도
+        const SWIPE_THRESHOLD = 60; 
 
         function initSwipeGestures() {
             document.addEventListener('touchstart', e => {
@@ -446,13 +442,11 @@
         }
 
         function handleSwipe() {
-            // 모달이 열려있으면 스와이프 무시
             if (!document.getElementById('edit-modal').classList.contains('hidden')) return;
 
             const diffX = touchEndX - touchStartX;
             const diffY = touchEndY - touchStartY;
 
-            // 상하 스크롤이 좌우 스와이프보다 크면(스크롤 중이면) 무시
             if (Math.abs(diffY) > Math.abs(diffX)) return; 
             
             const leftDrawer = document.getElementById('left-drawer');
@@ -460,12 +454,10 @@
             const isLeftOpen = !leftDrawer.classList.contains('-translate-x-full');
             const isRightOpen = !rightDrawer.classList.contains('translate-x-full');
 
-            // 오른쪽으로 스와이프 (왼쪽 메뉴 열기 or 오른쪽 메모장 닫기)
             if (diffX > SWIPE_THRESHOLD) {
                 if (isRightOpen) toggleRightMenu();
                 else if (!isLeftOpen) toggleLeftMenu();
             }
-            // 왼쪽으로 스와이프 (오른쪽 메모장 열기 or 왼쪽 메뉴 닫기)
             else if (diffX < -SWIPE_THRESHOLD) {
                 if (isLeftOpen) toggleLeftMenu();
                 else if (!isRightOpen) toggleRightMenu();
@@ -476,7 +468,7 @@
             const drawer = document.getElementById('left-drawer');
             const backdrop = document.getElementById('drawer-backdrop');
             if (drawer.classList.contains('-translate-x-full')) {
-                closeAllDrawers(); // 다른 거 닫기
+                closeAllDrawers(); 
                 drawer.classList.remove('-translate-x-full');
                 backdrop.classList.remove('hidden');
             } else {
@@ -504,12 +496,9 @@
             document.getElementById('drawer-backdrop').classList.add('hidden');
         }
 
-        // 모바일-PC 메모장 동기화
         function syncMemos(sourceId, targetId) {
             document.getElementById(targetId).value = document.getElementById(sourceId).value;
         }
-
-        // -----------------------------------------------------------
 
         function generateSprings() {
             const container = document.getElementById('springs-container');
@@ -571,7 +560,7 @@
                     daysHtml += `
                         <div class="${cellClasses}" onclick="openModal('${dateStr}')">
                             <div class="${textClass} text-sm md:text-lg font-sans ml-1 day-number">${dayNumber}</div>
-                            <div class="w-full mt-1 flex-1 flex flex-col items-center justify-start gap-1 overflow-hidden pointer-events-none day-content">
+                            <div class="w-full mt-1 flex-1 flex flex-col items-center justify-start gap-1 pointer-events-none day-content overflow-hidden">
                                 ${dayData.image ? `<img src="${dayData.image}" class="day-img max-w-[95%] max-h-[60px] md:max-h-[80px] object-contain">` : ''}
                                 ${formattedText ? `<div style="color: ${dayData.color};" class="font-handwriting text-base md:text-xl leading-tight break-words text-center w-full schedule-text">${formattedText}</div>` : ''}
                             </div>
@@ -695,9 +684,7 @@
             }
             
             try {
-                // 폰트가 완벽히 로드될 때까지 강제 대기 (글씨체 풀림 방지 핵심 로직)
                 await document.fonts.ready;
-
                 hiddenContainer.style.display = 'flex';
 
                 const clone = liveArea.cloneNode(true);
@@ -723,8 +710,7 @@
                 hiddenContainer.innerHTML = '';
                 hiddenContainer.appendChild(clone);
 
-                // CSS 렌더링을 위한 대기 시간을 약간 늘림
-                await new Promise(r => setTimeout(r, 400));
+                await new Promise(r => setTimeout(r, 600));
 
                 const canvas = await html2canvas(hiddenContainer, {
                     width: 1480,
