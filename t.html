@@ -6,7 +6,7 @@
     <!-- 화면 크기에 맞게 표시 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Fireworks Confetti Overlay</title>
+    <title>Confetti Overlay</title>
 
     <style>
         /* 모든 요소의 크기 계산 방식 통일 */
@@ -22,21 +22,20 @@
             width: 100%;
             height: 100%;
 
-            /* OBS에서 완전 투명 배경 */
+            /* 완전 투명 배경 */
             background: transparent;
 
-            /* 화면 밖으로 나가는 파티션 숨김 */
+            /* 화면 밖 효과 숨김 */
             overflow: hidden;
         }
 
         /* Canvas */
         canvas {
             display: block;
-
             width: 100vw;
             height: 100vh;
 
-            /* 마우스 클릭 방해 방지 */
+            /* 마우스 입력 방해 방지 */
             pointer-events: none;
         }
     </style>
@@ -44,7 +43,7 @@
 
 <body>
 
-    <!-- 폭죽 및 파티션을 렌더링하는 Canvas -->
+    <!-- 파티션을 그리는 Canvas -->
     <canvas id="canvas"></canvas>
 
     <script>
@@ -52,18 +51,22 @@
 
 
         /* =========================================================
-           Canvas 기본 설정
+           Canvas 설정
         ========================================================= */
 
-        const canvas = document.getElementById("canvas");
+        const canvas =
+            document.getElementById("canvas");
 
-        const ctx = canvas.getContext("2d", {
-            alpha: true
-        });
+        const ctx =
+            canvas.getContext("2d", {
+                alpha: true
+            });
+
 
         /* 화면 크기 */
         let width = 0;
         let height = 0;
+
 
         /* 장치 픽셀 비율 */
         let dpr = 1;
@@ -75,44 +78,32 @@
 
         const CONFIG = {
 
-            /* 화면 전체에서 기본적으로 떨어지는 파티션 */
-            ambientConfetti: 120,
+            /* 화면에 동시에 존재하는 파티션 개수 */
+            confettiCount: 160,
 
-            /* 폭죽 생성 최소 간격 */
-            fireworkMinDelay: 1000,
+            /* 최소 크기 */
+            minSize: 3,
 
-            /* 폭죽 생성 최대 간격 */
-            fireworkMaxDelay: 2200,
+            /* 최대 크기 */
+            maxSize: 9,
 
-            /* 폭죽 하나당 파티션 개수 */
-            burstParticles: 70,
+            /* 최소 낙하 속도 */
+            minSpeed: 0.7,
 
-            /* 일반 파티션 최소 크기 */
-            confettiMinSize: 3,
+            /* 최대 낙하 속도 */
+            maxSpeed: 2.7,
 
-            /* 일반 파티션 최대 크기 */
-            confettiMaxSize: 9,
+            /* 중력 */
+            gravity: 0.012,
 
-            /* 일반 파티션 최소 낙하 속도 */
-            fallMinSpeed: 0.7,
+            /* 바람 */
+            wind: 0.012,
 
-            /* 일반 파티션 최대 낙하 속도 */
-            fallMaxSpeed: 2.5,
+            /* 좌우 흔들림 */
+            swingAmount: 0.45,
 
-            /* 폭죽 파티션 최소 속도 */
-            burstMinSpeed: 1.5,
-
-            /* 폭죽 파티션 최대 속도 */
-            burstMaxSpeed: 5.5,
-
-            /* 폭죽 파티션 중력 */
-            gravity: 0.025,
-
-            /* 전체적인 바람 */
-            wind: 0.015,
-
-            /* 화면 아래에서 페이드아웃 시작 */
-            fadeDistance: 120
+            /* 화면 아래 페이드 영역 */
+            fadeDistance: 140
         };
 
 
@@ -137,12 +128,14 @@
 
 
         /* =========================================================
-           랜덤 함수
+           랜덤 숫자
         ========================================================= */
 
         function random(min, max) {
 
-            return Math.random() * (max - min) + min;
+            return Math.random() *
+                (max - min) +
+                min;
         }
 
 
@@ -154,7 +147,8 @@
 
             return COLORS[
                 Math.floor(
-                    Math.random() * COLORS.length
+                    Math.random() *
+                    COLORS.length
                 )
             ];
         }
@@ -164,11 +158,18 @@
            값 제한
         ========================================================= */
 
-        function clamp(value, min, max) {
+        function clamp(
+            value,
+            min,
+            max
+        ) {
 
             return Math.max(
                 min,
-                Math.min(max, value)
+                Math.min(
+                    max,
+                    value
+                )
             );
         }
 
@@ -180,28 +181,40 @@
         function resizeCanvas() {
 
             /* 현재 화면 크기 */
-            width = window.innerWidth;
-            height = window.innerHeight;
+            width =
+                window.innerWidth;
 
-            /* 최대 2배까지만 렌더링 */
-            dpr = Math.min(
-                window.devicePixelRatio || 1,
-                2
-            );
+            height =
+                window.innerHeight;
 
-            /* 실제 Canvas 해상도 */
+
+            /* 최대 2배까지만 사용 */
+            dpr =
+                Math.min(
+                    window.devicePixelRatio || 1,
+                    2
+                );
+
+
+            /* 실제 렌더링 해상도 */
             canvas.width =
-                Math.floor(width * dpr);
+                Math.floor(
+                    width * dpr
+                );
 
             canvas.height =
-                Math.floor(height * dpr);
+                Math.floor(
+                    height * dpr
+                );
 
-            /* 화면 표시 크기 */
+
+            /* CSS 크기 */
             canvas.style.width =
                 width + "px";
 
             canvas.style.height =
                 height + "px";
+
 
             /* 논리 좌표 */
             ctx.setTransform(
@@ -215,7 +228,7 @@
         }
 
 
-        /* 화면 크기 변경 감지 */
+        /* 화면 크기 변경 */
         window.addEventListener(
             "resize",
             resizeCanvas,
@@ -225,7 +238,7 @@
         );
 
 
-        /* 최초 Canvas 크기 설정 */
+        /* 최초 실행 */
         resizeCanvas();
 
 
@@ -235,312 +248,249 @@
 
         class Confetti {
 
-            constructor(
-                x = null,
-                y = null,
-                burst = false
-            ) {
-
-                /* 폭죽에서 생성된 파티션인지 여부 */
-                this.burst = burst;
-
+            constructor() {
 
                 /* -------------------------------------------------
-                   시작 위치
+                   위치
                 ------------------------------------------------- */
 
                 this.x =
-                    x === null
-                        ? random(
-                            -20,
-                            width + 20
-                        )
-                        : x;
+                    random(
+                        -20,
+                        width + 20
+                    );
 
                 this.y =
-                    y === null
-                        ? random(
-                            -height * 0.2,
-                            0
-                        )
-                        : y;
+                    random(
+                        -height,
+                        0
+                    );
 
 
                 /* -------------------------------------------------
-                   파티션 크기
+                   크기
                 ------------------------------------------------- */
 
-                this.width = random(
-                    CONFIG.confettiMinSize,
-                    CONFIG.confettiMaxSize
-                );
+                this.width =
+                    random(
+                        CONFIG.minSize,
+                        CONFIG.maxSize
+                    );
 
-                this.height = random(
-                    CONFIG.confettiMinSize,
-                    CONFIG.confettiMaxSize * 1.8
-                );
+                this.height =
+                    random(
+                        CONFIG.minSize,
+                        CONFIG.maxSize * 1.8
+                    );
 
 
                 /* -------------------------------------------------
-                   이동 속도
+                   낙하 속도
                 ------------------------------------------------- */
 
-                if (burst) {
-
-                    /* 폭죽이 터질 방향 */
-                    const angle = random(
-                        0,
-                        Math.PI * 2
+                this.vx =
+                    random(
+                        -0.35,
+                        0.35
                     );
 
-                    /* 폭죽 파티션 속도 */
-                    const speed = random(
-                        CONFIG.burstMinSpeed,
-                        CONFIG.burstMaxSpeed
+                this.vy =
+                    random(
+                        CONFIG.minSpeed,
+                        CONFIG.maxSpeed
                     );
-
-                    /* X 방향 속도 */
-                    this.vx =
-                        Math.cos(angle) * speed;
-
-                    /* Y 방향 속도 */
-                    this.vy =
-                        Math.sin(angle) * speed;
-
-                } else {
-
-                    /* 일반 파티션 좌우 이동 */
-                    this.vx = random(
-                        -0.5,
-                        0.5
-                    );
-
-                    /* 일반 파티션 낙하 속도 */
-                    this.vy = random(
-                        CONFIG.fallMinSpeed,
-                        CONFIG.fallMaxSpeed
-                    );
-                }
 
 
                 /* -------------------------------------------------
                    회전
                 ------------------------------------------------- */
 
-                this.rotation = random(
-                    0,
-                    Math.PI * 2
-                );
+                this.rotation =
+                    random(
+                        0,
+                        Math.PI * 2
+                    );
 
-                /* 회전 속도 */
-                this.rotationSpeed = random(
-                    -0.12,
-                    0.12
-                );
+
+                this.rotationSpeed =
+                    random(
+                        -0.1,
+                        0.1
+                    );
 
 
                 /* -------------------------------------------------
                    좌우 흔들림
                 ------------------------------------------------- */
 
-                this.swing = random(
-                    0,
-                    Math.PI * 2
-                );
+                this.swing =
+                    random(
+                        0,
+                        Math.PI * 2
+                    );
 
-                this.swingSpeed = random(
-                    0.01,
-                    0.04
-                );
+                this.swingSpeed =
+                    random(
+                        0.01,
+                        0.035
+                    );
 
 
                 /* -------------------------------------------------
                    색상
                 ------------------------------------------------- */
 
-                this.color = randomColor();
+                this.color =
+                    randomColor();
 
 
                 /* -------------------------------------------------
                    투명도
                 ------------------------------------------------- */
 
-                this.alpha = random(
-                    0.65,
-                    1
-                );
-
-
-                /* -------------------------------------------------
-                   폭죽 파티션 수명
-                ------------------------------------------------- */
-
-                this.life = burst
-                    ? random(80, 150)
-                    : Infinity;
-
-                this.maxLife = this.life;
+                this.alpha =
+                    random(
+                        0.65,
+                        1
+                    );
             }
 
 
             /* =====================================================
-               파티션 업데이트
+               파티션 이동
             ===================================================== */
 
             update() {
 
-                /* -----------------------------------------------
-                   폭죽에서 생성된 파티션
-                ----------------------------------------------- */
+                /* 좌우 흔들림 */
+                this.swing +=
+                    this.swingSpeed;
 
-                if (this.burst) {
 
-                    /* 중력 */
-                    this.vy +=
-                        CONFIG.gravity;
+                /* 자연스러운 좌우 움직임 */
+                this.x +=
+                    this.vx +
+                    Math.sin(
+                        this.swing
+                    ) *
+                    CONFIG.swingAmount;
 
-                    /* X 이동 */
-                    this.x += this.vx;
 
-                    /* Y 이동 */
-                    this.y += this.vy;
+                /* 아래 방향 이동 */
+                this.y +=
+                    this.vy;
 
-                    /* 공기 저항 */
-                    this.vx *= 0.992;
-                    this.vy *= 0.992;
 
-                    /* 회전 */
-                    this.rotation +=
-                        this.rotationSpeed;
+                /* 아주 약한 중력 */
+                this.vy +=
+                    CONFIG.gravity;
 
-                    /* 수명 감소 */
-                    this.life--;
 
-                    /* 자연스럽게 페이드아웃 */
+                /* 바람 */
+                this.x +=
+                    CONFIG.wind;
+
+
+                /* 회전 */
+                this.rotation +=
+                    this.rotationSpeed;
+
+
+                /* =================================================
+                   화면 아래쪽 페이드
+                ================================================= */
+
+                if (
+                    this.y >
+                    height -
+                    CONFIG.fadeDistance
+                ) {
+
+                    const distance =
+                        height -
+                        this.y;
+
                     this.alpha =
                         clamp(
-                            this.life /
-                                this.maxLife,
+                            distance /
+                            CONFIG.fadeDistance,
                             0,
                             1
                         );
-
-                } else {
-
-                    /* -------------------------------------------
-                       일반 파티션
-                    ------------------------------------------- */
-
-                    /* 흔들림 */
-                    this.swing +=
-                        this.swingSpeed;
-
-                    /* 좌우 이동 */
-                    this.x +=
-                        this.vx +
-                        Math.sin(
-                            this.swing
-                        ) * 0.35;
-
-                    /* 아래로 이동 */
-                    this.y += this.vy;
-
-                    /* 바람 */
-                    this.x +=
-                        CONFIG.wind;
-
-                    /* 회전 */
-                    this.rotation +=
-                        this.rotationSpeed;
+                }
 
 
-                    /* -------------------------------------------
-                       화면 아래쪽 페이드
-                    ------------------------------------------- */
+                /* =================================================
+                   화면 밖으로 나갔을 경우
+                ================================================= */
 
-                    if (
-                        this.y >
-                        height -
-                        CONFIG.fadeDistance
-                    ) {
+                if (
+                    this.y >
+                    height + 30 ||
+                    this.x <
+                    -50 ||
+                    this.x >
+                    width + 50
+                ) {
 
-                        const distance =
-                            height - this.y;
-
-                        this.alpha =
-                            clamp(
-                                distance /
-                                    CONFIG.fadeDistance,
-                                0,
-                                1
-                            );
-                    }
-
-
-                    /* -------------------------------------------
-                       화면 밖으로 나간 파티션 재생성
-                    ------------------------------------------- */
-
-                    if (
-                        this.y >
-                            height + 30 ||
-                        this.x <
-                            -50 ||
-                        this.x >
-                            width + 50
-                    ) {
-
-                        this.reset();
-                    }
+                    this.reset();
                 }
             }
 
 
             /* =====================================================
-               일반 파티션 재생성
+               파티션 재생성
             ===================================================== */
 
             reset() {
 
-                /* 새로운 X 위치 */
-                this.x = random(
-                    -20,
-                    width + 20
-                );
+                /* 위쪽 랜덤 위치 */
+                this.x =
+                    random(
+                        -20,
+                        width + 20
+                    );
 
-                /* 화면 위쪽에서 다시 시작 */
-                this.y = random(
-                    -100,
-                    -10
-                );
+                this.y =
+                    random(
+                        -120,
+                        -10
+                    );
 
-                /* 좌우 속도 */
-                this.vx = random(
-                    -0.5,
-                    0.5
-                );
 
-                /* 낙하 속도 */
-                this.vy = random(
-                    CONFIG.fallMinSpeed,
-                    CONFIG.fallMaxSpeed
-                );
+                /* 속도 초기화 */
+                this.vx =
+                    random(
+                        -0.35,
+                        0.35
+                    );
 
-                /* 투명도 */
-                this.alpha = random(
-                    0.65,
-                    1
-                );
+                this.vy =
+                    random(
+                        CONFIG.minSpeed,
+                        CONFIG.maxSpeed
+                    );
 
-                /* 회전 */
-                this.rotation = random(
-                    0,
-                    Math.PI * 2
-                );
+
+                /* 회전 초기화 */
+                this.rotation =
+                    random(
+                        0,
+                        Math.PI * 2
+                    );
+
 
                 /* 새로운 색상 */
                 this.color =
                     randomColor();
+
+
+                /* 투명도 */
+                this.alpha =
+                    random(
+                        0.65,
+                        1
+                    );
             }
 
 
@@ -554,14 +504,14 @@
                 ctx.save();
 
 
-                /* 파티션 위치 */
+                /* 위치 */
                 ctx.translate(
                     this.x,
                     this.y
                 );
 
 
-                /* 파티션 회전 */
+                /* 회전 */
                 ctx.rotate(
                     this.rotation
                 );
@@ -572,17 +522,18 @@
                     this.alpha;
 
 
-                /* -----------------------------------------------
-                   파티션 펄럭임
-                ----------------------------------------------- */
+                /* =================================================
+                   파티션이 펄럭이는 효과
+                ================================================= */
 
                 const flutter =
-                    0.65 +
+                    0.55 +
                     Math.abs(
                         Math.sin(
                             this.rotation * 2
                         )
-                    ) * 0.35;
+                    ) *
+                    0.45;
 
 
                 ctx.scale(
@@ -591,9 +542,9 @@
                 );
 
 
-                /* -----------------------------------------------
-                   파티션 그라데이션
-                ----------------------------------------------- */
+                /* =================================================
+                   그라데이션
+                ================================================= */
 
                 const gradient =
                     ctx.createLinearGradient(
@@ -604,17 +555,21 @@
                     );
 
 
-                /* 중앙으로 갈수록 밝아지는 느낌 */
+                /* 밝은 부분 */
                 gradient.addColorStop(
                     0,
                     "#ffffff"
                 );
 
+
+                /* 메인 색상 */
                 gradient.addColorStop(
-                    0.25,
+                    0.3,
                     this.color
                 );
 
+
+                /* 끝부분 */
                 gradient.addColorStop(
                     1,
                     this.color
@@ -626,9 +581,9 @@
                     gradient;
 
 
-                /* -----------------------------------------------
-                   둥근 사각형
-                ----------------------------------------------- */
+                /* =================================================
+                   파티션 모양
+                ================================================= */
 
                 const w =
                     this.width;
@@ -683,7 +638,7 @@
                 );
 
 
-                /* 아래쪽 */
+                /* 아래 */
                 ctx.lineTo(
                     -w / 2 + radius,
                     h / 2
@@ -715,10 +670,11 @@
                 );
 
 
+                /* 닫기 */
                 ctx.closePath();
 
 
-                /* 파티션 그리기 */
+                /* 파티션 출력 */
                 ctx.fill();
 
 
@@ -736,122 +692,76 @@
 
 
         /* =========================================================
-           기본 파티션 생성
+           파티션 생성
+           
+           ※ 폭죽 파티션 생성 없음
+           ※ 사방으로 퍼지는 burst 없음
         ========================================================= */
 
         for (
             let i = 0;
-            i < CONFIG.ambientConfetti;
+            i < CONFIG.confettiCount;
             i++
         ) {
 
-            const particle =
-                new Confetti();
-
-
-            /* 화면 전체에 랜덤 배치 */
-            particle.y =
-                random(
-                    -height,
-                    height
-                );
-
-
-            /* 배열에 추가 */
             confetti.push(
-                particle
+                new Confetti()
             );
         }
 
 
         /* =========================================================
-           폭죽 생성
+           폭죽 사방 발사 로직
            
-           ※ 폭죽 섬광 로직은 제거되었습니다.
-           ※ 폭죽이 터지는 위치에서 파티션만 생성됩니다.
-        ========================================================= */
+           요청에 따라 제거/주석 처리
 
-        function createFirework() {
+           아래와 같은 로직은 사용하지 않습니다.
 
-            /* 폭죽 X 위치 */
-            const x =
-                random(
-                    width * 0.12,
-                    width * 0.88
-                );
+           const angle = random(0, Math.PI * 2);
 
+           const speed = random(
+               1.5,
+               5.5
+           );
 
-            /* 폭죽 Y 위치 */
-            const y =
-                random(
-                    height * 0.12,
-                    height * 0.55
-                );
+           this.vx =
+               Math.cos(angle) *
+               speed;
 
+           this.vy =
+               Math.sin(angle) *
+               speed;
 
-            /*
-            ---------------------------------------------------------
-            폭죽 섬광 로직
-
-            요청에 따라 전체 주석 처리
-
-            flashes.push(
-                new Flash(x, y)
-            );
-
-            ---------------------------------------------------------
-            */
+           ========================================================= */
 
 
-            /* -----------------------------------------------
-               폭죽 파티션 생성
-            ----------------------------------------------- */
+        /*
+        =========================================================
+        폭죽 섬광 로직
 
-            for (
-                let i = 0;
-                i < CONFIG.burstParticles;
-                i++
-            ) {
+        요청에 따라 비활성화
 
-                confetti.push(
-                    new Confetti(
-                        x,
-                        y,
-                        true
-                    )
-                );
+        class Flash {
+
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = 5;
+                this.life = 20;
             }
 
+            update() {
+                this.radius += 2;
+                this.life--;
+            }
 
-            /* 다음 폭죽 예약 */
-            scheduleFirework();
+            draw() {
+                // 폭죽 섬광
+            }
         }
 
-
-        /* =========================================================
-           폭죽 생성 예약
-        ========================================================= */
-
-        function scheduleFirework() {
-
-            /* 다음 폭죽까지의 랜덤 시간 */
-            const delay =
-                random(
-                    CONFIG.fireworkMinDelay,
-                    CONFIG.fireworkMaxDelay
-                );
-
-
-            /* 일정 시간 후 폭죽 생성 */
-            setTimeout(
-                createFirework,
-                delay
-            );
-        }
-
-
-        /* 최초 폭죽 시작 */
-        scheduleFirework();
+        =========================================================
+        */
 
 
         /* =========================================================
@@ -869,81 +779,26 @@
             );
 
 
-            /* -----------------------------------------------
-               파티션 업데이트 및 렌더링
-            ----------------------------------------------- */
+            /* =====================================================
+               모든 파티션 업데이트
+            ===================================================== */
 
             for (
-                let i =
-                    confetti.length - 1;
-                i >= 0;
-                i--
+                let i = 0;
+                i < confetti.length;
+                i++
             ) {
 
-                const particle =
-                    confetti[i];
-
-
-                /* 위치/속도 업데이트 */
-                particle.update();
+                /* 파티션 이동 */
+                confetti[i].update();
 
 
                 /* 파티션 그리기 */
-                particle.draw();
-
-
-                /* -------------------------------------------
-                   폭죽 파티션 수명이 끝났으면 제거
-                ------------------------------------------- */
-
-                if (
-                    particle.burst &&
-                    particle.life <= 0
-                ) {
-
-                    confetti.splice(
-                        i,
-                        1
-                    );
-                }
+                confetti[i].draw();
             }
 
 
-            /*
-            =========================================================
-            폭죽 섬광 업데이트 로직
-
-            요청에 따라 전체 주석 처리
-
-            for (
-                let i = flashes.length - 1;
-                i >= 0;
-                i--
-            ) {
-
-                const flash =
-                    flashes[i];
-
-                flash.update();
-
-                flash.draw();
-
-                if (
-                    flash.life <= 0
-                ) {
-
-                    flashes.splice(
-                        i,
-                        1
-                    );
-                }
-            }
-
-            =========================================================
-            */
-
-
-            /* 다음 프레임 실행 */
+            /* 다음 프레임 */
             requestAnimationFrame(
                 animate
             );
