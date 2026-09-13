@@ -5,8 +5,8 @@ https://slwj2.github.io/index.html - 갓필드 싸움 로직
 https://slwj2.github.io/card.html - 카드 필드 (갓필드)
 
 ___
-https://slwj2.github.io/t.html - 파티션 + 파티션 폭죽
-https://slwj2.github.io/pa.html - 파티션 날리기
+https://slwj2.github.io/t.html - 파티션 날리기
+https://slwj2.github.io/pa.html - 파티션 + 파티션 폭죽
 https://slwj2.github.io/g.html - 불꽃놀이(소리 주의)
 
 ___
