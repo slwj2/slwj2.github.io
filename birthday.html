@@ -29,11 +29,13 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+
             font-family:
                 Pretendard,
                 "Noto Sans KR",
                 Arial,
                 sans-serif;
+
             background: #070910;
             color: #ffffff;
         }
@@ -42,16 +44,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
+
             user-select: none;
         }
 
         canvas {
             position: fixed;
             inset: 0;
+
             width: 100%;
             height: 100%;
+
             display: block;
+
             touch-action: none;
+        }
+
+        button,
+        input {
+            font-family: inherit;
         }
 
         /* ============================================================
@@ -66,15 +77,17 @@
 
             padding: 32px;
 
-            border: 1px solid rgba(255, 255, 255, 0.13);
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.13);
 
             border-radius: 30px;
 
             background:
                 linear-gradient(
                     145deg,
-                    rgba(31, 35, 57, 0.96),
-                    rgba(15, 18, 31, 0.94)
+                    rgba(31, 35, 57, 0.97),
+                    rgba(15, 18, 31, 0.96)
                 );
 
             backdrop-filter: blur(22px);
@@ -90,7 +103,11 @@
 
         .setup.hidden {
             opacity: 0;
-            transform: translateY(20px) scale(0.96);
+
+            transform:
+                translateY(20px)
+                scale(0.96);
+
             pointer-events: none;
         }
 
@@ -99,14 +116,20 @@
 
             text-align: center;
 
-            font-size: clamp(28px, 7vw, 36px);
+            font-size:
+                clamp(
+                    28px,
+                    7vw,
+                    36px
+                );
 
             font-weight: 900;
 
             letter-spacing: -1.8px;
 
             text-shadow:
-                0 4px 20px rgba(255, 130, 190, 0.3);
+                0 4px 20px
+                rgba(255, 130, 190, 0.3);
         }
 
         .subtitle {
@@ -124,7 +147,8 @@
         label {
             display: block;
 
-            margin: 18px 0 8px;
+            margin:
+                18px 0 8px;
 
             color: #d7dceb;
 
@@ -139,7 +163,9 @@
 
             padding: 0 16px;
 
-            border: 1px solid rgba(255, 255, 255, 0.09);
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.09);
 
             border-radius: 15px;
 
@@ -169,8 +195,11 @@
                 rgba(12, 15, 28, 0.95);
 
             box-shadow:
-                0 0 0 3px rgba(255, 143, 186, 0.11),
-                0 8px 30px rgba(255, 100, 170, 0.08);
+                0 0 0 3px
+                rgba(255, 143, 186, 0.11),
+
+                0 8px 30px
+                rgba(255, 100, 170, 0.08);
         }
 
         /* ============================================================
@@ -187,6 +216,8 @@
         }
 
         .cake {
+            position: relative;
+
             min-height: 82px;
 
             border:
@@ -210,11 +241,30 @@
 
             font-size: 13px;
 
+            overflow: hidden;
+
             transition:
                 transform 0.2s ease,
                 background 0.2s ease,
                 border-color 0.2s ease,
                 box-shadow 0.2s ease;
+        }
+
+        .cake::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    rgba(255,255,255,0.08),
+                    transparent 45%
+                );
+
+            pointer-events: none;
         }
 
         .cake span {
@@ -232,7 +282,8 @@
         }
 
         .cake:hover {
-            transform: translateY(-3px);
+            transform:
+                translateY(-3px);
 
             background:
                 linear-gradient(
@@ -243,7 +294,9 @@
         }
 
         .cake:active {
-            transform: translateY(0) scale(0.97);
+            transform:
+                translateY(0)
+                scale(0.97);
         }
 
         .cake.selected {
@@ -257,8 +310,11 @@
                 );
 
             box-shadow:
-                0 0 0 1px rgba(255, 143, 185, 0.08),
-                0 10px 35px rgba(255, 100, 170, 0.12);
+                0 0 0 1px
+                rgba(255, 143, 185, 0.08),
+
+                0 10px 35px
+                rgba(255, 100, 170, 0.12);
         }
 
         /* ============================================================
@@ -294,8 +350,11 @@
             cursor: pointer;
 
             box-shadow:
-                0 12px 35px rgba(213, 91, 180, 0.28),
-                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+                0 12px 35px
+                rgba(213, 91, 180, 0.28),
+
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.25);
 
             transition:
                 transform 0.2s ease,
@@ -304,16 +363,21 @@
         }
 
         .start:hover {
-            transform: translateY(-3px);
+            transform:
+                translateY(-3px);
 
-            filter: brightness(1.08);
+            filter:
+                brightness(1.08);
 
             box-shadow:
-                0 16px 42px rgba(213, 91, 180, 0.35);
+                0 16px 42px
+                rgba(213, 91, 180, 0.35);
         }
 
         .start:active {
-            transform: translateY(0) scale(0.98);
+            transform:
+                translateY(0)
+                scale(0.98);
         }
 
         /* ============================================================
@@ -357,9 +421,14 @@
             letter-spacing: -2px;
 
             text-shadow:
-                0 0 10px rgba(255, 255, 255, 0.45),
-                0 0 30px rgba(255, 130, 190, 0.45),
-                0 8px 35px rgba(0, 0, 0, 0.35);
+                0 0 10px
+                rgba(255, 255, 255, 0.45),
+
+                0 0 30px
+                rgba(255, 130, 190, 0.45),
+
+                0 8px 35px
+                rgba(0, 0, 0, 0.35);
         }
 
         .birthday-subtitle {
@@ -372,7 +441,11 @@
                         env(safe-area-inset-top)
                     )
                     +
-                    clamp(43px, 7vw, 78px)
+                    clamp(
+                        43px,
+                        7vw,
+                        78px
+                    )
                 );
 
             width: 100%;
@@ -386,7 +459,8 @@
             font-size: 14px;
 
             text-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.6);
+                0 2px 10px
+                rgba(0, 0, 0, 0.6);
         }
 
         /* ============================================================
@@ -429,12 +503,21 @@
             backdrop-filter: blur(12px);
 
             box-shadow:
-                0 8px 25px rgba(0, 0, 0, 0.25);
+                0 8px 25px
+                rgba(0, 0, 0, 0.25);
+
+            transition:
+                transform 0.15s ease;
         }
 
         .music-button:active {
-            transform: scale(0.92);
+            transform:
+                scale(0.92);
         }
+
+        /* ============================================================
+           안내
+        ============================================================ */
 
         .hint {
             position: fixed;
@@ -468,10 +551,13 @@
             text-shadow:
                 0 2px 10px
                 rgba(0, 0, 0, 0.5);
+
+            transition:
+                opacity 0.3s ease;
         }
 
         /* ============================================================
-           다시 시작 버튼
+           다시 시작
         ============================================================ */
 
         .restart {
@@ -516,6 +602,10 @@
             cursor: pointer;
 
             backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.25);
         }
 
         /* ============================================================
@@ -548,11 +638,30 @@
             }
 
             .birthday-subtitle {
-                top: calc(3% + 45px);
+                top:
+                    calc(
+                        3% + 45px
+                    );
             }
 
             .hint {
                 bottom: 2%;
+            }
+
+        }
+
+        /* ============================================================
+           모션 감소 환경
+        ============================================================ */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
             }
 
         }
@@ -688,11 +797,17 @@
             id="birthdayTitle"
         ></div>
 
-        <div class="birthday-subtitle">
+        <div
+            class="birthday-subtitle"
+            id="birthdaySubtitle"
+        >
             촛불을 하나씩 눌러 꺼주세요 🕯️
         </div>
 
-        <div class="hint">
+        <div
+            class="hint"
+            id="hint"
+        >
             ✨ 모든 촛불을 끄면 특별한 축하가 시작됩니다 ✨
         </div>
 
@@ -738,7 +853,10 @@
         ============================================================ */
 
         const canvas =
-            document.getElementById("canvas");
+            document.getElementById(
+                "canvas"
+            );
+
 
         const ctx =
             canvas.getContext(
@@ -757,6 +875,13 @@
         let dpr = 1;
 
 
+        /* ============================================================
+           별 캐시
+        ============================================================ */
+
+        let stars = [];
+
+
         function resizeCanvas() {
 
             dpr =
@@ -765,27 +890,34 @@
                     2
                 );
 
+
             width =
                 window.innerWidth;
 
+
             height =
                 window.innerHeight;
+
 
             canvas.width =
                 Math.floor(
                     width * dpr
                 );
 
+
             canvas.height =
                 Math.floor(
                     height * dpr
                 );
 
+
             canvas.style.width =
                 width + "px";
 
+
             canvas.style.height =
                 height + "px";
+
 
             ctx.setTransform(
                 dpr,
@@ -795,6 +927,46 @@
                 0,
                 0
             );
+
+
+            /*
+             * 별 위치를 매 프레임 계산하지 않고
+             * 화면 크기가 바뀔 때만 생성합니다.
+             */
+
+            stars = [];
+
+
+            for (
+                let i = 0;
+                i < 60;
+                i++
+            ) {
+
+                stars.push({
+
+                    x:
+                        Math.random() *
+                        width,
+
+                    y:
+                        Math.random() *
+                        height *
+                        0.72,
+
+                    size:
+                        0.5 +
+                        Math.random() *
+                        1.5,
+
+                    phase:
+                        Math.random() *
+                        Math.PI *
+                        2
+
+                });
+
+            }
 
         }
 
@@ -820,35 +992,54 @@
                 "setup"
             );
 
+
         const sceneUI =
             document.getElementById(
                 "sceneUI"
             );
+
 
         const birthdayTitle =
             document.getElementById(
                 "birthdayTitle"
             );
 
+
+        const birthdaySubtitle =
+            document.getElementById(
+                "birthdaySubtitle"
+            );
+
+
+        const hint =
+            document.getElementById(
+                "hint"
+            );
+
+
         const nameInput =
             document.getElementById(
                 "name"
             );
+
 
         const ageInput =
             document.getElementById(
                 "age"
             );
 
+
         const startButton =
             document.getElementById(
                 "startButton"
             );
 
+
         const musicButton =
             document.getElementById(
                 "musicButton"
             );
+
 
         const restartButton =
             document.getElementById(
@@ -859,8 +1050,10 @@
         let selectedCake =
             "strawberry";
 
+
         let birthdayName =
             "친구";
+
 
         let celebrationStarted =
             false;
@@ -894,9 +1087,11 @@
                                     }
                                 );
 
+
                             button.classList.add(
                                 "selected"
                             );
+
 
                             selectedCake =
                                 button.dataset.cake;
@@ -915,42 +1110,77 @@
         const cakeColors = {
 
             strawberry: {
-                bodyTop: "#fff7fa",
-                bodyBottom: "#e978a2",
+
+                bodyTop: "#fff8fb",
+
+                bodyBottom: "#d95d88",
+
                 cream: "#fffafd",
-                accent: "#ff3d6d",
-                dark: "#c62950"
+
+                accent: "#ff416d",
+
+                dark: "#a91f48",
+
+                shadow: "#9f3158"
+
             },
+
 
             cream: {
-                bodyTop: "#fffef9",
-                bodyBottom: "#d9b981",
+
+                bodyTop: "#fffef8",
+
+                bodyBottom: "#d7b77d",
+
                 cream: "#ffffff",
-                accent: "#f1d59d",
-                dark: "#c7a46b"
+
+                accent: "#e8c982",
+
+                dark: "#ad8341",
+
+                shadow: "#9b7137"
+
             },
+
 
             chocolate: {
-                bodyTop: "#a96d50",
-                bodyBottom: "#4a2117",
-                cream: "#f5d8c0",
-                accent: "#713421",
-                dark: "#34140e"
+
+                bodyTop: "#9a6047",
+
+                bodyBottom: "#3c1710",
+
+                cream: "#f4d7c2",
+
+                accent: "#6e2f1e",
+
+                dark: "#35130c",
+
+                shadow: "#24100b"
+
             },
 
+
             cheese: {
-                bodyTop: "#ffe98a",
-                bodyBottom: "#c9891b",
-                cream: "#fff2a9",
-                accent: "#e3ad31",
-                dark: "#9d6813"
+
+                bodyTop: "#ffe991",
+
+                bodyBottom: "#bf7915",
+
+                cream: "#fff1a4",
+
+                accent: "#e3a526",
+
+                dark: "#89540b",
+
+                shadow: "#74450b"
+
             }
 
         };
 
 
         /* ============================================================
-           촛불
+           촛불 및 이펙트
         ============================================================ */
 
         let candles = [];
@@ -961,6 +1191,12 @@
 
         let confetti = [];
 
+        let celebrationSparkles = [];
+
+
+        /* ============================================================
+           촛불 생성
+        ============================================================ */
 
         function createCandles(age) {
 
@@ -968,11 +1204,6 @@
 
             celebrationStarted = false;
 
-
-            /*
-             * 나이만큼 모두 생성하지 않고
-             * 100개까지 제한합니다.
-             */
 
             age =
                 Math.max(
@@ -984,15 +1215,11 @@
                 );
 
 
-            /*
-             * 10살 단위는 긴 초,
-             * 나머지는 짧은 초입니다.
-             */
-
             const longCount =
                 Math.floor(
                     age / 10
                 );
+
 
             const shortCount =
                 age % 10;
@@ -1060,25 +1287,27 @@
 
         const cheeseHoles = [
 
-            [0.15, 0.34, 5],
+            [0.13, 0.28, 6],
 
-            [0.25, 0.22, 4],
+            [0.24, 0.45, 4],
 
-            [0.37, 0.40, 7],
+            [0.34, 0.25, 5],
 
-            [0.49, 0.25, 4],
+            [0.46, 0.43, 7],
 
-            [0.61, 0.39, 6],
+            [0.57, 0.27, 4],
 
-            [0.74, 0.23, 4],
+            [0.69, 0.43, 6],
 
-            [0.85, 0.40, 5],
+            [0.80, 0.28, 5],
 
-            [0.22, 0.52, 4],
+            [0.89, 0.46, 4],
 
-            [0.46, 0.50, 5],
+            [0.27, 0.58, 4],
 
-            [0.70, 0.51, 4]
+            [0.61, 0.58, 5],
+
+            [0.77, 0.56, 4]
 
         ];
 
@@ -1096,7 +1325,7 @@
             amount =
                 Math.min(
                     amount,
-                    35
+                    40
                 );
 
 
@@ -1111,10 +1340,12 @@
                     Math.PI *
                     2;
 
+
                 const speed =
                     1.5 +
                     Math.random() *
                     5;
+
 
                 particles.push({
 
@@ -1130,9 +1361,11 @@
                         Math.sin(angle) *
                         speed,
 
-                    gravity: 0.06,
+                    gravity:
+                        0.06,
 
-                    life: 1,
+                    life:
+                        1,
 
                     size:
                         1 +
@@ -1147,7 +1380,7 @@
 
 
         /* ============================================================
-           연기 생성
+           연기
         ============================================================ */
 
         function createSmoke(
@@ -1157,7 +1390,7 @@
 
             for (
                 let i = 0;
-                i < 5;
+                i < 6;
                 i++
             ) {
 
@@ -1186,7 +1419,8 @@
                         Math.random() *
                         0.8,
 
-                    life: 1,
+                    life:
+                        1,
 
                     size:
                         3 +
@@ -1205,12 +1439,8 @@
         ============================================================ */
 
         function createConfetti(
-            amount = 140
+            amount = 160
         ) {
-
-            /*
-             * 기존 컨페티를 정리합니다.
-             */
 
             confetti = [];
 
@@ -1270,7 +1500,8 @@
                         Math.random() *
                         360,
 
-                    life: 1
+                    life:
+                        1
 
                 });
 
@@ -1280,57 +1511,108 @@
 
 
         /* ============================================================
-           케이크 데이터
+           축하 반짝이
+        ============================================================ */
+
+        function createCelebrationSparkles() {
+
+            celebrationSparkles = [];
+
+
+            for (
+                let i = 0;
+                i < 80;
+                i++
+            ) {
+
+                celebrationSparkles.push({
+
+                    angle:
+                        Math.random() *
+                        Math.PI *
+                        2,
+
+                    radius:
+                        80 +
+                        Math.random() *
+                        260,
+
+                    speed:
+                        0.002 +
+                        Math.random() *
+                        0.006,
+
+                    size:
+                        1 +
+                        Math.random() *
+                        3,
+
+                    phase:
+                        Math.random() *
+                        Math.PI *
+                        2
+
+                });
+
+            }
+
+        }
+
+
+        /* ============================================================
+           케이크 위치 및 크기
         ============================================================ */
 
         function getCakeData() {
 
-            /*
-             * 모바일 세로 화면에서는
-             * 케이크를 자동으로 작게 만듭니다.
-             */
-
-            const maxWidth =
-                Math.min(
-                    width * 0.82,
-                    650
-                );
-
-
-            const maxHeight =
-                Math.min(
-                    height * 0.36,
-                    270
-                );
+            const mobile =
+                width < 600;
 
 
             let cakeWidth =
-                maxWidth;
+                Math.min(
+                    width *
+                    (
+                        mobile
+                            ? 0.86
+                            : 0.72
+                    ),
+                    680
+                );
 
 
             let cakeHeight =
-                maxHeight;
+                Math.min(
+                    height *
+                    (
+                        mobile
+                            ? 0.28
+                            : 0.31
+                    ),
+                    250
+                );
 
 
             /*
-             * 화면 높이가 작은 경우
-             * 케이크 높이를 더 줄입니다.
+             * 화면이 매우 낮으면
+             * 케이크를 더 작게 만듭니다.
              */
 
             if (
-                height < 700
+                height < 650
             ) {
 
                 cakeWidth =
                     Math.min(
                         width * 0.78,
-                        570
+                        560
                     );
+
 
                 cakeHeight =
                     Math.min(
-                        height * 0.31,
-                        220
+                        height * 0.26,
+                        205
                     );
 
             }
@@ -1339,7 +1621,7 @@
             const bottom =
                 Math.min(
                     height * 0.84,
-                    height - 40
+                    height - 35
                 );
 
 
@@ -1378,20 +1660,24 @@
                 );
 
 
-            const surfaceY =
-                cake.bottom -
-                cake.height +
-                40;
-
-
-            /*
-             * 촛불 개수가 많으면
-             * 여러 줄로 자동 분리합니다.
-             */
-
             const total =
                 candles.length;
 
+
+            /*
+             * 케이크 상단 표면입니다.
+             */
+
+            const surfaceY =
+                cake.bottom -
+                cake.height +
+                38;
+
+
+            /*
+             * 촛불 개수에 따라
+             * 줄 수를 결정합니다.
+             */
 
             let columns;
 
@@ -1419,6 +1705,15 @@
                 columns = 8;
 
             }
+
+
+            const rowGap =
+                total <= 10
+                    ? 0
+                    : Math.min(
+                        25,
+                        cake.height * 0.10
+                    );
 
 
             candles.forEach(
@@ -1449,8 +1744,8 @@
                         cake.width *
                         (
                             total <= 5
-                                ? 0.62
-                                : 0.76
+                                ? 0.55
+                                : 0.72
                         );
 
 
@@ -1488,16 +1783,11 @@
                             1;
 
 
-                    /*
-                     * 가운데는 낮고 양쪽은
-                     * 조금 높게 배치합니다.
-                     */
-
                     const curve =
                         Math.abs(
                             normalized
                         ) *
-                        9;
+                        8;
 
 
                     const x =
@@ -1507,35 +1797,35 @@
                         spacing;
 
 
-                    /*
-                     * 긴 초는 뒤,
-                     * 짧은 초는 앞쪽으로 배치합니다.
-                     */
-
                     let y =
                         surfaceY +
                         row *
-                        30 +
+                        rowGap +
                         curve;
 
 
+                    /*
+                     * 짧은 촛불은 앞쪽에 배치합니다.
+                     */
+
                     if (
-                        candle.type === "short"
+                        candle.type ===
+                        "short"
                     ) {
 
-                        y += 24;
+                        y += 19;
 
                     }
 
 
                     /*
-                     * 촛불이 너무 많아질 경우
-                     * 크기를 자동으로 축소합니다.
+                     * 촛불 수가 많을수록
+                     * 전체 크기를 줄입니다.
                      */
 
                     const scale =
                         Math.max(
-                            0.55,
+                            0.48,
                             Math.min(
                                 1,
                                 1 -
@@ -1544,7 +1834,7 @@
                                     total -
                                     12
                                 ) *
-                                0.025
+                                0.022
                             )
                         );
 
@@ -1559,9 +1849,9 @@
                             row +
                             (
                                 candle.type ===
-                                "long"
-                                    ? 0
-                                    : 0.5
+                                "short"
+                                    ? 0.5
+                                    : 0
                             ),
 
                         scale:
@@ -1601,11 +1891,13 @@
 
             context.beginPath();
 
+
             context.moveTo(
                 x + radius,
                 y
             );
 
+
             context.arcTo(
                 x + w,
                 y,
@@ -1613,6 +1905,7 @@
                 y + h,
                 radius
             );
+
 
             context.arcTo(
                 x + w,
@@ -1622,6 +1915,7 @@
                 radius
             );
 
+
             context.arcTo(
                 x,
                 y + h,
@@ -1630,6 +1924,7 @@
                 radius
             );
 
+
             context.arcTo(
                 x,
                 y,
@@ -1637,6 +1932,7 @@
                 y,
                 radius
             );
+
 
             context.closePath();
 
@@ -1644,7 +1940,136 @@
 
 
         /* ============================================================
-           케이크 빛
+           케이크 그림자
+        ============================================================ */
+
+        function drawCakeShadow(
+            cake
+        ) {
+
+            ctx.save();
+
+
+            ctx.filter =
+                "blur(8px)";
+
+
+            ctx.fillStyle =
+                "rgba(0,0,0,0.38)";
+
+
+            ctx.beginPath();
+
+
+            ctx.ellipse(
+                cake.x,
+                cake.bottom + 13,
+                cake.width * 0.46,
+                19,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fill();
+
+
+            ctx.restore();
+
+        }
+
+
+        /* ============================================================
+           접시
+        ============================================================ */
+
+        function drawPlate(
+            cake
+        ) {
+
+            const plate =
+                ctx.createLinearGradient(
+                    0,
+                    cake.bottom - 3,
+                    0,
+                    cake.bottom + 35
+                );
+
+
+            plate.addColorStop(
+                0,
+                "#ffffff"
+            );
+
+
+            plate.addColorStop(
+                0.35,
+                "#f6eaf0"
+            );
+
+
+            plate.addColorStop(
+                0.65,
+                "#dca8bf"
+            );
+
+
+            plate.addColorStop(
+                1,
+                "#8f5874"
+            );
+
+
+            ctx.fillStyle =
+                plate;
+
+
+            ctx.beginPath();
+
+
+            ctx.ellipse(
+                cake.x,
+                cake.bottom + 5,
+                cake.width * 0.56,
+                25,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "rgba(255,255,255,0.45)";
+
+
+            ctx.lineWidth = 2;
+
+
+            ctx.beginPath();
+
+
+            ctx.ellipse(
+                cake.x,
+                cake.bottom + 3,
+                cake.width * 0.46,
+                15,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.stroke();
+
+        }
+
+
+        /* ============================================================
+           케이크 광원
         ============================================================ */
 
         function drawCakeGlow(
@@ -1666,7 +2091,7 @@
 
             glow.addColorStop(
                 0,
-                "rgba(255,180,220,0.14)"
+                "rgba(255,190,225,0.16)"
             );
 
 
@@ -1688,6 +2113,7 @@
 
             ctx.beginPath();
 
+
             ctx.arc(
                 cake.x,
                 cake.bottom -
@@ -1697,16 +2123,17 @@
                 Math.PI * 2
             );
 
+
             ctx.fill();
 
         }
 
 
         /* ============================================================
-           케이크 기본 레이어
+           케이크 하단 1단
         ============================================================ */
 
-        function drawCakeBase(
+        function drawLowerTier(
             cake,
             colors
         ) {
@@ -1716,98 +2143,24 @@
                 cake.width / 2;
 
 
-            const top =
+            const tierHeight =
+                cake.height * 0.46;
+
+
+            const tierTop =
                 cake.bottom -
-                cake.height;
+                tierHeight -
+                5;
 
 
             /*
-             * 그림자
-             */
-
-            ctx.save();
-
-            ctx.fillStyle =
-                "rgba(0,0,0,0.34)";
-
-            ctx.filter =
-                "blur(5px)";
-
-            ctx.beginPath();
-
-            ctx.ellipse(
-                cake.x,
-                cake.bottom + 15,
-                cake.width * 0.46,
-                18,
-                0,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-            ctx.restore();
-
-
-            /*
-             * 접시
-             */
-
-            const plate =
-                ctx.createLinearGradient(
-                    0,
-                    cake.bottom - 5,
-                    0,
-                    cake.bottom + 32
-                );
-
-
-            plate.addColorStop(
-                0,
-                "#ffffff"
-            );
-
-
-            plate.addColorStop(
-                0.45,
-                "#f9d9e8"
-            );
-
-
-            plate.addColorStop(
-                1,
-                "#b87598"
-            );
-
-
-            ctx.fillStyle =
-                plate;
-
-
-            ctx.beginPath();
-
-            ctx.ellipse(
-                cake.x,
-                cake.bottom + 6,
-                cake.width * 0.54,
-                25,
-                0,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-
-            /*
-             * 케이크 몸체
+             * 케이크 옆면 그라데이션
              */
 
             const body =
                 ctx.createLinearGradient(
                     0,
-                    top + 50,
+                    tierTop,
                     0,
                     cake.bottom
                 );
@@ -1820,7 +2173,7 @@
 
 
             body.addColorStop(
-                0.42,
+                0.38,
                 colors.bodyTop
             );
 
@@ -1838,10 +2191,10 @@
             roundRect(
                 ctx,
                 left,
-                top + 45,
+                tierTop,
                 cake.width,
-                cake.height * 0.68,
-                27
+                tierHeight,
+                24
             );
 
 
@@ -1849,13 +2202,13 @@
 
 
             /*
-             * 케이크 앞쪽 음영
+             * 옆면 음영
              */
 
             const shade =
                 ctx.createLinearGradient(
                     0,
-                    top + 90,
+                    tierTop,
                     0,
                     cake.bottom
                 );
@@ -1868,8 +2221,14 @@
 
 
             shade.addColorStop(
+                0.55,
+                "rgba(60,15,30,0.02)"
+            );
+
+
+            shade.addColorStop(
                 1,
-                "rgba(60,15,30,0.16)"
+                "rgba(50,10,20,0.23)"
             );
 
 
@@ -1880,10 +2239,10 @@
             roundRect(
                 ctx,
                 left + 2,
-                top + 48,
+                tierTop + 2,
                 cake.width - 4,
-                cake.height * 0.65,
-                25
+                tierHeight - 2,
+                22
             );
 
 
@@ -1891,18 +2250,181 @@
 
 
             /*
-             * 윗면
+             * 하단 단면 라인
+             */
+
+            ctx.strokeStyle =
+                "rgba(255,255,255,0.16)";
+
+
+            ctx.lineWidth = 2;
+
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                left + 18,
+                cake.bottom -
+                29
+            );
+
+
+            ctx.lineTo(
+                left +
+                cake.width -
+                18,
+                cake.bottom -
+                29
+            );
+
+
+            ctx.stroke();
+
+        }
+
+
+        /* ============================================================
+           케이크 상단 2단
+        ============================================================ */
+
+        function drawUpperTier(
+            cake,
+            colors
+        ) {
+
+            const upperWidth =
+                cake.width * 0.82;
+
+
+            const left =
+                cake.x -
+                upperWidth / 2;
+
+
+            const upperHeight =
+                cake.height * 0.43;
+
+
+            const bottom =
+                cake.bottom -
+                cake.height * 0.38;
+
+
+            const top =
+                bottom -
+                upperHeight;
+
+
+            /*
+             * 상단 케이크 몸체
+             */
+
+            const body =
+                ctx.createLinearGradient(
+                    0,
+                    top,
+                    0,
+                    bottom
+                );
+
+
+            body.addColorStop(
+                0,
+                colors.bodyTop
+            );
+
+
+            body.addColorStop(
+                1,
+                colors.bodyBottom
+            );
+
+
+            ctx.fillStyle =
+                body;
+
+
+            roundRect(
+                ctx,
+                left,
+                top + 18,
+                upperWidth,
+                upperHeight,
+                23
+            );
+
+
+            ctx.fill();
+
+
+            /*
+             * 상단 옆면 빛
+             */
+
+            const shine =
+                ctx.createLinearGradient(
+                    left,
+                    0,
+                    left + upperWidth,
+                    0
+                );
+
+
+            shine.addColorStop(
+                0,
+                "rgba(255,255,255,0.04)"
+            );
+
+
+            shine.addColorStop(
+                0.3,
+                "rgba(255,255,255,0.18)"
+            );
+
+
+            shine.addColorStop(
+                0.55,
+                "rgba(255,255,255,0)"
+            );
+
+
+            shine.addColorStop(
+                1,
+                "rgba(255,255,255,0.03)"
+            );
+
+
+            ctx.fillStyle =
+                shine;
+
+
+            roundRect(
+                ctx,
+                left + 2,
+                top + 20,
+                upperWidth - 4,
+                upperHeight - 2,
+                21
+            );
+
+
+            ctx.fill();
+
+
+            /*
+             * 상단 표면
              */
 
             const topGradient =
                 ctx.createRadialGradient(
                     cake.x -
-                    cake.width * 0.12,
-                    top + 30,
-                    5,
+                    upperWidth * 0.16,
+                    top + 13,
+                    2,
                     cake.x,
-                    top + 45,
-                    cake.width * 0.58
+                    top + 22,
+                    upperWidth * 0.55
                 );
 
 
@@ -1913,7 +2435,7 @@
 
 
             topGradient.addColorStop(
-                0.6,
+                0.5,
                 colors.cream
             );
 
@@ -1930,17 +2452,47 @@
 
             ctx.beginPath();
 
+
             ctx.ellipse(
                 cake.x,
-                top + 46,
-                cake.width / 2,
-                43,
+                top + 21,
+                upperWidth / 2,
+                31,
                 0,
                 0,
                 Math.PI * 2
             );
 
+
             ctx.fill();
+
+
+            /*
+             * 윗면 외곽선
+             */
+
+            ctx.strokeStyle =
+                "rgba(255,255,255,0.24)";
+
+
+            ctx.lineWidth = 2;
+
+
+            ctx.beginPath();
+
+
+            ctx.ellipse(
+                cake.x,
+                top + 21,
+                upperWidth / 2 - 2,
+                29,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.stroke();
 
         }
 
@@ -1949,7 +2501,154 @@
            크림 드립
         ============================================================ */
 
-        function drawCreamDrips(
+        function drawFrostingDrips(
+            cake,
+            colors
+        ) {
+
+            const upperWidth =
+                cake.width * 0.82;
+
+
+            const left =
+                cake.x -
+                upperWidth / 2;
+
+
+            const upperHeight =
+                cake.height * 0.43;
+
+
+            const bottom =
+                cake.bottom -
+                cake.height * 0.38;
+
+
+            const top =
+                bottom -
+                upperHeight;
+
+
+            const frostingY =
+                top + 38;
+
+
+            /*
+             * 크림 베이스
+             */
+
+            ctx.fillStyle =
+                colors.cream;
+
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                left,
+                frostingY
+            );
+
+
+            const segments = 28;
+
+
+            for (
+                let i = 0;
+                i <= segments;
+                i++
+            ) {
+
+                const t =
+                    i /
+                    segments;
+
+
+                const x =
+                    left +
+                    upperWidth *
+                    t;
+
+
+                const wave =
+                    Math.sin(
+                        i * 1.35
+                    ) *
+                    2.5;
+
+
+                const drip =
+                    i % 4 === 0
+                        ? 12 +
+                          (
+                              i % 3
+                          ) *
+                          3
+                        : 0;
+
+
+                const y =
+                    frostingY +
+                    13 +
+                    wave +
+                    drip;
+
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
+            }
+
+
+            ctx.lineTo(
+                left + upperWidth,
+                frostingY
+            );
+
+
+            ctx.closePath();
+
+
+            ctx.fill();
+
+
+            /*
+             * 크림 위쪽의 부드러운 광택
+             */
+
+            ctx.strokeStyle =
+                "rgba(255,255,255,0.75)";
+
+
+            ctx.lineWidth = 2;
+
+
+            ctx.beginPath();
+
+
+            ctx.ellipse(
+                cake.x,
+                frostingY,
+                upperWidth * 0.48,
+                20,
+                0,
+                Math.PI,
+                Math.PI * 2
+            );
+
+
+            ctx.stroke();
+
+        }
+
+
+        /* ============================================================
+           하단 크림 띠
+        ============================================================ */
+
+        function drawLowerFrosting(
             cake,
             colors
         ) {
@@ -1959,9 +2658,9 @@
                 cake.width / 2;
 
 
-            const top =
+            const y =
                 cake.bottom -
-                cake.height;
+                cake.height * 0.46;
 
 
             ctx.fillStyle =
@@ -1970,47 +2669,50 @@
 
             ctx.beginPath();
 
+
             ctx.moveTo(
                 left,
-                top + 54
+                y
             );
 
 
-            const steps = 32;
+            const count = 26;
 
 
             for (
                 let i = 0;
-                i <= steps;
+                i <= count;
                 i++
             ) {
 
-                const px =
+                const x =
                     left +
                     cake.width *
                     (
                         i /
-                        steps
+                        count
                     );
 
 
                 const wave =
                     Math.sin(
-                        i *
-                        1.15
+                        i * 1.25
                     ) *
-                    3;
+                    2;
 
 
-                const py =
-                    top +
-                    70 +
-                    wave;
+                const drip =
+                    i % 5 === 0
+                        ? 9
+                        : 0;
 
 
                 ctx.lineTo(
-                    px,
-                    py
+                    x,
+                    y +
+                    10 +
+                    wave +
+                    drip
                 );
 
             }
@@ -2018,65 +2720,55 @@
 
             ctx.lineTo(
                 left + cake.width,
-                top + 105
-            );
-
-
-            ctx.lineTo(
-                left,
-                top + 105
+                y
             );
 
 
             ctx.closePath();
 
+
             ctx.fill();
 
 
             /*
-             * 자연스러운 크림 방울
+             * 크림 아래쪽 파이핑
              */
 
             for (
                 let i = 0;
-                i < 11;
+                i < 12;
                 i++
             ) {
 
-                const px =
+                const x =
                     left +
-                    20 +
+                    25 +
                     i *
                     (
                         (
                             cake.width -
-                            40
+                            50
                         ) /
-                        10
+                        11
                     );
 
 
-                const py =
-                    top +
-                    91 +
-                    Math.sin(
-                        i *
-                        1.5
-                    ) *
-                    3;
+                const yy =
+                    y +
+                    17;
 
 
                 ctx.beginPath();
 
-                ctx.ellipse(
-                    px,
-                    py,
-                    14,
-                    18,
-                    0,
+
+                ctx.arc(
+                    x,
+                    yy,
+                    7,
                     0,
                     Math.PI * 2
                 );
+
 
                 ctx.fill();
 
@@ -2086,55 +2778,54 @@
 
 
         /* ============================================================
-           딸기 케이크
+           딸기 케이크 장식
         ============================================================ */
 
-        function drawStrawberryCake(
+        function drawStrawberryDecoration(
             cake
         ) {
 
-            const left =
-                cake.x -
-                cake.width / 2;
+            const upperWidth =
+                cake.width * 0.82;
 
 
             const top =
                 cake.bottom -
-                cake.height;
+                cake.height +
+                cake.height * 0.57;
 
 
             const berries = [
 
-                [0.18, 0.46, 15],
+                [-0.33, 3, 13],
 
-                [0.32, 0.28, 17],
+                [-0.16, -3, 15],
 
-                [0.50, 0.43, 18],
+                [0, 4, 16],
 
-                [0.68, 0.28, 17],
+                [0.17, -3, 15],
 
-                [0.82, 0.46, 15]
+                [0.34, 3, 13]
 
             ];
 
 
             berries.forEach(
-                berry => {
+                item => {
 
                     const x =
-                        left +
-                        cake.width *
-                        berry[0];
+                        cake.x +
+                        upperWidth *
+                        item[0];
 
 
                     const y =
                         top +
-                        berry[1] *
-                        90;
+                        item[1];
 
 
                     const r =
-                        berry[2];
+                        item[2];
 
 
                     /*
@@ -2142,31 +2833,34 @@
                      */
 
                     ctx.fillStyle =
-                        "rgba(110,20,40,0.18)";
+                        "rgba(90,10,30,0.22)";
+
 
                     ctx.beginPath();
 
+
                     ctx.ellipse(
                         x,
-                        y + 4,
+                        y + 3,
                         r,
-                        r * 1.13,
+                        r * 1.08,
                         0,
                         0,
                         Math.PI * 2
                     );
 
+
                     ctx.fill();
 
 
                     /*
-                     * 딸기
+                     * 딸기 본체
                      */
 
-                    const gradient =
+                    const berry =
                         ctx.createRadialGradient(
                             x - r * 0.35,
-                            y - r * 0.4,
+                            y - r * 0.45,
                             1,
                             x,
                             y,
@@ -2174,39 +2868,41 @@
                         );
 
 
-                    gradient.addColorStop(
+                    berry.addColorStop(
                         0,
-                        "#ff9bb0"
+                        "#ffb1c1"
                     );
 
 
-                    gradient.addColorStop(
-                        0.45,
-                        "#ff426b"
+                    berry.addColorStop(
+                        0.4,
+                        "#ff4d73"
                     );
 
 
-                    gradient.addColorStop(
+                    berry.addColorStop(
                         1,
-                        "#c91f48"
+                        "#c51d47"
                     );
 
 
                     ctx.fillStyle =
-                        gradient;
+                        berry;
 
 
                     ctx.beginPath();
+
 
                     ctx.ellipse(
                         x,
                         y,
                         r,
-                        r * 1.12,
+                        r * 1.1,
                         0,
                         0,
                         Math.PI * 2
                     );
+
 
                     ctx.fill();
 
@@ -2216,7 +2912,7 @@
                      */
 
                     ctx.fillStyle =
-                        "#ffe27a";
+                        "#ffe580";
 
 
                     for (
@@ -2234,27 +2930,29 @@
                             x +
                             Math.cos(angle) *
                             r *
-                            0.52;
+                            0.48;
 
 
                         const sy =
                             y +
                             Math.sin(angle) *
                             r *
-                            0.72;
+                            0.68;
 
 
                         ctx.beginPath();
 
+
                         ctx.ellipse(
                             sx,
                             sy,
-                            1.3,
-                            2.2,
+                            1.2,
+                            2,
                             0,
                             0,
                             Math.PI * 2
                         );
+
 
                         ctx.fill();
 
@@ -2262,39 +2960,43 @@
 
 
                     /*
-                     * 딸기 잎
+                     * 잎
                      */
 
                     ctx.fillStyle =
-                        "#5ca052";
+                        "#57954d";
 
 
                     ctx.beginPath();
+
 
                     ctx.ellipse(
                         x - 5,
                         y - r + 3,
                         5,
-                        9,
-                        -0.45,
+                        8,
+                        -0.5,
                         0,
                         Math.PI * 2
                     );
+
 
                     ctx.fill();
 
 
                     ctx.beginPath();
 
+
                     ctx.ellipse(
                         x + 5,
                         y - r + 3,
                         5,
-                        9,
-                        0.45,
+                        8,
+                        0.5,
                         0,
                         Math.PI * 2
                     );
+
 
                     ctx.fill();
 
@@ -2303,12 +3005,8 @@
 
 
             /*
-             * 작은 딸기 장식
+             * 작은 딸기 조각
              */
-
-            ctx.fillStyle =
-                "#ff6686";
-
 
             for (
                 let i = 0;
@@ -2317,34 +3015,37 @@
             ) {
 
                 const x =
-                    left +
-                    35 +
+                    cake.x -
+                    cake.width * 0.36 +
                     i *
                     (
-                        (
-                            cake.width -
-                            70
-                        ) /
-                        6
+                        cake.width *
+                        0.12
                     );
 
 
                 const y =
                     cake.bottom -
-                    34 +
+                    27 +
                     Math.sin(i) *
-                    3;
+                    2;
+
+
+                ctx.fillStyle =
+                    "#ff5a7e";
 
 
                 ctx.beginPath();
 
+
                 ctx.arc(
                     x,
                     y,
-                    5,
+                    4.5,
                     0,
                     Math.PI * 2
                 );
+
 
                 ctx.fill();
 
@@ -2354,21 +3055,21 @@
 
 
         /* ============================================================
-           생크림 케이크
+           생크림 케이크 장식
         ============================================================ */
 
-        function drawCreamCake(
+        function drawCreamDecoration(
             cake
         ) {
 
-            const left =
-                cake.x -
-                cake.width / 2;
+            const upperWidth =
+                cake.width * 0.82;
 
 
-            const top =
+            const y =
                 cake.bottom -
-                cake.height;
+                cake.height +
+                cake.height * 0.57;
 
 
             /*
@@ -2382,33 +3083,29 @@
             ) {
 
                 const x =
-                    left +
-                    30 +
+                    cake.x -
+                    upperWidth * 0.38 +
                     i *
                     (
-                        (
-                            cake.width -
-                            60
-                        ) /
-                        8
+                        upperWidth *
+                        0.095
                     );
 
 
-                const y =
-                    top +
-                    76 +
+                const yy =
+                    y +
                     Math.sin(i * 0.9) *
-                    4;
+                    3;
 
 
                 const gradient =
                     ctx.createRadialGradient(
                         x - 3,
-                        y - 4,
+                        yy - 5,
                         1,
                         x,
-                        y,
-                        10
+                        yy,
+                        11
                     );
 
 
@@ -2420,7 +3117,7 @@
 
                 gradient.addColorStop(
                     1,
-                    "#e7dce0"
+                    "#ded6dc"
                 );
 
 
@@ -2430,13 +3127,15 @@
 
                 ctx.beginPath();
 
+
                 ctx.arc(
                     x,
-                    y,
-                    9,
+                    yy,
+                    10,
                     0,
                     Math.PI * 2
                 );
+
 
                 ctx.fill();
 
@@ -2449,13 +3148,15 @@
 
             const berries = [
 
-                [0.23, 0.42],
+                [-0.30, -2],
 
-                [0.42, 0.30],
+                [-0.15, 5],
 
-                [0.60, 0.43],
+                [0.03, -4],
 
-                [0.77, 0.31]
+                [0.20, 4],
+
+                [0.34, -2]
 
             ];
 
@@ -2464,43 +3165,42 @@
                 item => {
 
                     const x =
-                        left +
-                        cake.width *
+                        cake.x +
+                        upperWidth *
                         item[0];
 
 
-                    const y =
-                        top +
-                        item[1] *
-                        85;
+                    const yy =
+                        y +
+                        item[1];
 
 
                     const gradient =
                         ctx.createRadialGradient(
                             x - 2,
-                            y - 3,
+                            yy - 3,
                             1,
                             x,
-                            y,
+                            yy,
                             8
                         );
 
 
                     gradient.addColorStop(
                         0,
-                        "#8ea8ff"
+                        "#9fb7ff"
                     );
 
 
                     gradient.addColorStop(
-                        0.45,
-                        "#536fc5"
+                        0.5,
+                        "#526fc9"
                     );
 
 
                     gradient.addColorStop(
                         1,
-                        "#263a7c"
+                        "#26396f"
                     );
 
 
@@ -2510,13 +3210,15 @@
 
                     ctx.beginPath();
 
+
                     ctx.arc(
                         x,
-                        y,
+                        yy,
                         8,
                         0,
                         Math.PI * 2
                     );
+
 
                     ctx.fill();
 
@@ -2527,21 +3229,21 @@
 
 
         /* ============================================================
-           초콜릿 케이크
+           초콜릿 케이크 장식
         ============================================================ */
 
-        function drawChocolateCake(
+        function drawChocolateDecoration(
             cake
         ) {
 
-            const left =
-                cake.x -
-                cake.width / 2;
+            const upperWidth =
+                cake.width * 0.82;
 
 
             const top =
                 cake.bottom -
-                cake.height;
+                cake.height +
+                cake.height * 0.57;
 
 
             /*
@@ -2549,44 +3251,43 @@
              */
 
             ctx.fillStyle =
-                "#63301e";
+                "#552318";
 
 
             ctx.beginPath();
 
+
             ctx.moveTo(
-                left,
-                top + 55
+                cake.x -
+                upperWidth / 2,
+                top -
+                18
             );
 
 
             for (
                 let i = 0;
-                i <= 30;
+                i <= 24;
                 i++
             ) {
 
                 const x =
-                    left +
-                    cake.width *
+                    cake.x -
+                    upperWidth / 2 +
+                    upperWidth *
                     (
                         i /
-                        30
+                        24
                     );
 
 
-                const wave =
-                    Math.sin(
-                        i *
-                        1.2
-                    ) *
-                    3;
-
-
                 const y =
-                    top +
-                    73 +
-                    wave;
+                    top -
+                    5 +
+                    Math.sin(
+                        i * 1.2
+                    ) *
+                    2;
 
 
                 ctx.lineTo(
@@ -2598,18 +3299,23 @@
 
 
             ctx.lineTo(
-                left + cake.width,
-                top + 100
+                cake.x +
+                upperWidth / 2,
+                top +
+                13
             );
 
 
             ctx.lineTo(
-                left,
-                top + 100
+                cake.x -
+                upperWidth / 2,
+                top +
+                13
             );
 
 
             ctx.closePath();
+
 
             ctx.fill();
 
@@ -2625,39 +3331,32 @@
             ) {
 
                 const x =
-                    left +
-                    35 +
+                    cake.x -
+                    upperWidth * 0.38 +
                     i *
-                    (
-                        (
-                            cake.width -
-                            70
-                        ) /
-                        7
-                    );
+                    upperWidth *
+                    0.108;
 
 
                 const y =
-                    top +
-                    81 +
-                    Math.sin(
-                        i *
-                        1.3
-                    ) *
+                    top -
+                    2 +
+                    Math.sin(i * 1.4) *
                     5;
 
 
                 ctx.save();
+
 
                 ctx.translate(
                     x,
                     y
                 );
 
+
                 ctx.rotate(
                     (
-                        i -
-                        4
+                        i - 4
                     ) *
                     0.08
                 );
@@ -2665,28 +3364,28 @@
 
                 const chocolate =
                     ctx.createLinearGradient(
-                        -15,
-                        -7,
-                        15,
-                        7
+                        -14,
+                        -6,
+                        14,
+                        6
                     );
 
 
                 chocolate.addColorStop(
                     0,
-                    "#9b5337"
+                    "#9b5137"
                 );
 
 
                 chocolate.addColorStop(
                     0.5,
-                    "#6d3423"
+                    "#69301f"
                 );
 
 
                 chocolate.addColorStop(
                     1,
-                    "#3f1b13"
+                    "#32120c"
                 );
 
 
@@ -2696,9 +3395,9 @@
 
                 roundRect(
                     ctx,
-                    -15,
+                    -14,
                     -5,
-                    30,
+                    28,
                     10,
                     4
                 );
@@ -2706,7 +3405,61 @@
 
                 ctx.fill();
 
+
                 ctx.restore();
+
+            }
+
+
+            /*
+             * 초콜릿 칩
+             */
+
+            ctx.fillStyle =
+                "#32130d";
+
+
+            for (
+                let i = 0;
+                i < 13;
+                i++
+            ) {
+
+                const x =
+                    cake.x -
+                    cake.width * 0.38 +
+                    (
+                        i * 37
+                    ) %
+                    (
+                        cake.width *
+                        0.76
+                    );
+
+
+                const y =
+                    cake.bottom -
+                    35 -
+                    (
+                        i % 3
+                    ) *
+                    5;
+
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    x,
+                    y,
+                    3 +
+                    (i % 2),
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fill();
 
             }
 
@@ -2714,37 +3467,47 @@
 
 
         /* ============================================================
-           치즈 케이크
+           치즈 케이크 장식
         ============================================================ */
 
-        function drawCheeseCake(
+        function drawCheeseDecoration(
             cake
         ) {
 
-            const left =
-                cake.x -
-                cake.width / 2;
+            const upperWidth =
+                cake.width * 0.82;
 
 
             const top =
                 cake.bottom -
-                cake.height;
+                cake.height +
+                cake.height * 0.57;
 
+
+            /*
+             * 치즈 표면
+             */
 
             cheeseHoles.forEach(
                 hole => {
 
                     const x =
-                        left +
-                        cake.width *
+                        cake.x -
+                        upperWidth / 2 +
+                        upperWidth *
                         hole[0];
 
 
                     const y =
-                        top +
-                        47 +
+                        top -
+                        14 +
                         hole[1] *
-                        45;
+                        38;
+
+
+                    const r =
+                        hole[2] *
+                        0.75;
 
 
                     const gradient =
@@ -2754,19 +3517,19 @@
                             1,
                             x,
                             y,
-                            hole[2]
+                            r
                         );
 
 
                     gradient.addColorStop(
                         0,
-                        "rgba(130,80,8,0.45)"
+                        "rgba(125,72,7,0.48)"
                     );
 
 
                     gradient.addColorStop(
                         1,
-                        "rgba(130,80,8,0.12)"
+                        "rgba(125,72,7,0.12)"
                     );
 
 
@@ -2776,13 +3539,15 @@
 
                     ctx.beginPath();
 
+
                     ctx.arc(
                         x,
                         y,
-                        hole[2],
+                        r,
                         0,
                         Math.PI * 2
                     );
+
 
                     ctx.fill();
 
@@ -2791,27 +3556,31 @@
 
 
             /*
-             * 골든 크러스트
+             * 황금빛 치즈 테두리
              */
 
             ctx.strokeStyle =
-                "rgba(164,104,14,0.35)";
+                "rgba(164,104,14,0.4)";
 
-            ctx.lineWidth =
-                5;
+
+            ctx.lineWidth = 5;
 
 
             ctx.beginPath();
 
+
             ctx.ellipse(
                 cake.x,
-                top + 46,
-                cake.width * 0.45,
-                37,
+                cake.bottom -
+                cake.height +
+                39,
+                upperWidth * 0.46,
+                28,
                 0,
                 0,
                 Math.PI * 2
             );
+
 
             ctx.stroke();
 
@@ -2819,18 +3588,13 @@
 
 
         /* ============================================================
-           케이크 장식
+           하단 장식
         ============================================================ */
 
-        function drawCakeDecoration(
-            cake
+        function drawBottomDecoration(
+            cake,
+            colors
         ) {
-
-            const colors =
-                cakeColors[
-                    selectedCake
-                ];
-
 
             const left =
                 cake.x -
@@ -2838,7 +3602,7 @@
 
 
             /*
-             * 케이크 하단 크림 장식
+             * 하단 크림 파이핑
              */
 
             for (
@@ -2862,12 +3626,11 @@
 
                 const y =
                     cake.bottom -
-                    18 +
+                    15 +
                     Math.sin(
-                        i *
-                        1.1
+                        i * 1.15
                     ) *
-                    3;
+                    2;
 
 
                 const gradient =
@@ -2877,7 +3640,7 @@
                         1,
                         x,
                         y,
-                        18
+                        16
                     );
 
 
@@ -2899,51 +3662,27 @@
 
                 ctx.beginPath();
 
+
                 ctx.ellipse(
                     x,
                     y,
-                    17,
-                    10,
+                    15,
+                    9,
                     0,
                     0,
                     Math.PI * 2
                 );
 
+
                 ctx.fill();
 
             }
-
-
-            /*
-             * 케이크 가장자리 하이라이트
-             */
-
-            ctx.strokeStyle =
-                "rgba(255,255,255,0.28)";
-
-            ctx.lineWidth =
-                2;
-
-
-            roundRect(
-                ctx,
-                left + 3,
-                cake.bottom -
-                cake.height +
-                49,
-                cake.width - 6,
-                cake.height * 0.62,
-                24
-            );
-
-
-            ctx.stroke();
 
         }
 
 
         /* ============================================================
-           전체 케이크
+           케이크 전체
         ============================================================ */
 
         function drawCake() {
@@ -2963,24 +3702,66 @@
             );
 
 
-            drawCakeBase(
+            drawCakeShadow(
+                cake
+            );
+
+
+            drawPlate(
+                cake
+            );
+
+
+            /*
+             * 가장 먼저 아래쪽 1단을 그립니다.
+             */
+
+            drawLowerTier(
                 cake,
                 colors
             );
 
 
-            drawCreamDrips(
+            /*
+             * 아래쪽 크림 띠입니다.
+             */
+
+            drawLowerFrosting(
                 cake,
                 colors
             );
 
+
+            /*
+             * 위쪽 2단을 그립니다.
+             */
+
+            drawUpperTier(
+                cake,
+                colors
+            );
+
+
+            /*
+             * 위쪽 크림 드립입니다.
+             */
+
+            drawFrostingDrips(
+                cake,
+                colors
+            );
+
+
+            /*
+             * 케이크 종류별 장식입니다.
+             */
 
             if (
                 selectedCake ===
                 "strawberry"
             ) {
 
-                drawStrawberryCake(
+                drawStrawberryDecoration(
                     cake
                 );
 
@@ -2992,7 +3773,7 @@
                 "cream"
             ) {
 
-                drawCreamCake(
+                drawCreamDecoration(
                     cake
                 );
 
@@ -3004,7 +3785,7 @@
                 "chocolate"
             ) {
 
-                drawChocolateCake(
+                drawChocolateDecoration(
                     cake
                 );
 
@@ -3016,22 +3797,23 @@
                 "cheese"
             ) {
 
-                drawCheeseCake(
+                drawCheeseDecoration(
                     cake
                 );
 
             }
 
 
-            drawCakeDecoration(
-                cake
+            drawBottomDecoration(
+                cake,
+                colors
             );
 
         }
 
 
         /* ============================================================
-           촛불
+           촛불 하나 그리기
         ============================================================ */
 
         function drawCandle(
@@ -3045,12 +3827,12 @@
                 1;
 
 
-            const height =
+            const heightCandle =
                 (
                     candle.type ===
                     "long"
                         ? 76
-                        : 46
+                        : 45
                 ) *
                 scale;
 
@@ -3067,74 +3849,74 @@
 
             const y =
                 position.y -
-                height;
+                heightCandle;
 
 
             /*
-             * 그림자
+             * 초 그림자
              */
 
             ctx.fillStyle =
-                "rgba(70,20,45,0.18)";
+                "rgba(50,10,30,0.2)";
 
 
             ctx.beginPath();
+
 
             ctx.ellipse(
                 position.x,
                 position.y,
                 widthCandle,
-                4 *
-                scale,
+                4 * scale,
                 0,
                 0,
                 Math.PI * 2
             );
 
+
             ctx.fill();
 
 
             /*
-             * 촛불 몸체
+             * 초 몸체
              */
 
             const candleGradient =
                 ctx.createLinearGradient(
                     x,
                     0,
-                    x +
-                    widthCandle,
+                    x + widthCandle,
                     0
                 );
 
 
             candleGradient.addColorStop(
                 0,
-                "#b95d89"
+                "#a94e7d"
             );
 
 
             candleGradient.addColorStop(
                 0.2,
-                "#f18ab3"
+                "#f083ad"
             );
 
 
             candleGradient.addColorStop(
                 0.5,
-                "#fff4fa"
+                "#fff5fa"
             );
 
 
             candleGradient.addColorStop(
                 0.78,
-                "#ef8ab4"
+                "#ee82ae"
             );
 
 
             candleGradient.addColorStop(
                 1,
-                "#a94f7d"
+                "#9d4874"
             );
 
 
@@ -3147,9 +3929,8 @@
                 x,
                 y,
                 widthCandle,
-                height,
-                5 *
-                scale
+                heightCandle,
+                5 * scale
             );
 
 
@@ -3157,60 +3938,63 @@
 
 
             /*
-             * 사선 무늬
+             * 사선 줄무늬
              */
 
             ctx.save();
+
 
             roundRect(
                 ctx,
                 x,
                 y,
                 widthCandle,
-                height,
-                5 *
-                scale
+                heightCandle,
+                5 * scale
             );
+
 
             ctx.clip();
 
+
             ctx.strokeStyle =
-                "rgba(255,100,160,0.4)";
+                "rgba(255,105,165,0.42)";
+
 
             ctx.lineWidth =
-                3 *
-                scale;
+                3 * scale;
 
 
             for (
                 let i = -2;
-                i <
-                height / 14 + 2;
+                i < heightCandle / 14 + 2;
                 i++
             ) {
 
                 ctx.beginPath();
 
+
                 ctx.moveTo(
                     x - 5,
                     y +
-                    i *
-                    14
+                    i * 14
                 );
+
 
                 ctx.lineTo(
                     x +
                     widthCandle +
                     5,
                     y +
-                    i *
-                    14 -
+                    i * 14 -
                     8
                 );
+
 
                 ctx.stroke();
 
             }
+
 
             ctx.restore();
 
@@ -3220,29 +4004,31 @@
              */
 
             ctx.strokeStyle =
-                "#39241f";
+                "#34211e";
+
 
             ctx.lineWidth =
                 Math.max(
                     1,
-                    1.5 *
-                    scale
+                    1.5 * scale
                 );
 
 
             ctx.beginPath();
+
 
             ctx.moveTo(
                 position.x,
                 y
             );
 
+
             ctx.lineTo(
                 position.x,
                 y -
-                7 *
-                scale
+                7 * scale
             );
+
 
             ctx.stroke();
 
@@ -3257,8 +4043,7 @@
 
                 const flicker =
                     Math.sin(
-                        time *
-                        0.016 +
+                        time * 0.016 +
                         candle.flame
                     ) *
                     2.5 *
@@ -3272,12 +4057,11 @@
 
                 const flameY =
                     y -
-                    17 *
-                    scale;
+                    17 * scale;
 
 
                 /*
-                 * 불꽃 광원
+                 * 불빛
                  */
 
                 const glow =
@@ -3287,8 +4071,7 @@
                         1,
                         flameX,
                         flameY,
-                        25 *
-                        scale
+                        25 * scale
                     );
 
 
@@ -3316,14 +4099,15 @@
 
                 ctx.beginPath();
 
+
                 ctx.arc(
                     flameX,
                     flameY,
-                    25 *
-                    scale,
+                    25 * scale,
                     0,
                     Math.PI * 2
                 );
+
 
                 ctx.fill();
 
@@ -3334,10 +4118,12 @@
 
                 ctx.save();
 
+
                 ctx.translate(
                     flameX,
                     flameY
                 );
+
 
                 ctx.scale(
                     scale,
@@ -3384,10 +4170,12 @@
 
                 ctx.beginPath();
 
+
                 ctx.moveTo(
                     0,
                     -18
                 );
+
 
                 ctx.bezierCurveTo(
                     11,
@@ -3398,6 +4186,7 @@
                     10
                 );
 
+
                 ctx.bezierCurveTo(
                     -9,
                     5,
@@ -3407,7 +4196,9 @@
                     -18
                 );
 
+
                 ctx.closePath();
+
 
                 ctx.fill();
 
@@ -3422,6 +4213,7 @@
 
                 ctx.beginPath();
 
+
                 ctx.ellipse(
                     0,
                     1,
@@ -3431,6 +4223,7 @@
                     0,
                     Math.PI * 2
                 );
+
 
                 ctx.fill();
 
@@ -3457,11 +4250,20 @@
             const order =
                 candles
                     .map(
-                        (candle, index) => ({
+                        (
                             candle,
+                            index
+                        ) => ({
+
+                            candle,
+
                             index,
+
                             position:
-                                positions[index]
+                                positions[
+                                    index
+                                ]
+
                         })
                     )
                     .sort(
@@ -3545,7 +4347,7 @@
 
 
             /*
-             * 위쪽 은은한 빛
+             * 위쪽 핑크빛 광원
              */
 
             const light =
@@ -3587,65 +4389,151 @@
              * 별
              */
 
-            for (
-                let i = 0;
-                i < 55;
-                i++
-            ) {
+            stars.forEach(
+                (
+                    star,
+                    index
+                ) => {
 
-                const x =
-                    (
-                        i *
-                        137.31
-                    ) %
-                    width;
+                    const alpha =
+                        0.18 +
+                        (
+                            Math.sin(
+                                time *
+                                0.0012 +
+                                star.phase
+                            ) +
+                            1
+                        ) *
+                        0.13;
 
 
-                const y =
-                    (
-                        i *
-                        79.17
-                    ) %
-                    (
-                        height *
-                        0.72
+                    ctx.globalAlpha =
+                        alpha;
+
+
+                    ctx.fillStyle =
+                        "#ffffff";
+
+
+                    ctx.beginPath();
+
+
+                    ctx.arc(
+                        star.x,
+                        star.y,
+                        star.size,
+                        0,
+                        Math.PI * 2
                     );
 
 
-                const alpha =
-                    0.2 +
-                    (
-                        Math.sin(
-                            time *
-                            0.001 +
-                            i
-                        ) +
-                        1
-                    ) *
-                    0.12;
+                    ctx.fill();
+
+                }
+            );
 
 
-                ctx.globalAlpha =
-                    alpha;
+            ctx.globalAlpha = 1;
+
+        }
 
 
-                ctx.fillStyle =
-                    "#ffffff";
+        /* ============================================================
+           축하 반짝이
+        ============================================================ */
 
+        function drawCelebrationSparkles(
+            time
+        ) {
 
-                ctx.beginPath();
-
-                ctx.arc(
-                    x,
-                    y,
-                    1.1,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fill();
-
+            if (
+                !celebrationStarted
+            ) {
+                return;
             }
+
+
+            const cake =
+                getCakeData();
+
+
+            const centerX =
+                cake.x;
+
+
+            const centerY =
+                cake.bottom -
+                cake.height * 0.55;
+
+
+            celebrationSparkles.forEach(
+                sparkle => {
+
+                    const angle =
+                        sparkle.angle +
+                        time *
+                        sparkle.speed;
+
+
+                    const radius =
+                        sparkle.radius +
+                        Math.sin(
+                            time * 0.002 +
+                            sparkle.phase
+                        ) *
+                        12;
+
+
+                    const x =
+                        centerX +
+                        Math.cos(angle) *
+                        radius;
+
+
+                    const y =
+                        centerY +
+                        Math.sin(angle) *
+                        radius *
+                        0.55;
+
+
+                    const alpha =
+                        0.15 +
+                        (
+                            Math.sin(
+                                time * 0.004 +
+                                sparkle.phase
+                            ) +
+                            1
+                        ) *
+                        0.35;
+
+
+                    ctx.globalAlpha =
+                        alpha;
+
+
+                    ctx.fillStyle =
+                        "#fff5c9";
+
+
+                    ctx.beginPath();
+
+
+                    ctx.arc(
+                        x,
+                        y,
+                        sparkle.size,
+                        0,
+                        Math.PI * 2
+                    );
+
+
+                    ctx.fill();
+
+                }
+            );
 
 
             ctx.globalAlpha = 1;
@@ -3673,11 +4561,14 @@
                 p.x +=
                     p.vx;
 
+
                 p.y +=
                     p.vy;
 
+
                 p.vy +=
                     p.gravity;
+
 
                 p.life -=
                     0.025;
@@ -3691,6 +4582,7 @@
                         i,
                         1
                     );
+
 
                     continue;
 
@@ -3707,6 +4599,7 @@
 
                 ctx.beginPath();
 
+
                 ctx.arc(
                     p.x,
                     p.y,
@@ -3715,13 +4608,13 @@
                     Math.PI * 2
                 );
 
+
                 ctx.fill();
 
             }
 
 
-            ctx.globalAlpha =
-                1;
+            ctx.globalAlpha = 1;
 
         }
 
@@ -3746,8 +4639,10 @@
                 smoke.x +=
                     smoke.vx;
 
+
                 smoke.y +=
                     smoke.vy;
+
 
                 smoke.vx +=
                     (
@@ -3756,8 +4651,10 @@
                     ) *
                     0.025;
 
+
                 smoke.size +=
                     0.06;
+
 
                 smoke.life -=
                     0.018;
@@ -3771,6 +4668,7 @@
                         i,
                         1
                     );
+
 
                     continue;
 
@@ -3788,6 +4686,7 @@
 
                 ctx.beginPath();
 
+
                 ctx.arc(
                     smoke.x,
                     smoke.y,
@@ -3796,19 +4695,19 @@
                     Math.PI * 2
                 );
 
+
                 ctx.fill();
 
             }
 
 
-            ctx.globalAlpha =
-                1;
+            ctx.globalAlpha = 1;
 
         }
 
 
         /* ============================================================
-           컨페티 업데이트
+           컨페티
         ============================================================ */
 
         function updateConfetti() {
@@ -3827,11 +4726,14 @@
                 c.x +=
                     c.vx;
 
+
                 c.y +=
                     c.vy;
 
+
                 c.vy +=
                     0.025;
+
 
                 c.rotation +=
                     c.rotationSpeed;
@@ -3842,17 +4744,14 @@
                     height + 40
                 ) {
 
-                    /*
-                     * 다시 위에서 생성하여
-                     * 축하가 계속 이어지도록 합니다.
-                     */
-
                     c.x =
                         Math.random() *
                         width;
 
+
                     c.y =
                         -20;
+
 
                     c.vy =
                         1 +
@@ -3864,14 +4763,17 @@
 
                 ctx.save();
 
+
                 ctx.translate(
                     c.x,
                     c.y
                 );
 
+
                 ctx.rotate(
                     c.rotation
                 );
+
 
                 ctx.globalAlpha =
                     c.life;
@@ -3894,33 +4796,60 @@
             }
 
 
-            ctx.globalAlpha =
-                1;
+            ctx.globalAlpha = 1;
 
         }
 
 
         /* ============================================================
-           Audio
+           Web Audio
         ============================================================ */
 
         let audioContext =
             null;
 
+
         let masterGain =
             null;
+
 
         let musicGain =
             null;
 
+
         let effectGain =
             null;
+
 
         let musicPlaying =
             false;
 
+
         let musicTimer =
             null;
+
+
+        /*
+         * 핵심 수정:
+         *
+         * 음악 세대 번호입니다.
+         *
+         * 음악을 다시 시작할 때마다 번호를 증가시켜
+         * 이전에 예약된 음악이 현재 음악으로 취급되지
+         * 않도록 합니다.
+         */
+
+        let musicGeneration =
+            0;
+
+
+        /*
+         * 현재 음악에서 생성한 oscillator를
+         * 전부 추적합니다.
+         */
+
+        let activeMusicSources =
+            new Set();
 
 
         const APP_VOLUME =
@@ -3930,16 +4859,27 @@
         const NOTE = {
 
             C4: 261.63,
+
             D4: 293.66,
+
             E4: 329.63,
+
             F4: 349.23,
+
             G4: 392.00,
+
             A4: 440.00,
+
             B4: 493.88,
+
             C5: 523.25,
+
             D5: 587.33,
+
             E5: 659.25,
+
             F5: 698.46,
+
             G5: 783.99
 
         };
@@ -3948,32 +4888,56 @@
         const birthdayMelody = [
 
             [NOTE.G4, 0.32],
+
             [NOTE.G4, 0.32],
+
             [NOTE.A4, 0.58],
+
             [NOTE.G4, 0.58],
+
             [NOTE.C5, 0.58],
+
             [NOTE.B4, 0.90],
 
+
             [NOTE.G4, 0.32],
+
             [NOTE.G4, 0.32],
+
             [NOTE.A4, 0.58],
+
             [NOTE.G4, 0.58],
+
             [NOTE.D5, 0.58],
+
             [NOTE.C5, 0.90],
 
+
             [NOTE.G4, 0.32],
+
             [NOTE.G4, 0.32],
+
             [NOTE.G5, 0.58],
+
             [NOTE.E5, 0.58],
+
             [NOTE.C5, 0.58],
+
             [NOTE.B4, 0.58],
+
             [NOTE.A4, 0.90],
 
+
             [NOTE.F5, 0.32],
+
             [NOTE.F5, 0.32],
+
             [NOTE.E5, 0.58],
+
             [NOTE.C5, 0.58],
+
             [NOTE.D5, 0.58],
+
             [NOTE.C5, 1.05]
 
         ];
@@ -3997,6 +4961,7 @@
                     audioContext.resume();
 
                 }
+
 
                 return;
 
@@ -4047,6 +5012,42 @@
             masterGain.connect(
                 audioContext.destination
             );
+
+        }
+
+
+        /* ============================================================
+           음악 소스 정리
+        ============================================================ */
+
+        function stopAllMusicSources() {
+
+            /*
+             * 현재 추적 중인 모든 oscillator를
+             * 즉시 정지합니다.
+             */
+
+            activeMusicSources.forEach(
+                source => {
+
+                    try {
+
+                        source.stop();
+
+                    } catch (error) {
+
+                        /*
+                         * 이미 정지된 oscillator는
+                         * 무시합니다.
+                         */
+
+                    }
+
+                }
+            );
+
+
+            activeMusicSources.clear();
 
         }
 
@@ -4134,20 +5135,38 @@
 
 
         /* ============================================================
-           피아노
+           피아노 음
         ============================================================ */
 
         function playPianoNote(
             frequency,
             startTime,
             duration,
-            volume = 0.12
+            volume = 0.12,
+            generation = musicGeneration
         ) {
 
             if (
                 !audioContext
             ) {
+
                 return;
+
+            }
+
+
+            /*
+             * 오래된 음악 루프가 예약되지 않도록
+             * generation을 검사합니다.
+             */
+
+            if (
+                generation !==
+                musicGeneration
+            ) {
+
+                return;
+
             }
 
 
@@ -4191,6 +5210,27 @@
             );
 
 
+            /*
+             * oscillator를 추적합니다.
+             */
+
+            activeMusicSources.add(
+                oscillator
+            );
+
+
+            oscillator.addEventListener(
+                "ended",
+                () => {
+
+                    activeMusicSources.delete(
+                        oscillator
+                    );
+
+                }
+            );
+
+
             oscillator.start(
                 startTime
             );
@@ -4212,13 +5252,26 @@
         function playBell(
             frequency,
             startTime,
-            volume = 0.035
+            volume = 0.035,
+            generation = musicGeneration
         ) {
 
             if (
                 !audioContext
             ) {
+
                 return;
+
+            }
+
+
+            if (
+                generation !==
+                musicGeneration
+            ) {
+
+                return;
+
             }
 
 
@@ -4270,6 +5323,23 @@
             );
 
 
+            activeMusicSources.add(
+                bell
+            );
+
+
+            bell.addEventListener(
+                "ended",
+                () => {
+
+                    activeMusicSources.delete(
+                        bell
+                    );
+
+                }
+            );
+
+
             bell.start(
                 startTime
             );
@@ -4284,15 +5354,29 @@
 
 
         /* ============================================================
-           생일 음악
+           생일 음악 스케줄
         ============================================================ */
 
-        function scheduleBirthdaySong() {
+        function scheduleBirthdaySong(
+            generation
+        ) {
 
             if (
                 !audioContext
             ) {
+
                 return 0;
+
+            }
+
+
+            if (
+                generation !==
+                musicGeneration
+            ) {
+
+                return 0;
+
             }
 
 
@@ -4311,20 +5395,40 @@
                     index
                 ) => {
 
+                    /*
+                     * 현재 세대인지 다시 확인합니다.
+                     */
+
+                    if (
+                        generation !==
+                        musicGeneration
+                    ) {
+
+                        return;
+
+                    }
+
+
                     playPianoNote(
                         frequency,
                         cursor,
                         duration,
-                        0.115
+                        0.115,
+                        generation
                     );
 
 
                     playBell(
                         frequency,
                         cursor,
-                        0.018
+                        0.018,
+                        generation
                     );
 
+
+                    /*
+                     * 낮은 베이스 음을 추가합니다.
+                     */
 
                     if (
                         index % 4 ===
@@ -4335,7 +5439,8 @@
                             frequency / 2,
                             cursor,
                             duration,
-                            0.025
+                            0.025,
+                            generation
                         );
 
                     }
@@ -4364,10 +5469,42 @@
             initAudio();
 
 
+            /*
+             * 이미 음악이 재생 중이면
+             * 절대로 새로운 음악을 추가하지 않습니다.
+             */
+
             if (
                 musicPlaying
             ) {
+
                 return;
+
+            }
+
+
+            /*
+             * 이전 음악을 완전히 제거합니다.
+             */
+
+            musicGeneration++;
+
+
+            stopAllMusicSources();
+
+
+            if (
+                musicTimer
+            ) {
+
+                clearTimeout(
+                    musicTimer
+                );
+
+
+                musicTimer =
+                    null;
+
             }
 
 
@@ -4379,17 +5516,32 @@
                 "🔊";
 
 
+            const generation =
+                musicGeneration;
+
+
             function loop() {
 
+                /*
+                 * 현재 음악이 아니면
+                 * 절대로 다음 곡을 예약하지 않습니다.
+                 */
+
                 if (
-                    !musicPlaying
+                    !musicPlaying ||
+                    generation !==
+                    musicGeneration
                 ) {
+
                     return;
+
                 }
 
 
                 const duration =
-                    scheduleBirthdaySong();
+                    scheduleBirthdaySong(
+                        generation
+                    );
 
 
                 musicTimer =
@@ -4417,9 +5569,25 @@
 
         function stopMusic() {
 
+            /*
+             * 먼저 음악 상태를 false로 바꿉니다.
+             */
+
             musicPlaying =
                 false;
 
+
+            /*
+             * 음악 세대를 변경하여
+             * 이전 예약 음악을 무효화합니다.
+             */
+
+            musicGeneration++;
+
+
+            /*
+             * 예약된 루프를 제거합니다.
+             */
 
             if (
                 musicTimer
@@ -4429,8 +5597,45 @@
                     musicTimer
                 );
 
+
                 musicTimer =
                     null;
+
+            }
+
+
+            /*
+             * 이미 재생 예약되어 있던 음도
+             * 모두 정리합니다.
+             */
+
+            stopAllMusicSources();
+
+
+            if (
+                musicGain &&
+                audioContext
+            ) {
+
+                const now =
+                    audioContext.currentTime;
+
+
+                musicGain.gain.cancelScheduledValues(
+                    now
+                );
+
+
+                musicGain.gain.setValueAtTime(
+                    0.0001,
+                    now
+                );
+
+
+                musicGain.gain.setValueAtTime(
+                    0.58,
+                    now + 0.03
+                );
 
             }
 
@@ -4440,6 +5645,10 @@
 
         }
 
+
+        /* ============================================================
+           음악 버튼
+        ============================================================ */
 
         musicButton.addEventListener(
             "click",
@@ -4470,7 +5679,9 @@
             if (
                 !audioContext
             ) {
+
                 return;
+
             }
 
 
@@ -4555,7 +5766,9 @@
             if (
                 !audioContext
             ) {
+
                 return;
+
             }
 
 
@@ -4566,8 +5779,11 @@
             const notes = [
 
                 NOTE.C5,
+
                 NOTE.E5,
+
                 NOTE.G5,
+
                 NOTE.C5 * 2
 
             ];
@@ -4579,7 +5795,7 @@
                     index
                 ) => {
 
-                    playBell(
+                    playBellEffect(
                         frequency,
                         now +
                         index *
@@ -4588,6 +5804,86 @@
                     );
 
                 }
+            );
+
+        }
+
+
+        /* ============================================================
+           효과음 전용 벨
+        ============================================================ */
+
+        function playBellEffect(
+            frequency,
+            startTime,
+            volume
+        ) {
+
+            if (
+                !audioContext
+            ) {
+
+                return;
+
+            }
+
+
+            const bell =
+                audioContext.createOscillator();
+
+
+            bell.type =
+                "sine";
+
+
+            bell.frequency.setValueAtTime(
+                frequency * 2,
+                startTime
+            );
+
+
+            const gain =
+                audioContext.createGain();
+
+
+            gain.gain.setValueAtTime(
+                0.0001,
+                startTime
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                volume,
+                startTime +
+                0.01
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                startTime +
+                1.2
+            );
+
+
+            bell.connect(
+                gain
+            );
+
+
+            gain.connect(
+                effectGain
+            );
+
+
+            bell.start(
+                startTime
+            );
+
+
+            bell.stop(
+                startTime +
+                1.25
             );
 
         }
@@ -4609,6 +5905,15 @@
             ) {
 
                 audioContext.resume();
+
+            }
+
+
+            if (
+                celebrationStarted
+            ) {
+
+                return;
 
             }
 
@@ -4659,7 +5964,9 @@
                 if (
                     candle.blown
                 ) {
+
                     continue;
+
                 }
 
 
@@ -4677,25 +5984,20 @@
                         candle.type ===
                         "long"
                             ? 76
-                            : 46
+                            : 45
                     ) *
                     scale;
 
 
-                /*
-                 * 실제 초보다 훨씬 넓게
-                 * 클릭 영역을 설정합니다.
-                 */
-
                 const hitWidth =
-                    32 *
+                    34 *
                     scale;
 
 
                 const hitTop =
                     position.y -
                     candleHeight -
-                    30 *
+                    31 *
                     scale;
 
 
@@ -4706,6 +6008,7 @@
 
 
                 if (
+
                     x >=
                     position.x -
                     hitWidth / 2 &&
@@ -4719,6 +6022,7 @@
 
                     y <=
                     hitBottom
+
                 ) {
 
                     candle.blown =
@@ -4779,7 +6083,9 @@
             if (
                 celebrationStarted
             ) {
+
                 return;
+
             }
 
 
@@ -4791,19 +6097,31 @@
                 () => {
 
                     createConfetti(
-                        180
+                        190
                     );
+
+
+                    createCelebrationSparkles();
 
 
                     playCelebrationSound();
 
 
+                    birthdayTitle.textContent =
+                        `🎉 ${birthdayName}님, 정말 축하합니다! 🎉`;
+
+
+                    birthdaySubtitle.textContent =
+                        "오늘 하루도 행복한 순간으로 가득하세요 ✨";
+
+
+                    hint.textContent =
+                        "🎂 생일을 다시 축하하려면 아래 버튼을 눌러주세요 🎂";
+
+
                     restartButton.style.display =
                         "block";
 
-
-                    birthdayTitle.textContent =
-                        `🎉 ${birthdayName}님, 정말 축하합니다! 🎉`;
 
                 },
                 500
@@ -4864,7 +6182,7 @@
 
 
         /* ============================================================
-           시작
+           생일 시작
         ============================================================ */
 
         function startBirthday() {
@@ -4911,11 +6229,21 @@
                 );
 
 
+            /*
+             * 혹시 이전 생일에서
+             * 음악이 남아 있다면 완전히 종료합니다.
+             */
+
+            stopMusic();
+
+
             particles = [];
 
             smokeParticles = [];
 
             confetti = [];
+
+            celebrationSparkles = [];
 
 
             createCandles(
@@ -4925,6 +6253,14 @@
 
             birthdayTitle.textContent =
                 `🎂 ${birthdayName}님, 생일 축하합니다!`;
+
+
+            birthdaySubtitle.textContent =
+                "촛불을 하나씩 눌러 꺼주세요 🕯️";
+
+
+            hint.textContent =
+                "✨ 모든 촛불을 끄면 특별한 축하가 시작됩니다 ✨";
 
 
             setup.classList.add(
@@ -4946,6 +6282,7 @@
 
             initAudio();
 
+
             startMusic();
 
         }
@@ -4958,7 +6295,7 @@
 
 
         /* ============================================================
-           Enter 키로 시작
+           Enter 키
         ============================================================ */
 
         nameInput.addEventListener(
@@ -5003,8 +6340,16 @@
             "click",
             () => {
 
+                /*
+                 * 음악을 먼저 완전히 정리합니다.
+                 */
+
                 stopMusic();
 
+
+                /*
+                 * 화면을 시작 화면으로 되돌립니다.
+                 */
 
                 setup.classList.remove(
                     "hidden"
@@ -5023,13 +6368,20 @@
                     "none";
 
 
+                /*
+                 * 모든 이펙트를 초기화합니다.
+                 */
+
                 particles = [];
 
                 smokeParticles = [];
 
                 confetti = [];
 
+                celebrationSparkles = [];
+
                 candles = [];
+
 
                 celebrationStarted =
                     false;
@@ -5059,13 +6411,22 @@
 
                 drawCake();
 
+
                 drawCandles(
                     time
                 );
 
+
+                drawCelebrationSparkles(
+                    time
+                );
+
+
                 updateParticles();
 
+
                 updateSmoke();
+
 
                 updateConfetti();
 
