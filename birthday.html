@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
     <title>생일 축하합니다 🎂</title>
 
     <style>
+
+        /* ============================================================
+           기본 초기화
+        ============================================================ */
+
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -22,7 +34,7 @@
                 "Noto Sans KR",
                 Arial,
                 sans-serif;
-            background: #080b14;
+            background: #070910;
             color: #ffffff;
         }
 
@@ -30,6 +42,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            user-select: none;
         }
 
         canvas {
@@ -41,231 +54,598 @@
             touch-action: none;
         }
 
+        /* ============================================================
+           시작 화면
+        ============================================================ */
+
         .setup {
             position: relative;
             z-index: 10;
-            width: min(92vw, 520px);
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 28px;
-            background: rgba(18, 22, 36, 0.92);
-            backdrop-filter: blur(18px);
+
+            width: min(92vw, 540px);
+
+            padding: 32px;
+
+            border: 1px solid rgba(255, 255, 255, 0.13);
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(31, 35, 57, 0.96),
+                    rgba(15, 18, 31, 0.94)
+                );
+
+            backdrop-filter: blur(22px);
+
             box-shadow:
-                0 25px 80px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+                0 30px 100px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+            transition:
+                opacity 0.45s ease,
+                transform 0.45s ease;
         }
 
         .setup.hidden {
-            display: none;
+            opacity: 0;
+            transform: translateY(20px) scale(0.96);
+            pointer-events: none;
         }
 
-        h1 {
-            margin: 0 0 8px;
+        .setup h1 {
+            margin: 0;
+
             text-align: center;
-            font-size: 32px;
+
+            font-size: clamp(28px, 7vw, 36px);
+
+            font-weight: 900;
+
+            letter-spacing: -1.8px;
+
+            text-shadow:
+                0 4px 20px rgba(255, 130, 190, 0.3);
         }
 
         .subtitle {
-            margin-bottom: 26px;
+            margin-top: 9px;
+            margin-bottom: 28px;
+
             text-align: center;
+
             color: #aeb6ca;
+
             font-size: 14px;
+            line-height: 1.6;
         }
 
         label {
             display: block;
-            margin: 17px 0 8px;
-            color: #cbd2e3;
+
+            margin: 18px 0 8px;
+
+            color: #d7dceb;
+
             font-size: 14px;
-            font-weight: 600;
+
+            font-weight: 700;
         }
 
         input {
             width: 100%;
-            height: 48px;
-            padding: 0 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
+            height: 50px;
+
+            padding: 0 16px;
+
+            border: 1px solid rgba(255, 255, 255, 0.09);
+
+            border-radius: 15px;
+
             outline: none;
-            background: #111626;
-            color: #fff;
+
+            background:
+                rgba(8, 11, 21, 0.75);
+
+            color: #ffffff;
+
             font-size: 16px;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        input::placeholder {
+            color: #6f778d;
         }
 
         input:focus {
             border-color: #ff8fba;
-            box-shadow: 0 0 0 3px rgba(255, 143, 186, 0.1);
+
+            background:
+                rgba(12, 15, 28, 0.95);
+
+            box-shadow:
+                0 0 0 3px rgba(255, 143, 186, 0.11),
+                0 8px 30px rgba(255, 100, 170, 0.08);
         }
+
+        /* ============================================================
+           케이크 선택
+        ============================================================ */
 
         .cakes {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 9px;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 10px;
         }
 
         .cake {
-            min-height: 72px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 15px;
-            background: #111626;
+            min-height: 82px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.08);
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #171b2c,
+                    #101322
+                );
+
             color: #dce1ef;
+
             cursor: pointer;
+
+            font-family: inherit;
+
             font-size: 13px;
-            transition: 0.2s ease;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
         .cake span {
             display: block;
-            margin-bottom: 4px;
-            font-size: 25px;
+
+            margin-bottom: 5px;
+
+            font-size: 27px;
+
+            filter:
+                drop-shadow(
+                    0 4px 8px
+                    rgba(0, 0, 0, 0.25)
+                );
         }
 
         .cake:hover {
-            transform: translateY(-2px);
-            background: #191e31;
+            transform: translateY(-3px);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #20253b,
+                    #15192a
+                );
+        }
+
+        .cake:active {
+            transform: translateY(0) scale(0.97);
         }
 
         .cake.selected {
             border-color: #ff8fb9;
-            background: rgba(255, 143, 185, 0.13);
-            box-shadow: 0 0 20px rgba(255, 143, 185, 0.1);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 143, 185, 0.18),
+                    rgba(168, 113, 255, 0.10)
+                );
+
+            box-shadow:
+                0 0 0 1px rgba(255, 143, 185, 0.08),
+                0 10px 35px rgba(255, 100, 170, 0.12);
         }
+
+        /* ============================================================
+           시작 버튼
+        ============================================================ */
 
         .start {
             width: 100%;
-            height: 52px;
-            margin-top: 25px;
+            height: 54px;
+
+            margin-top: 26px;
+
             border: 0;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #ff79ae, #b978ff);
-            color: #fff;
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff72a9,
+                    #bd7aff 55%,
+                    #7f9cff
+                );
+
+            color: #ffffff;
+
+            font-family: inherit;
+
             font-size: 16px;
-            font-weight: 800;
+
+            font-weight: 900;
+
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(220, 100, 180, 0.25);
-            transition: 0.2s ease;
+
+            box-shadow:
+                0 12px 35px rgba(213, 91, 180, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+            transition:
+                transform 0.2s ease,
+                filter 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
         .start:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+
             filter: brightness(1.08);
+
+            box-shadow:
+                0 16px 42px rgba(213, 91, 180, 0.35);
         }
+
+        .start:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* ============================================================
+           장면 UI
+        ============================================================ */
 
         .scene-ui {
             position: fixed;
+
             z-index: 5;
+
             inset: 0;
+
             pointer-events: none;
         }
 
         .birthday-title {
             position: absolute;
-            top: 7%;
+
+            top:
+                max(
+                    5%,
+                    env(safe-area-inset-top)
+                );
+
             width: 100%;
+
             padding: 0 15px;
+
             text-align: center;
-            font-size: clamp(25px, 5vw, 58px);
+
+            font-size:
+                clamp(
+                    25px,
+                    5vw,
+                    58px
+                );
+
             font-weight: 900;
+
             letter-spacing: -2px;
+
             text-shadow:
-                0 0 10px rgba(255, 255, 255, 0.4),
-                0 0 30px rgba(255, 130, 190, 0.35);
+                0 0 10px rgba(255, 255, 255, 0.45),
+                0 0 30px rgba(255, 130, 190, 0.45),
+                0 8px 35px rgba(0, 0, 0, 0.35);
         }
 
         .birthday-subtitle {
             position: absolute;
-            top: calc(7% + clamp(40px, 7vw, 75px));
+
+            top:
+                calc(
+                    max(
+                        5%,
+                        env(safe-area-inset-top)
+                    )
+                    +
+                    clamp(43px, 7vw, 78px)
+                );
+
             width: 100%;
+
+            padding: 0 20px;
+
             text-align: center;
-            color: #cbd1df;
+
+            color: #d1d6e5;
+
             font-size: 14px;
+
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.6);
         }
+
+        /* ============================================================
+           음악 버튼
+        ============================================================ */
 
         .music-button {
             position: fixed;
+
             z-index: 20;
-            right: 18px;
-            top: 18px;
-            width: 44px;
-            height: 44px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            right:
+                max(
+                    18px,
+                    env(safe-area-inset-right)
+                );
+
+            top:
+                max(
+                    18px,
+                    env(safe-area-inset-top)
+                );
+
+            width: 46px;
+            height: 46px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.13);
+
             border-radius: 50%;
-            background: rgba(20, 24, 40, 0.75);
-            color: #fff;
+
+            background:
+                rgba(20, 24, 40, 0.76);
+
+            color: #ffffff;
+
             cursor: pointer;
-            backdrop-filter: blur(10px);
-            pointer-events: auto;
+
+            backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .music-button:active {
+            transform: scale(0.92);
         }
 
         .hint {
             position: fixed;
+
             z-index: 5;
-            bottom: 5%;
+
+            bottom:
+                max(
+                    5%,
+                    env(safe-area-inset-bottom)
+                );
+
             width: 100%;
+
             padding: 0 10px;
+
             text-align: center;
-            color: rgba(255, 255, 255, 0.65);
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.68
+                );
+
             font-size: 14px;
+
             pointer-events: none;
+
+            text-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.5);
         }
 
+        /* ============================================================
+           다시 시작 버튼
+        ============================================================ */
+
+        .restart {
+            position: fixed;
+
+            z-index: 20;
+
+            left: 50%;
+
+            bottom:
+                max(
+                    25px,
+                    env(safe-area-inset-bottom)
+                );
+
+            transform:
+                translateX(-50%);
+
+            min-width: 150px;
+
+            height: 45px;
+
+            padding: 0 22px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.15);
+
+            border-radius: 999px;
+
+            background:
+                rgba(22, 26, 42, 0.82);
+
+            color: #ffffff;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            backdrop-filter: blur(12px);
+        }
+
+        /* ============================================================
+           모바일
+        ============================================================ */
+
         @media (max-width: 500px) {
+
             .setup {
-                padding: 23px;
+                padding: 24px;
+
+                border-radius: 25px;
             }
 
             .cakes {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns:
+                    repeat(2, 1fr);
             }
+
+            .cake {
+                min-height: 75px;
+            }
+
         }
+
+        @media (max-height: 650px) {
+
+            .birthday-title {
+                top: 3%;
+            }
+
+            .birthday-subtitle {
+                top: calc(3% + 45px);
+            }
+
+            .hint {
+                bottom: 2%;
+            }
+
+        }
+
     </style>
+
 </head>
 
 <body>
 
+    <!-- ============================================================
+         Canvas
+    ============================================================ -->
+
     <canvas id="canvas"></canvas>
 
-    <div class="setup" id="setup">
-        <h1>🎂 생일 축하하기</h1>
+
+    <!-- ============================================================
+         시작 화면
+    ============================================================ -->
+
+    <div
+        class="setup"
+        id="setup"
+    >
+
+        <h1>
+            🎂 생일 축하하기
+        </h1>
 
         <div class="subtitle">
-            이름과 케이크를 선택하고 생일을 시작해보세요.
+            이름과 케이크를 선택하고<br>
+            특별한 생일을 시작해보세요.
         </div>
 
-        <label for="name">이름</label>
+
+        <label for="name">
+            이름
+        </label>
 
         <input
             id="name"
             type="text"
             maxlength="20"
+            autocomplete="off"
             placeholder="예: 홍길동"
         >
 
-        <label>케이크</label>
+
+        <label>
+            케이크
+        </label>
 
         <div class="cakes">
 
-            <button class="cake selected" data-cake="strawberry">
+            <button
+                class="cake selected"
+                data-cake="strawberry"
+                type="button"
+            >
                 <span>🍓</span>
                 딸기
             </button>
 
-            <button class="cake" data-cake="cream">
+            <button
+                class="cake"
+                data-cake="cream"
+                type="button"
+            >
                 <span>🍰</span>
                 생크림
             </button>
 
-            <button class="cake" data-cake="chocolate">
+            <button
+                class="cake"
+                data-cake="chocolate"
+                type="button"
+            >
                 <span>🍫</span>
                 초콜릿
             </button>
 
-            <button class="cake" data-cake="cheese">
+            <button
+                class="cake"
+                data-cake="cheese"
+                type="button"
+            >
                 <span>🧀</span>
                 치즈
             </button>
 
         </div>
+
 
         <label for="age">
             나이 / 초 개수
@@ -277,15 +657,31 @@
             min="1"
             max="100"
             value="10"
+            inputmode="numeric"
             placeholder="나이를 입력하세요"
         >
 
-        <button class="start" id="startButton">
+
+        <button
+            class="start"
+            id="startButton"
+            type="button"
+        >
             🎉 생일 시작하기
         </button>
+
     </div>
 
-    <div class="scene-ui" id="sceneUI" style="display:none;">
+
+    <!-- ============================================================
+         장면 UI
+    ============================================================ -->
+
+    <div
+        class="scene-ui"
+        id="sceneUI"
+        style="display:none;"
+    >
 
         <div
             class="birthday-title"
@@ -293,40 +689,65 @@
         ></div>
 
         <div class="birthday-subtitle">
-            촛불을 클릭해서 꺼주세요 🕯️
+            촛불을 하나씩 눌러 꺼주세요 🕯️
         </div>
 
         <div class="hint">
-            ✨ 촛불을 모두 끄면 축하가 시작됩니다 ✨
+            ✨ 모든 촛불을 끄면 특별한 축하가 시작됩니다 ✨
         </div>
 
     </div>
+
+
+    <!-- ============================================================
+         음악
+    ============================================================ -->
 
     <button
         class="music-button"
         id="musicButton"
         style="display:none;"
+        type="button"
+        aria-label="음악 켜기 또는 끄기"
     >
         🔊
     </button>
 
 
+    <!-- ============================================================
+         다시 시작
+    ============================================================ -->
+
+    <button
+        class="restart"
+        id="restartButton"
+        type="button"
+        style="display:none;"
+    >
+        🎂 다시 시작
+    </button>
+
+
     <script>
+
         "use strict";
 
 
         /* ============================================================
-           Canvas 기본 설정
+           Canvas
         ============================================================ */
 
         const canvas =
             document.getElementById("canvas");
 
         const ctx =
-            canvas.getContext("2d", {
-                alpha: false,
-                desynchronized: true
-            });
+            canvas.getContext(
+                "2d",
+                {
+                    alpha: false,
+                    desynchronized: true
+                }
+            );
 
 
         let width = 0;
@@ -344,13 +765,11 @@
                     2
                 );
 
-
             width =
                 window.innerWidth;
 
             height =
                 window.innerHeight;
-
 
             canvas.width =
                 Math.floor(
@@ -362,13 +781,11 @@
                     height * dpr
                 );
 
-
             canvas.style.width =
                 width + "px";
 
             canvas.style.height =
                 height + "px";
-
 
             ctx.setTransform(
                 dpr,
@@ -378,12 +795,16 @@
                 0,
                 0
             );
+
         }
 
 
         window.addEventListener(
             "resize",
-            resizeCanvas
+            resizeCanvas,
+            {
+                passive: true
+            }
         );
 
 
@@ -395,27 +816,44 @@
         ============================================================ */
 
         const setup =
-            document.getElementById("setup");
+            document.getElementById(
+                "setup"
+            );
 
         const sceneUI =
-            document.getElementById("sceneUI");
+            document.getElementById(
+                "sceneUI"
+            );
 
         const birthdayTitle =
-            document.getElementById("birthdayTitle");
-
+            document.getElementById(
+                "birthdayTitle"
+            );
 
         const nameInput =
-            document.getElementById("name");
+            document.getElementById(
+                "name"
+            );
 
         const ageInput =
-            document.getElementById("age");
-
+            document.getElementById(
+                "age"
+            );
 
         const startButton =
-            document.getElementById("startButton");
+            document.getElementById(
+                "startButton"
+            );
 
         const musicButton =
-            document.getElementById("musicButton");
+            document.getElementById(
+                "musicButton"
+            );
+
+        const restartButton =
+            document.getElementById(
+                "restartButton"
+            );
 
 
         let selectedCake =
@@ -424,64 +862,141 @@
         let birthdayName =
             "친구";
 
-
-        document
-            .querySelectorAll(".cake")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        document
-                            .querySelectorAll(".cake")
-                            .forEach(item => {
-
-                                item.classList.remove(
-                                    "selected"
-                                );
-
-                            });
-
-
-                        button.classList.add(
-                            "selected"
-                        );
-
-
-                        selectedCake =
-                            button.dataset.cake;
-                    }
-                );
-
-            });
+        let celebrationStarted =
+            false;
 
 
         /* ============================================================
-           케이크 / 촛불 데이터
+           케이크 선택
+        ============================================================ */
+
+        document
+            .querySelectorAll(".cake")
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            document
+                                .querySelectorAll(
+                                    ".cake"
+                                )
+                                .forEach(
+                                    item => {
+
+                                        item.classList
+                                            .remove(
+                                                "selected"
+                                            );
+
+                                    }
+                                );
+
+                            button.classList.add(
+                                "selected"
+                            );
+
+                            selectedCake =
+                                button.dataset.cake;
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* ============================================================
+           케이크 색상
+        ============================================================ */
+
+        const cakeColors = {
+
+            strawberry: {
+                bodyTop: "#fff7fa",
+                bodyBottom: "#e978a2",
+                cream: "#fffafd",
+                accent: "#ff3d6d",
+                dark: "#c62950"
+            },
+
+            cream: {
+                bodyTop: "#fffef9",
+                bodyBottom: "#d9b981",
+                cream: "#ffffff",
+                accent: "#f1d59d",
+                dark: "#c7a46b"
+            },
+
+            chocolate: {
+                bodyTop: "#a96d50",
+                bodyBottom: "#4a2117",
+                cream: "#f5d8c0",
+                accent: "#713421",
+                dark: "#34140e"
+            },
+
+            cheese: {
+                bodyTop: "#ffe98a",
+                bodyBottom: "#c9891b",
+                cream: "#fff2a9",
+                accent: "#e3ad31",
+                dark: "#9d6813"
+            }
+
+        };
+
+
+        /* ============================================================
+           촛불
         ============================================================ */
 
         let candles = [];
 
-        let cakeHoles = [];
+        let smokeParticles = [];
+
+        let particles = [];
+
+        let confetti = [];
 
 
         function createCandles(age) {
 
             candles = [];
 
+            celebrationStarted = false;
+
+
+            /*
+             * 나이만큼 모두 생성하지 않고
+             * 100개까지 제한합니다.
+             */
+
+            age =
+                Math.max(
+                    1,
+                    Math.min(
+                        Math.floor(age),
+                        100
+                    )
+                );
+
+
+            /*
+             * 10살 단위는 긴 초,
+             * 나머지는 짧은 초입니다.
+             */
 
             const longCount =
-                Math.floor(age / 10);
+                Math.floor(
+                    age / 10
+                );
 
             const shortCount =
                 age % 10;
 
-
-            /*
-             * 긴 초는 먼저 생성합니다.
-             * 렌더링에서도 뒤쪽에 배치됩니다.
-             */
 
             for (
                 let i = 0;
@@ -498,16 +1013,17 @@
                     flame:
                         Math.random() *
                         Math.PI *
+                        2,
+
+                    phase:
+                        Math.random() *
+                        Math.PI *
                         2
 
                 });
 
             }
 
-
-            /*
-             * 짧은 초는 앞쪽에 배치됩니다.
-             */
 
             for (
                 let i = 0;
@@ -524,86 +1040,65 @@
                     flame:
                         Math.random() *
                         Math.PI *
+                        2,
+
+                    phase:
+                        Math.random() *
+                        Math.PI *
                         2
 
                 });
 
             }
+
         }
 
 
         /* ============================================================
-           치즈 케이크 구멍
-           
-           한 번 생성한 위치를 계속 사용하여
-           화면이 깜빡이지 않도록 합니다.
+           치즈 구멍
         ============================================================ */
 
-        function createCheeseHoles() {
+        const cheeseHoles = [
 
-            cakeHoles = [];
+            [0.15, 0.34, 5],
 
+            [0.25, 0.22, 4],
 
-            const holes = [
+            [0.37, 0.40, 7],
 
-                [0.16, 0.34, 5],
+            [0.49, 0.25, 4],
 
-                [0.27, 0.22, 4],
+            [0.61, 0.39, 6],
 
-                [0.38, 0.39, 6],
+            [0.74, 0.23, 4],
 
-                [0.52, 0.24, 4],
+            [0.85, 0.40, 5],
 
-                [0.65, 0.36, 5],
+            [0.22, 0.52, 4],
 
-                [0.78, 0.25, 4],
+            [0.46, 0.50, 5],
 
-                [0.86, 0.42, 5],
+            [0.70, 0.51, 4]
 
-                [0.21, 0.48, 3],
-
-                [0.46, 0.48, 4],
-
-                [0.70, 0.49, 3]
-
-            ];
-
-
-            holes.forEach(
-                hole => {
-
-                    cakeHoles.push({
-
-                        x: hole[0],
-
-                        y: hole[1],
-
-                        r: hole[2]
-
-                    });
-
-                }
-            );
-        }
-
-
-        createCheeseHoles();
+        ];
 
 
         /* ============================================================
-           파티클
+           파티클 생성
         ============================================================ */
-
-        let particles = [];
-
-        let confetti = [];
-
 
         function createParticle(
             x,
             y,
             amount = 20
         ) {
+
+            amount =
+                Math.min(
+                    amount,
+                    35
+                );
+
 
             for (
                 let i = 0;
@@ -616,18 +1111,16 @@
                     Math.PI *
                     2;
 
-
                 const speed =
-                    1 +
+                    1.5 +
                     Math.random() *
                     5;
 
-
                 particles.push({
 
-                    x,
+                    x: x,
 
-                    y,
+                    y: y,
 
                     vx:
                         Math.cos(angle) *
@@ -636,6 +1129,8 @@
                     vy:
                         Math.sin(angle) *
                         speed,
+
+                    gravity: 0.06,
 
                     life: 1,
 
@@ -647,12 +1142,85 @@
                 });
 
             }
+
         }
 
 
-        function createConfetti(
-            amount = 100
+        /* ============================================================
+           연기 생성
+        ============================================================ */
+
+        function createSmoke(
+            x,
+            y
         ) {
+
+            for (
+                let i = 0;
+                i < 5;
+                i++
+            ) {
+
+                smokeParticles.push({
+
+                    x:
+                        x +
+                        (
+                            Math.random() -
+                            0.5
+                        ) *
+                        8,
+
+                    y:
+                        y,
+
+                    vx:
+                        (
+                            Math.random() -
+                            0.5
+                        ) *
+                        0.5,
+
+                    vy:
+                        -0.8 -
+                        Math.random() *
+                        0.8,
+
+                    life: 1,
+
+                    size:
+                        3 +
+                        Math.random() *
+                        4
+
+                });
+
+            }
+
+        }
+
+
+        /* ============================================================
+           컨페티
+        ============================================================ */
+
+        function createConfetti(
+            amount = 140
+        ) {
+
+            /*
+             * 기존 컨페티를 정리합니다.
+             */
+
+            confetti = [];
+
+
+            amount =
+                Math.min(
+                    amount,
+                    220
+                );
+
 
             for (
                 let i = 0;
@@ -671,8 +1239,11 @@
                         height,
 
                     vx:
-                        (Math.random() - 0.5) *
-                        2,
+                        (
+                            Math.random() -
+                            0.5
+                        ) *
+                        2.5,
 
                     vy:
                         1 +
@@ -684,143 +1255,115 @@
                         Math.PI,
 
                     rotationSpeed:
-                        (Math.random() - 0.5) *
-                        0.15,
+                        (
+                            Math.random() -
+                            0.5
+                        ) *
+                        0.18,
 
                     size:
                         4 +
                         Math.random() *
                         7,
 
+                    hue:
+                        Math.random() *
+                        360,
+
                     life: 1
 
                 });
 
             }
+
         }
 
 
         /* ============================================================
-           케이크 색상
-        ============================================================ */
-
-        const cakeColors = {
-
-            strawberry: {
-
-                top: "#fff4f8",
-
-                bottom: "#f486ad",
-
-                cream: "#fffafd",
-
-                accent: "#ff4f78"
-
-            },
-
-
-            cream: {
-
-                top: "#fffdf5",
-
-                bottom: "#e5cfa3",
-
-                cream: "#ffffff",
-
-                accent: "#f3dca8"
-
-            },
-
-
-            chocolate: {
-
-                top: "#a56a4e",
-
-                bottom: "#552719",
-
-                cream: "#f3d7c1",
-
-                accent: "#6e3422"
-
-            },
-
-
-            cheese: {
-
-                top: "#ffe990",
-
-                bottom: "#d69b24",
-
-                cream: "#fff2a8",
-
-                accent: "#e7b63e"
-
-            }
-
-        };
-
-
-        /* ============================================================
-           케이크 위치 / 크기
+           케이크 데이터
         ============================================================ */
 
         function getCakeData() {
 
             /*
-             * 기존보다 케이크를 조금 넓게 만들어
-             * 촛불이 자연스럽게 배치될 공간을 확보합니다.
+             * 모바일 세로 화면에서는
+             * 케이크를 자동으로 작게 만듭니다.
              */
 
-            const cakeWidth =
+            const maxWidth =
                 Math.min(
-                    width * 0.74,
-                    620
+                    width * 0.82,
+                    650
                 );
 
 
-            const cakeHeight =
+            const maxHeight =
                 Math.min(
-                    height * 0.31,
-                    250
+                    height * 0.36,
+                    270
                 );
 
 
-            const x =
-                width / 2;
+            let cakeWidth =
+                maxWidth;
+
+
+            let cakeHeight =
+                maxHeight;
+
+
+            /*
+             * 화면 높이가 작은 경우
+             * 케이크 높이를 더 줄입니다.
+             */
+
+            if (
+                height < 700
+            ) {
+
+                cakeWidth =
+                    Math.min(
+                        width * 0.78,
+                        570
+                    );
+
+                cakeHeight =
+                    Math.min(
+                        height * 0.31,
+                        220
+                    );
+
+            }
 
 
             const bottom =
-                height * 0.82;
+                Math.min(
+                    height * 0.84,
+                    height - 40
+                );
 
 
             return {
 
-                x,
+                x:
+                    width / 2,
 
-                width: cakeWidth,
+                width:
+                    cakeWidth,
 
-                height: cakeHeight,
+                height:
+                    cakeHeight,
 
-                bottom
+                bottom:
+                    bottom
 
             };
+
         }
 
 
         /* ============================================================
-           촛불 위치 계산
-           
-           핵심 변경 부분입니다.
-           
-           긴 초:
-           - 케이크 뒤쪽
-           - 조금 위
-           - 넓게 퍼지는 곡선
-           
-           짧은 초:
-           - 케이크 앞쪽
-           - 조금 아래
-           - 긴 초와 겹치지 않음
+           촛불 위치
         ============================================================ */
 
         function getCandlePositions() {
@@ -829,318 +1372,209 @@
                 getCakeData();
 
 
-            const longCandles =
-                candles.filter(
-                    candle =>
-                        candle.type === "long"
-                );
-
-
-            const shortCandles =
-                candles.filter(
-                    candle =>
-                        candle.type === "short"
-                );
-
-
             const positions =
                 new Array(
                     candles.length
                 );
 
 
-            /*
-             * 케이크 윗면의 실제 크림 표면입니다.
-             */
-
             const surfaceY =
                 cake.bottom -
                 cake.height +
-                48;
+                40;
 
 
             /*
-             * 긴 초는 뒤쪽에 둡니다.
+             * 촛불 개수가 많으면
+             * 여러 줄로 자동 분리합니다.
              */
 
-            function placeRow(
-                list,
-                depth,
-                isLong
+            const total =
+                candles.length;
+
+
+            let columns;
+
+
+            if (
+                total <= 5
             ) {
 
-                const count =
-                    list.length;
+                columns = total;
+
+            } else if (
+                total <= 10
+            ) {
+
+                columns = 5;
+
+            } else if (
+                total <= 20
+            ) {
+
+                columns = 7;
+
+            } else {
+
+                columns = 8;
+
+            }
 
 
-                if (count === 0) {
-                    return;
-                }
+            candles.forEach(
+                (candle, index) => {
+
+                    const row =
+                        Math.floor(
+                            index /
+                            columns
+                        );
 
 
-                /*
-                 * 너무 많은 촛불이 들어갈 경우
-                 * 자동으로 간격을 줄입니다.
-                 */
-
-                const usableWidth =
-                    cake.width *
-                    (
-                        isLong
-                            ? 0.72
-                            : 0.82
-                    );
+                    const col =
+                        index %
+                        columns;
 
 
-                const maxSpacing =
-                    isLong
-                        ? 62
-                        : 52;
+                    const rowCount =
+                        Math.min(
+                            columns,
+                            total -
+                            row *
+                            columns
+                        );
 
 
-                const spacing =
-                    Math.min(
-                        maxSpacing,
-                        usableWidth /
-                        Math.max(
-                            count - 1,
+                    const usableWidth =
+                        cake.width *
+                        (
+                            total <= 5
+                                ? 0.62
+                                : 0.76
+                        );
+
+
+                    const spacing =
+                        rowCount <= 1
+                            ? 0
+                            :
+                            usableWidth /
+                            (
+                                rowCount -
+                                1
+                            );
+
+
+                    const rowWidth =
+                        spacing *
+                        (
+                            rowCount -
                             1
-                        )
-                    );
+                        );
 
 
-                const actualWidth =
-                    spacing *
-                    Math.max(
-                        count - 1,
-                        1
-                    );
-
-
-                const startX =
-                    cake.x -
-                    actualWidth / 2;
-
-
-                list.forEach(
-                    (candle, index) => {
-
-                        const originalIndex =
-                            candles.indexOf(
-                                candle
-                            );
-
-
-                        /*
-                         * 양쪽은 살짝 높고
-                         * 중앙은 살짝 낮게 만들어
-                         * 원형 케이크의 곡선을 따라갑니다.
-                         */
-
-                        const normalized =
-                            count <= 1
-                                ? 0
-                                :
+                    const normalized =
+                        rowCount <= 1
+                            ? 0
+                            :
+                            (
+                                col /
                                 (
-                                    index /
-                                    (count - 1)
-                                ) * 2 - 1;
-
-
-                        const curve =
-                            Math.abs(
-                                normalized
+                                    rowCount -
+                                    1
+                                )
                             ) *
-                            12;
+                            2 -
+                            1;
 
 
-                        /*
-                         * 긴 초는 뒤,
-                         * 짧은 초는 앞입니다.
-                         */
+                    /*
+                     * 가운데는 낮고 양쪽은
+                     * 조금 높게 배치합니다.
+                     */
 
-                        const y =
-                            surfaceY +
-                            depth +
-                            curve;
+                    const curve =
+                        Math.abs(
+                            normalized
+                        ) *
+                        9;
 
 
-                        positions[
-                            originalIndex
-                        ] = {
+                    const x =
+                        cake.x -
+                        rowWidth / 2 +
+                        col *
+                        spacing;
 
-                            x:
-                                startX +
-                                index *
-                                spacing,
 
-                            y,
+                    /*
+                     * 긴 초는 뒤,
+                     * 짧은 초는 앞쪽으로 배치합니다.
+                     */
 
-                            depth,
+                    let y =
+                        surfaceY +
+                        row *
+                        30 +
+                        curve;
 
-                            scale:
-                                count > 18
-                                    ? 0.72
-                                    : count > 12
-                                        ? 0.82
-                                        : 1
 
-                        };
+                    if (
+                        candle.type === "short"
+                    ) {
+
+                        y += 24;
 
                     }
-                );
-            }
 
 
-            /*
-             * 긴 초를 먼저 배치합니다.
-             * 화면상 뒤쪽에 존재합니다.
-             */
+                    /*
+                     * 촛불이 너무 많아질 경우
+                     * 크기를 자동으로 축소합니다.
+                     */
 
-            placeRow(
-                longCandles,
-                2,
-                true
-            );
-
-
-            /*
-             * 짧은 초는 앞쪽에 배치합니다.
-             */
-
-            placeRow(
-                shortCandles,
-                37,
-                false
-            );
-
-
-            /*
-             * 초가 너무 많아 한 줄에 들어가지 않는 경우를
-             * 추가 행으로 재배치합니다.
-             *
-             * 20개 이상일 때는 긴 초와 짧은 초가
-             * 겹치지 않도록 여러 줄을 사용합니다.
-             */
-
-            if (candles.length > 20) {
-
-                const sorted =
-                    candles.slice();
-
-
-                const maxPerRow =
-                    Math.min(
-                        12,
+                    const scale =
                         Math.max(
-                            7,
-                            Math.ceil(
-                                Math.sqrt(
-                                    candles.length *
-                                    1.7
-                                )
-                            )
-                        )
-                    );
-
-
-                sorted.forEach(
-                    (candle, index) => {
-
-                        const row =
-                            Math.floor(
-                                index /
-                                maxPerRow
-                            );
-
-
-                        const rowIndex =
-                            index %
-                            maxPerRow;
-
-
-                        const rowCount =
+                            0.55,
                             Math.min(
-                                maxPerRow,
-                                candles.length -
-                                row *
-                                maxPerRow
-                            );
-
-
-                        const spacing =
-                            cake.width *
-                            0.72 /
-                            Math.max(
-                                rowCount - 1,
-                                1
-                            );
-
-
-                        const rowWidth =
-                            spacing *
-                            Math.max(
-                                rowCount - 1,
-                                1
-                            );
-
-
-                        const x =
-                            cake.x -
-                            rowWidth / 2 +
-                            rowIndex *
-                            spacing;
-
-
-                        const curve =
-                            Math.abs(
-                                (
-                                    rowIndex /
-                                    Math.max(
-                                        rowCount - 1,
-                                        1
-                                    )
-                                ) * 2 - 1
-                            ) *
-                            8;
-
-
-                        const originalIndex =
-                            candles.indexOf(
-                                candle
-                            );
-
-
-                        positions[
-                            originalIndex
-                        ] = {
-
-                            x,
-
-                            y:
-                                surfaceY +
-                                8 +
-                                row * 34 +
-                                curve,
-
-                            depth:
-                                row,
-
-                            scale:
+                                1,
+                                1 -
                                 Math.max(
-                                    0.58,
-                                    1 -
-                                    row * 0.08
-                                )
+                                    0,
+                                    total -
+                                    12
+                                ) *
+                                0.025
+                            )
+                        );
 
-                        };
 
-                    }
-                );
-            }
+                    positions[index] = {
+
+                        x: x,
+
+                        y: y,
+
+                        depth:
+                            row +
+                            (
+                                candle.type ===
+                                "long"
+                                    ? 0
+                                    : 0.5
+                            ),
+
+                        scale:
+                            scale
+
+                    };
+
+                }
+            );
 
 
             return positions;
+
         }
 
 
@@ -1205,24 +1639,77 @@
             );
 
             context.closePath();
+
         }
 
 
         /* ============================================================
-           케이크 그리기
+           케이크 빛
         ============================================================ */
 
-        function drawCake() {
+        function drawCakeGlow(
+            cake
+        ) {
 
-            const cake =
-                getCakeData();
+            const glow =
+                ctx.createRadialGradient(
+                    cake.x,
+                    cake.bottom -
+                    cake.height * 0.55,
+                    20,
+                    cake.x,
+                    cake.bottom -
+                    cake.height * 0.55,
+                    cake.width * 0.72
+                );
 
 
-            const colors =
-                cakeColors[
-                    selectedCake
-                ];
+            glow.addColorStop(
+                0,
+                "rgba(255,180,220,0.14)"
+            );
 
+
+            glow.addColorStop(
+                0.45,
+                "rgba(255,120,190,0.055)"
+            );
+
+
+            glow.addColorStop(
+                1,
+                "rgba(255,120,190,0)"
+            );
+
+
+            ctx.fillStyle =
+                glow;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                cake.x,
+                cake.bottom -
+                cake.height * 0.55,
+                cake.width * 0.72,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+
+
+        /* ============================================================
+           케이크 기본 레이어
+        ============================================================ */
+
+        function drawCakeBase(
+            cake,
+            colors
+        ) {
 
             const left =
                 cake.x -
@@ -1234,23 +1721,25 @@
                 cake.height;
 
 
-            /* --------------------------------------------------------
-               바닥 그림자
-            -------------------------------------------------------- */
+            /*
+             * 그림자
+             */
 
             ctx.save();
 
             ctx.fillStyle =
-                "rgba(0,0,0,0.30)";
+                "rgba(0,0,0,0.34)";
 
+            ctx.filter =
+                "blur(5px)";
 
             ctx.beginPath();
 
             ctx.ellipse(
                 cake.x,
-                cake.bottom + 25,
+                cake.bottom + 15,
                 cake.width * 0.46,
-                22,
+                18,
                 0,
                 0,
                 Math.PI * 2
@@ -1261,42 +1750,47 @@
             ctx.restore();
 
 
-            /* --------------------------------------------------------
-               접시
-            -------------------------------------------------------- */
+            /*
+             * 접시
+             */
 
-            ctx.save();
-
-            const plateGradient =
+            const plate =
                 ctx.createLinearGradient(
                     0,
                     cake.bottom - 5,
                     0,
-                    cake.bottom + 35
+                    cake.bottom + 32
                 );
 
 
-            plateGradient.addColorStop(
+            plate.addColorStop(
                 0,
-                "#fff9fd"
+                "#ffffff"
             );
 
-            plateGradient.addColorStop(
+
+            plate.addColorStop(
+                0.45,
+                "#f9d9e8"
+            );
+
+
+            plate.addColorStop(
                 1,
-                "#dca6bd"
+                "#b87598"
             );
 
 
             ctx.fillStyle =
-                plateGradient;
+                plate;
 
 
             ctx.beginPath();
 
             ctx.ellipse(
                 cake.x,
-                cake.bottom + 7,
-                cake.width * 0.53,
+                cake.bottom + 6,
+                cake.width * 0.54,
                 25,
                 0,
                 0,
@@ -1306,49 +1800,39 @@
             ctx.fill();
 
 
-            ctx.strokeStyle =
-                "rgba(255,255,255,0.5)";
+            /*
+             * 케이크 몸체
+             */
 
-            ctx.lineWidth = 2;
-
-            ctx.stroke();
-
-            ctx.restore();
-
-
-            /* --------------------------------------------------------
-               케이크 본체
-            -------------------------------------------------------- */
-
-            const bodyGradient =
+            const body =
                 ctx.createLinearGradient(
                     0,
-                    top + 45,
+                    top + 50,
                     0,
                     cake.bottom
                 );
 
 
-            bodyGradient.addColorStop(
+            body.addColorStop(
                 0,
-                colors.top
+                colors.bodyTop
             );
 
 
-            bodyGradient.addColorStop(
-                0.45,
-                colors.top
+            body.addColorStop(
+                0.42,
+                colors.bodyTop
             );
 
 
-            bodyGradient.addColorStop(
+            body.addColorStop(
                 1,
-                colors.bottom
+                colors.bodyBottom
             );
 
 
             ctx.fillStyle =
-                bodyGradient;
+                body;
 
 
             roundRect(
@@ -1356,55 +1840,49 @@
                 left,
                 top + 45,
                 cake.width,
-                cake.height * 0.67,
-                28
+                cake.height * 0.68,
+                27
             );
 
 
             ctx.fill();
 
 
-            /* --------------------------------------------------------
-               케이크 앞면 부드러운 하이라이트
-            -------------------------------------------------------- */
+            /*
+             * 케이크 앞쪽 음영
+             */
 
-            const highlight =
+            const shade =
                 ctx.createLinearGradient(
-                    left,
-                    top + 70,
-                    left + cake.width,
-                    top + 70
+                    0,
+                    top + 90,
+                    0,
+                    cake.bottom
                 );
 
 
-            highlight.addColorStop(
+            shade.addColorStop(
                 0,
-                "rgba(255,255,255,0.05)"
+                "rgba(255,255,255,0)"
             );
 
 
-            highlight.addColorStop(
-                0.5,
-                "rgba(255,255,255,0.25)"
-            );
-
-
-            highlight.addColorStop(
+            shade.addColorStop(
                 1,
-                "rgba(255,255,255,0.03)"
+                "rgba(60,15,30,0.16)"
             );
 
 
             ctx.fillStyle =
-                highlight;
+                shade;
 
 
             roundRect(
                 ctx,
-                left + 3,
-                top + 50,
-                cake.width - 6,
-                cake.height * 0.62,
+                left + 2,
+                top + 48,
+                cake.width - 4,
+                cake.height * 0.65,
                 25
             );
 
@@ -1412,21 +1890,51 @@
             ctx.fill();
 
 
-            /* --------------------------------------------------------
-               윗면 크림
-            -------------------------------------------------------- */
+            /*
+             * 윗면
+             */
+
+            const topGradient =
+                ctx.createRadialGradient(
+                    cake.x -
+                    cake.width * 0.12,
+                    top + 30,
+                    5,
+                    cake.x,
+                    top + 45,
+                    cake.width * 0.58
+                );
+
+
+            topGradient.addColorStop(
+                0,
+                "#ffffff"
+            );
+
+
+            topGradient.addColorStop(
+                0.6,
+                colors.cream
+            );
+
+
+            topGradient.addColorStop(
+                1,
+                colors.bodyTop
+            );
+
 
             ctx.fillStyle =
-                colors.cream;
+                topGradient;
 
 
             ctx.beginPath();
 
             ctx.ellipse(
                 cake.x,
-                top + 45,
+                top + 46,
                 cake.width / 2,
-                42,
+                43,
                 0,
                 0,
                 Math.PI * 2
@@ -1434,10 +1942,27 @@
 
             ctx.fill();
 
+        }
 
-            /* --------------------------------------------------------
-               크림 가장자리
-            -------------------------------------------------------- */
+
+        /* ============================================================
+           크림 드립
+        ============================================================ */
+
+        function drawCreamDrips(
+            cake,
+            colors
+        ) {
+
+            const left =
+                cake.x -
+                cake.width / 2;
+
+
+            const top =
+                cake.bottom -
+                cake.height;
+
 
             ctx.fillStyle =
                 colors.cream;
@@ -1445,49 +1970,630 @@
 
             ctx.beginPath();
 
+            ctx.moveTo(
+                left,
+                top + 54
+            );
+
+
+            const steps = 32;
+
+
             for (
                 let i = 0;
-                i <= 36;
+                i <= steps;
                 i++
             ) {
 
                 const px =
                     left +
+                    cake.width *
                     (
-                        cake.width /
-                        36
-                    ) *
-                    i;
+                        i /
+                        steps
+                    );
 
 
                 const wave =
                     Math.sin(
                         i *
-                        0.9
+                        1.15
                     ) *
-                    5;
+                    3;
 
 
                 const py =
                     top +
-                    62 +
+                    70 +
                     wave;
 
 
-                if (i === 0) {
+                ctx.lineTo(
+                    px,
+                    py
+                );
 
-                    ctx.moveTo(
-                        px,
-                        py
+            }
+
+
+            ctx.lineTo(
+                left + cake.width,
+                top + 105
+            );
+
+
+            ctx.lineTo(
+                left,
+                top + 105
+            );
+
+
+            ctx.closePath();
+
+            ctx.fill();
+
+
+            /*
+             * 자연스러운 크림 방울
+             */
+
+            for (
+                let i = 0;
+                i < 11;
+                i++
+            ) {
+
+                const px =
+                    left +
+                    20 +
+                    i *
+                    (
+                        (
+                            cake.width -
+                            40
+                        ) /
+                        10
                     );
 
-                } else {
 
-                    ctx.lineTo(
-                        px,
-                        py
+                const py =
+                    top +
+                    91 +
+                    Math.sin(
+                        i *
+                        1.5
+                    ) *
+                    3;
+
+
+                ctx.beginPath();
+
+                ctx.ellipse(
+                    px,
+                    py,
+                    14,
+                    18,
+                    0,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+
+        }
+
+
+        /* ============================================================
+           딸기 케이크
+        ============================================================ */
+
+        function drawStrawberryCake(
+            cake
+        ) {
+
+            const left =
+                cake.x -
+                cake.width / 2;
+
+
+            const top =
+                cake.bottom -
+                cake.height;
+
+
+            const berries = [
+
+                [0.18, 0.46, 15],
+
+                [0.32, 0.28, 17],
+
+                [0.50, 0.43, 18],
+
+                [0.68, 0.28, 17],
+
+                [0.82, 0.46, 15]
+
+            ];
+
+
+            berries.forEach(
+                berry => {
+
+                    const x =
+                        left +
+                        cake.width *
+                        berry[0];
+
+
+                    const y =
+                        top +
+                        berry[1] *
+                        90;
+
+
+                    const r =
+                        berry[2];
+
+
+                    /*
+                     * 딸기 그림자
+                     */
+
+                    ctx.fillStyle =
+                        "rgba(110,20,40,0.18)";
+
+                    ctx.beginPath();
+
+                    ctx.ellipse(
+                        x,
+                        y + 4,
+                        r,
+                        r * 1.13,
+                        0,
+                        0,
+                        Math.PI * 2
                     );
+
+                    ctx.fill();
+
+
+                    /*
+                     * 딸기
+                     */
+
+                    const gradient =
+                        ctx.createRadialGradient(
+                            x - r * 0.35,
+                            y - r * 0.4,
+                            1,
+                            x,
+                            y,
+                            r
+                        );
+
+
+                    gradient.addColorStop(
+                        0,
+                        "#ff9bb0"
+                    );
+
+
+                    gradient.addColorStop(
+                        0.45,
+                        "#ff426b"
+                    );
+
+
+                    gradient.addColorStop(
+                        1,
+                        "#c91f48"
+                    );
+
+
+                    ctx.fillStyle =
+                        gradient;
+
+
+                    ctx.beginPath();
+
+                    ctx.ellipse(
+                        x,
+                        y,
+                        r,
+                        r * 1.12,
+                        0,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+
+
+                    /*
+                     * 딸기 씨
+                     */
+
+                    ctx.fillStyle =
+                        "#ffe27a";
+
+
+                    for (
+                        let i = 0;
+                        i < 8;
+                        i++
+                    ) {
+
+                        const angle =
+                            i *
+                            0.78;
+
+
+                        const sx =
+                            x +
+                            Math.cos(angle) *
+                            r *
+                            0.52;
+
+
+                        const sy =
+                            y +
+                            Math.sin(angle) *
+                            r *
+                            0.72;
+
+
+                        ctx.beginPath();
+
+                        ctx.ellipse(
+                            sx,
+                            sy,
+                            1.3,
+                            2.2,
+                            0,
+                            0,
+                            Math.PI * 2
+                        );
+
+                        ctx.fill();
+
+                    }
+
+
+                    /*
+                     * 딸기 잎
+                     */
+
+                    ctx.fillStyle =
+                        "#5ca052";
+
+
+                    ctx.beginPath();
+
+                    ctx.ellipse(
+                        x - 5,
+                        y - r + 3,
+                        5,
+                        9,
+                        -0.45,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+
+
+                    ctx.beginPath();
+
+                    ctx.ellipse(
+                        x + 5,
+                        y - r + 3,
+                        5,
+                        9,
+                        0.45,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+
                 }
+            );
+
+
+            /*
+             * 작은 딸기 장식
+             */
+
+            ctx.fillStyle =
+                "#ff6686";
+
+
+            for (
+                let i = 0;
+                i < 7;
+                i++
+            ) {
+
+                const x =
+                    left +
+                    35 +
+                    i *
+                    (
+                        (
+                            cake.width -
+                            70
+                        ) /
+                        6
+                    );
+
+
+                const y =
+                    cake.bottom -
+                    34 +
+                    Math.sin(i) *
+                    3;
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    x,
+                    y,
+                    5,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+
+        }
+
+
+        /* ============================================================
+           생크림 케이크
+        ============================================================ */
+
+        function drawCreamCake(
+            cake
+        ) {
+
+            const left =
+                cake.x -
+                cake.width / 2;
+
+
+            const top =
+                cake.bottom -
+                cake.height;
+
+
+            /*
+             * 크림 봉우리
+             */
+
+            for (
+                let i = 0;
+                i < 9;
+                i++
+            ) {
+
+                const x =
+                    left +
+                    30 +
+                    i *
+                    (
+                        (
+                            cake.width -
+                            60
+                        ) /
+                        8
+                    );
+
+
+                const y =
+                    top +
+                    76 +
+                    Math.sin(i * 0.9) *
+                    4;
+
+
+                const gradient =
+                    ctx.createRadialGradient(
+                        x - 3,
+                        y - 4,
+                        1,
+                        x,
+                        y,
+                        10
+                    );
+
+
+                gradient.addColorStop(
+                    0,
+                    "#ffffff"
+                );
+
+
+                gradient.addColorStop(
+                    1,
+                    "#e7dce0"
+                );
+
+
+                ctx.fillStyle =
+                    gradient;
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    x,
+                    y,
+                    9,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+
+
+            /*
+             * 블루베리
+             */
+
+            const berries = [
+
+                [0.23, 0.42],
+
+                [0.42, 0.30],
+
+                [0.60, 0.43],
+
+                [0.77, 0.31]
+
+            ];
+
+
+            berries.forEach(
+                item => {
+
+                    const x =
+                        left +
+                        cake.width *
+                        item[0];
+
+
+                    const y =
+                        top +
+                        item[1] *
+                        85;
+
+
+                    const gradient =
+                        ctx.createRadialGradient(
+                            x - 2,
+                            y - 3,
+                            1,
+                            x,
+                            y,
+                            8
+                        );
+
+
+                    gradient.addColorStop(
+                        0,
+                        "#8ea8ff"
+                    );
+
+
+                    gradient.addColorStop(
+                        0.45,
+                        "#536fc5"
+                    );
+
+
+                    gradient.addColorStop(
+                        1,
+                        "#263a7c"
+                    );
+
+
+                    ctx.fillStyle =
+                        gradient;
+
+
+                    ctx.beginPath();
+
+                    ctx.arc(
+                        x,
+                        y,
+                        8,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+
+                }
+            );
+
+        }
+
+
+        /* ============================================================
+           초콜릿 케이크
+        ============================================================ */
+
+        function drawChocolateCake(
+            cake
+        ) {
+
+            const left =
+                cake.x -
+                cake.width / 2;
+
+
+            const top =
+                cake.bottom -
+                cake.height;
+
+
+            /*
+             * 초콜릿 드립
+             */
+
+            ctx.fillStyle =
+                "#63301e";
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                left,
+                top + 55
+            );
+
+
+            for (
+                let i = 0;
+                i <= 30;
+                i++
+            ) {
+
+                const x =
+                    left +
+                    cake.width *
+                    (
+                        i /
+                        30
+                    );
+
+
+                const wave =
+                    Math.sin(
+                        i *
+                        1.2
+                    ) *
+                    3;
+
+
+                const y =
+                    top +
+                    73 +
+                    wave;
+
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
             }
 
 
@@ -1508,418 +2614,172 @@
             ctx.fill();
 
 
-            /* --------------------------------------------------------
-               크림 아래쪽 장식선
-            -------------------------------------------------------- */
-
-            ctx.strokeStyle =
-                "rgba(255,255,255,0.7)";
-
-            ctx.lineWidth = 4;
-
-            ctx.beginPath();
+            /*
+             * 초콜릿 조각
+             */
 
             for (
                 let i = 0;
-                i <= 30;
+                i < 8;
                 i++
             ) {
 
-                const px =
+                const x =
                     left +
-                    cake.width *
+                    35 +
+                    i *
                     (
-                        i /
-                        30
+                        (
+                            cake.width -
+                            70
+                        ) /
+                        7
                     );
 
 
-                const py =
+                const y =
                     top +
-                    91 +
+                    81 +
                     Math.sin(
                         i *
-                        0.8
+                        1.3
                     ) *
-                    4;
+                    5;
 
 
-                if (i === 0) {
+                ctx.save();
 
-                    ctx.moveTo(
-                        px,
-                        py
-                    );
-
-                } else {
-
-                    ctx.lineTo(
-                        px,
-                        py
-                    );
-                }
-            }
-
-            ctx.stroke();
-
-
-            /* ========================================================
-               딸기 케이크
-            ======================================================== */
-
-            if (
-                selectedCake ===
-                "strawberry"
-            ) {
-
-                const strawberryPositions = [
-
-                    [0.20, 0.43, 14],
-
-                    [0.34, 0.28, 16],
-
-                    [0.50, 0.40, 17],
-
-                    [0.66, 0.28, 15],
-
-                    [0.80, 0.43, 14]
-
-                ];
-
-
-                strawberryPositions.forEach(
-                    item => {
-
-                        const px =
-                            left +
-                            cake.width *
-                            item[0];
-
-
-                        const py =
-                            top +
-                            item[1] *
-                            90;
-
-
-                        const radius =
-                            item[2];
-
-
-                        /* 딸기 그림자 */
-
-                        ctx.fillStyle =
-                            "rgba(180,40,70,0.15)";
-
-
-                        ctx.beginPath();
-
-                        ctx.ellipse(
-                            px,
-                            py + 3,
-                            radius,
-                            radius * 1.15,
-                            0,
-                            0,
-                            Math.PI * 2
-                        );
-
-                        ctx.fill();
-
-
-                        /* 딸기 */
-
-                        const strawberryGradient =
-                            ctx.createRadialGradient(
-                                px - 4,
-                                py - 5,
-                                1,
-                                px,
-                                py,
-                                radius
-                            );
-
-
-                        strawberryGradient.addColorStop(
-                            0,
-                            "#ff7b97"
-                        );
-
-
-                        strawberryGradient.addColorStop(
-                            0.65,
-                            "#ff3f68"
-                        );
-
-
-                        strawberryGradient.addColorStop(
-                            1,
-                            "#d9234b"
-                        );
-
-
-                        ctx.fillStyle =
-                            strawberryGradient;
-
-
-                        ctx.beginPath();
-
-                        ctx.ellipse(
-                            px,
-                            py,
-                            radius,
-                            radius * 1.12,
-                            0,
-                            0,
-                            Math.PI * 2
-                        );
-
-                        ctx.fill();
-
-
-                        /* 딸기 씨 */
-
-                        ctx.fillStyle =
-                            "#ffd86b";
-
-
-                        for (
-                            let s = 0;
-                            s < 7;
-                            s++
-                        ) {
-
-                            const seedAngle =
-                                s *
-                                0.9;
-
-
-                            const sx =
-                                px +
-                                Math.cos(
-                                    seedAngle
-                                ) *
-                                radius *
-                                0.55;
-
-
-                            const sy =
-                                py +
-                                Math.sin(
-                                    seedAngle
-                                ) *
-                                radius *
-                                0.72;
-
-
-                            ctx.beginPath();
-
-                            ctx.ellipse(
-                                sx,
-                                sy,
-                                1.4,
-                                2.2,
-                                0,
-                                0,
-                                Math.PI * 2
-                            );
-
-                            ctx.fill();
-                        }
-
-
-                        /* 잎 */
-
-                        ctx.fillStyle =
-                            "#63aa59";
-
-
-                        ctx.beginPath();
-
-                        ctx.ellipse(
-                            px - 5,
-                            py - radius + 2,
-                            5,
-                            9,
-                            -0.45,
-                            0,
-                            Math.PI * 2
-                        );
-
-                        ctx.fill();
-
-
-                        ctx.beginPath();
-
-                        ctx.ellipse(
-                            px + 5,
-                            py - radius + 2,
-                            5,
-                            9,
-                            0.45,
-                            0,
-                            Math.PI * 2
-                        );
-
-                        ctx.fill();
-
-                    }
+                ctx.translate(
+                    x,
+                    y
                 );
-            }
+
+                ctx.rotate(
+                    (
+                        i -
+                        4
+                    ) *
+                    0.08
+                );
 
 
-            /* ========================================================
-               초콜릿 케이크
-            ======================================================== */
+                const chocolate =
+                    ctx.createLinearGradient(
+                        -15,
+                        -7,
+                        15,
+                        7
+                    );
 
-            if (
-                selectedCake ===
-                "chocolate"
-            ) {
+
+                chocolate.addColorStop(
+                    0,
+                    "#9b5337"
+                );
+
+
+                chocolate.addColorStop(
+                    0.5,
+                    "#6d3423"
+                );
+
+
+                chocolate.addColorStop(
+                    1,
+                    "#3f1b13"
+                );
+
 
                 ctx.fillStyle =
-                    "rgba(255,255,255,0.16)";
+                    chocolate;
 
 
-                for (
-                    let i = 0;
-                    i < 8;
-                    i++
-                ) {
+                roundRect(
+                    ctx,
+                    -15,
+                    -5,
+                    30,
+                    10,
+                    4
+                );
 
-                    const px =
+
+                ctx.fill();
+
+                ctx.restore();
+
+            }
+
+        }
+
+
+        /* ============================================================
+           치즈 케이크
+        ============================================================ */
+
+        function drawCheeseCake(
+            cake
+        ) {
+
+            const left =
+                cake.x -
+                cake.width / 2;
+
+
+            const top =
+                cake.bottom -
+                cake.height;
+
+
+            cheeseHoles.forEach(
+                hole => {
+
+                    const x =
                         left +
-                        35 +
-                        i *
-                        (
-                            (
-                                cake.width -
-                                70
-                            ) /
-                            7
+                        cake.width *
+                        hole[0];
+
+
+                    const y =
+                        top +
+                        47 +
+                        hole[1] *
+                        45;
+
+
+                    const gradient =
+                        ctx.createRadialGradient(
+                            x - 2,
+                            y - 2,
+                            1,
+                            x,
+                            y,
+                            hole[2]
                         );
 
 
-                    const py =
-                        top +
-                        80 +
-                        Math.sin(
-                            i *
-                            1.4
-                        ) *
-                        5;
-
-
-                    ctx.beginPath();
-
-                    ctx.roundRect(
-                        px - 16,
-                        py,
-                        32,
-                        6,
-                        3
+                    gradient.addColorStop(
+                        0,
+                        "rgba(130,80,8,0.45)"
                     );
 
-                    ctx.fill();
 
-                }
-            }
-
-
-            /* ========================================================
-               치즈 케이크
-            ======================================================== */
-
-            if (
-                selectedCake ===
-                "cheese"
-            ) {
-
-                cakeHoles.forEach(
-                    hole => {
-
-                        const px =
-                            left +
-                            hole.x *
-                            cake.width;
-
-
-                        const py =
-                            top +
-                            47 +
-                            hole.y *
-                            45;
-
-
-                        ctx.fillStyle =
-                            "rgba(130,85,10,0.28)";
-
-
-                        ctx.beginPath();
-
-                        ctx.arc(
-                            px,
-                            py,
-                            hole.r,
-                            0,
-                            Math.PI * 2
-                        );
-
-                        ctx.fill();
-
-                    }
-                );
-            }
-
-
-            /* ========================================================
-               생크림 케이크
-            ======================================================== */
-
-            if (
-                selectedCake ===
-                "cream"
-            ) {
-
-                for (
-                    let i = 0;
-                    i < 9;
-                    i++
-                ) {
-
-                    const px =
-                        left +
-                        35 +
-                        i *
-                        (
-                            (
-                                cake.width -
-                                70
-                            ) /
-                            8
-                        );
-
-
-                    const py =
-                        top +
-                        78 +
-                        Math.sin(
-                            i *
-                            0.9
-                        ) *
-                        3;
+                    gradient.addColorStop(
+                        1,
+                        "rgba(130,80,8,0.12)"
+                    );
 
 
                     ctx.fillStyle =
-                        "#fffdfd";
+                        gradient;
 
 
                     ctx.beginPath();
 
                     ctx.arc(
-                        px,
-                        py,
-                        7,
+                        x,
+                        y,
+                        hole[2],
                         0,
                         Math.PI * 2
                     );
@@ -1927,16 +2787,59 @@
                     ctx.fill();
 
                 }
-            }
+            );
 
 
-            /* ========================================================
-               케이크 아래 크림 장식
-            ======================================================== */
+            /*
+             * 골든 크러스트
+             */
 
-            ctx.fillStyle =
-                colors.cream;
+            ctx.strokeStyle =
+                "rgba(164,104,14,0.35)";
 
+            ctx.lineWidth =
+                5;
+
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                cake.x,
+                top + 46,
+                cake.width * 0.45,
+                37,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.stroke();
+
+        }
+
+
+        /* ============================================================
+           케이크 장식
+        ============================================================ */
+
+        function drawCakeDecoration(
+            cake
+        ) {
+
+            const colors =
+                cakeColors[
+                    selectedCake
+                ];
+
+
+            const left =
+                cake.x -
+                cake.width / 2;
+
+
+            /*
+             * 케이크 하단 크림 장식
+             */
 
             for (
                 let i = 0;
@@ -1944,20 +2847,20 @@
                 i++
             ) {
 
-                const px =
+                const x =
                     left +
-                    20 +
+                    22 +
                     i *
                     (
                         (
                             cake.width -
-                            40
+                            44
                         ) /
                         12
                     );
 
 
-                const py =
+                const y =
                     cake.bottom -
                     18 +
                     Math.sin(
@@ -1967,11 +2870,38 @@
                     3;
 
 
+                const gradient =
+                    ctx.createRadialGradient(
+                        x - 3,
+                        y - 4,
+                        1,
+                        x,
+                        y,
+                        18
+                    );
+
+
+                gradient.addColorStop(
+                    0,
+                    "#ffffff"
+                );
+
+
+                gradient.addColorStop(
+                    1,
+                    colors.cream
+                );
+
+
+                ctx.fillStyle =
+                    gradient;
+
+
                 ctx.beginPath();
 
                 ctx.ellipse(
-                    px,
-                    py,
+                    x,
+                    y,
                     17,
                     10,
                     0,
@@ -1982,25 +2912,549 @@
                 ctx.fill();
 
             }
+
+
+            /*
+             * 케이크 가장자리 하이라이트
+             */
+
+            ctx.strokeStyle =
+                "rgba(255,255,255,0.28)";
+
+            ctx.lineWidth =
+                2;
+
+
+            roundRect(
+                ctx,
+                left + 3,
+                cake.bottom -
+                cake.height +
+                49,
+                cake.width - 6,
+                cake.height * 0.62,
+                24
+            );
+
+
+            ctx.stroke();
+
         }
 
 
         /* ============================================================
-           촛불 그리기
+           전체 케이크
         ============================================================ */
 
-        function drawCandles(time) {
+        function drawCake() {
+
+            const cake =
+                getCakeData();
+
+
+            const colors =
+                cakeColors[
+                    selectedCake
+                ];
+
+
+            drawCakeGlow(
+                cake
+            );
+
+
+            drawCakeBase(
+                cake,
+                colors
+            );
+
+
+            drawCreamDrips(
+                cake,
+                colors
+            );
+
+
+            if (
+                selectedCake ===
+                "strawberry"
+            ) {
+
+                drawStrawberryCake(
+                    cake
+                );
+
+            }
+
+
+            if (
+                selectedCake ===
+                "cream"
+            ) {
+
+                drawCreamCake(
+                    cake
+                );
+
+            }
+
+
+            if (
+                selectedCake ===
+                "chocolate"
+            ) {
+
+                drawChocolateCake(
+                    cake
+                );
+
+            }
+
+
+            if (
+                selectedCake ===
+                "cheese"
+            ) {
+
+                drawCheeseCake(
+                    cake
+                );
+
+            }
+
+
+            drawCakeDecoration(
+                cake
+            );
+
+        }
+
+
+        /* ============================================================
+           촛불
+        ============================================================ */
+
+        function drawCandle(
+            candle,
+            position,
+            time
+        ) {
+
+            const scale =
+                position.scale ||
+                1;
+
+
+            const height =
+                (
+                    candle.type ===
+                    "long"
+                        ? 76
+                        : 46
+                ) *
+                scale;
+
+
+            const widthCandle =
+                14 *
+                scale;
+
+
+            const x =
+                position.x -
+                widthCandle / 2;
+
+
+            const y =
+                position.y -
+                height;
+
+
+            /*
+             * 그림자
+             */
+
+            ctx.fillStyle =
+                "rgba(70,20,45,0.18)";
+
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                position.x,
+                position.y,
+                widthCandle,
+                4 *
+                scale,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            /*
+             * 촛불 몸체
+             */
+
+            const candleGradient =
+                ctx.createLinearGradient(
+                    x,
+                    0,
+                    x +
+                    widthCandle,
+                    0
+                );
+
+
+            candleGradient.addColorStop(
+                0,
+                "#b95d89"
+            );
+
+
+            candleGradient.addColorStop(
+                0.2,
+                "#f18ab3"
+            );
+
+
+            candleGradient.addColorStop(
+                0.5,
+                "#fff4fa"
+            );
+
+
+            candleGradient.addColorStop(
+                0.78,
+                "#ef8ab4"
+            );
+
+
+            candleGradient.addColorStop(
+                1,
+                "#a94f7d"
+            );
+
+
+            ctx.fillStyle =
+                candleGradient;
+
+
+            roundRect(
+                ctx,
+                x,
+                y,
+                widthCandle,
+                height,
+                5 *
+                scale
+            );
+
+
+            ctx.fill();
+
+
+            /*
+             * 사선 무늬
+             */
+
+            ctx.save();
+
+            roundRect(
+                ctx,
+                x,
+                y,
+                widthCandle,
+                height,
+                5 *
+                scale
+            );
+
+            ctx.clip();
+
+            ctx.strokeStyle =
+                "rgba(255,100,160,0.4)";
+
+            ctx.lineWidth =
+                3 *
+                scale;
+
+
+            for (
+                let i = -2;
+                i <
+                height / 14 + 2;
+                i++
+            ) {
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    x - 5,
+                    y +
+                    i *
+                    14
+                );
+
+                ctx.lineTo(
+                    x +
+                    widthCandle +
+                    5,
+                    y +
+                    i *
+                    14 -
+                    8
+                );
+
+                ctx.stroke();
+
+            }
+
+            ctx.restore();
+
+
+            /*
+             * 심지
+             */
+
+            ctx.strokeStyle =
+                "#39241f";
+
+            ctx.lineWidth =
+                Math.max(
+                    1,
+                    1.5 *
+                    scale
+                );
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                position.x,
+                y
+            );
+
+            ctx.lineTo(
+                position.x,
+                y -
+                7 *
+                scale
+            );
+
+            ctx.stroke();
+
+
+            /*
+             * 불꽃
+             */
+
+            if (
+                !candle.blown
+            ) {
+
+                const flicker =
+                    Math.sin(
+                        time *
+                        0.016 +
+                        candle.flame
+                    ) *
+                    2.5 *
+                    scale;
+
+
+                const flameX =
+                    position.x +
+                    flicker;
+
+
+                const flameY =
+                    y -
+                    17 *
+                    scale;
+
+
+                /*
+                 * 불꽃 광원
+                 */
+
+                const glow =
+                    ctx.createRadialGradient(
+                        flameX,
+                        flameY,
+                        1,
+                        flameX,
+                        flameY,
+                        25 *
+                        scale
+                    );
+
+
+                glow.addColorStop(
+                    0,
+                    "rgba(255,255,230,0.9)"
+                );
+
+
+                glow.addColorStop(
+                    0.25,
+                    "rgba(255,220,100,0.65)"
+                );
+
+
+                glow.addColorStop(
+                    1,
+                    "rgba(255,120,20,0)"
+                );
+
+
+                ctx.fillStyle =
+                    glow;
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    flameX,
+                    flameY,
+                    25 *
+                    scale,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+
+                /*
+                 * 실제 불꽃
+                 */
+
+                ctx.save();
+
+                ctx.translate(
+                    flameX,
+                    flameY
+                );
+
+                ctx.scale(
+                    scale,
+                    scale
+                );
+
+
+                const flame =
+                    ctx.createLinearGradient(
+                        0,
+                        -18,
+                        0,
+                        10
+                    );
+
+
+                flame.addColorStop(
+                    0,
+                    "#ffffff"
+                );
+
+
+                flame.addColorStop(
+                    0.25,
+                    "#fff7a3"
+                );
+
+
+                flame.addColorStop(
+                    0.65,
+                    "#ffad32"
+                );
+
+
+                flame.addColorStop(
+                    1,
+                    "#ff5a18"
+                );
+
+
+                ctx.fillStyle =
+                    flame;
+
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    0,
+                    -18
+                );
+
+                ctx.bezierCurveTo(
+                    11,
+                    -8,
+                    9,
+                    5,
+                    0,
+                    10
+                );
+
+                ctx.bezierCurveTo(
+                    -9,
+                    5,
+                    -8,
+                    -8,
+                    0,
+                    -18
+                );
+
+                ctx.closePath();
+
+                ctx.fill();
+
+
+                /*
+                 * 불꽃 중심
+                 */
+
+                ctx.fillStyle =
+                    "#fffde1";
+
+
+                ctx.beginPath();
+
+                ctx.ellipse(
+                    0,
+                    1,
+                    3,
+                    7,
+                    0,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+
+                ctx.restore();
+
+            }
+
+        }
+
+
+        /* ============================================================
+           촛불 전체
+        ============================================================ */
+
+        function drawCandles(
+            time
+        ) {
 
             const positions =
                 getCandlePositions();
 
 
-            /*
-             * 긴 초 → 뒤쪽
-             * 짧은 초 → 앞쪽
-             */
-
-            const drawOrder =
+            const order =
                 candles
                     .map(
                         (candle, index) => ({
@@ -2017,421 +3471,18 @@
                     );
 
 
-            drawOrder.forEach(
+            order.forEach(
                 item => {
 
-                    const candle =
-                        item.candle;
-
-
-                    const position =
-                        item.position;
-
-
-                    const scale =
-                        position.scale ||
-                        1;
-
-
-                    const candleHeight =
-                        (
-                            candle.type ===
-                            "long"
-                                ? 82
-                                : 48
-                        ) *
-                        scale;
-
-
-                    const candleWidth =
-                        15 *
-                        scale;
-
-
-                    const x =
-                        position.x -
-                        candleWidth / 2;
-
-
-                    const y =
-                        position.y -
-                        candleHeight;
-
-
-                    /* ------------------------------------------------
-                       촛불 아래쪽 그림자
-                    ------------------------------------------------ */
-
-                    ctx.save();
-
-                    ctx.fillStyle =
-                        "rgba(90,30,60,0.16)";
-
-
-                    ctx.beginPath();
-
-                    ctx.ellipse(
-                        position.x,
-                        position.y + 1,
-                        candleWidth * 0.8,
-                        5 * scale,
-                        0,
-                        0,
-                        Math.PI * 2
+                    drawCandle(
+                        item.candle,
+                        item.position,
+                        time
                     );
-
-                    ctx.fill();
-
-                    ctx.restore();
-
-
-                    /* ------------------------------------------------
-                       초 몸체
-                    ------------------------------------------------ */
-
-                    const candleGradient =
-                        ctx.createLinearGradient(
-                            x,
-                            y,
-                            x + candleWidth,
-                            y
-                        );
-
-
-                    candleGradient.addColorStop(
-                        0,
-                        "#d875a3"
-                    );
-
-
-                    candleGradient.addColorStop(
-                        0.25,
-                        "#ffb7d5"
-                    );
-
-
-                    candleGradient.addColorStop(
-                        0.5,
-                        "#fff8fc"
-                    );
-
-
-                    candleGradient.addColorStop(
-                        0.75,
-                        "#ffb7d5"
-                    );
-
-
-                    candleGradient.addColorStop(
-                        1,
-                        "#cf6b99"
-                    );
-
-
-                    ctx.fillStyle =
-                        candleGradient;
-
-
-                    roundRect(
-                        ctx,
-                        x,
-                        y,
-                        candleWidth,
-                        candleHeight,
-                        6 * scale
-                    );
-
-
-                    ctx.fill();
-
-
-                    /* ------------------------------------------------
-                       초의 줄무늬
-                    ------------------------------------------------ */
-
-                    ctx.save();
-
-                    ctx.beginPath();
-
-                    roundRect(
-                        ctx,
-                        x,
-                        y,
-                        candleWidth,
-                        candleHeight,
-                        6 * scale
-                    );
-
-                    ctx.clip();
-
-
-                    ctx.strokeStyle =
-                        "rgba(255,105,165,0.38)";
-
-                    ctx.lineWidth =
-                        3 * scale;
-
-
-                    for (
-                        let stripe = -2;
-                        stripe <
-                        candleHeight / 16 + 2;
-                        stripe++
-                    ) {
-
-                        ctx.beginPath();
-
-                        ctx.moveTo(
-                            x - 5,
-                            y +
-                            stripe *
-                            16
-                        );
-
-                        ctx.lineTo(
-                            x +
-                            candleWidth +
-                            5,
-                            y +
-                            stripe *
-                            16 -
-                            9
-                        );
-
-                        ctx.stroke();
-
-                    }
-
-                    ctx.restore();
-
-
-                    /* ------------------------------------------------
-                       심지
-                    ------------------------------------------------ */
-
-                    ctx.strokeStyle =
-                        "#4b302b";
-
-                    ctx.lineWidth =
-                        Math.max(
-                            1,
-                            2 *
-                            scale
-                        );
-
-
-                    ctx.beginPath();
-
-                    ctx.moveTo(
-                        position.x,
-                        y
-                    );
-
-                    ctx.lineTo(
-                        position.x,
-                        y -
-                        7 *
-                        scale
-                    );
-
-                    ctx.stroke();
-
-
-                    /* ------------------------------------------------
-                       불꽃
-                    ------------------------------------------------ */
-
-                    if (!candle.blown) {
-
-                        const flicker =
-                            Math.sin(
-                                time *
-                                0.018 +
-                                candle.flame
-                            ) *
-                            2 *
-                            scale;
-
-
-                        const flameX =
-                            position.x +
-                            flicker;
-
-
-                        const flameY =
-                            y -
-                            17 *
-                            scale;
-
-
-                        /* 불꽃 외부 광 */
-                        const flameGlow =
-                            ctx.createRadialGradient(
-                                flameX,
-                                flameY,
-                                1,
-                                flameX,
-                                flameY,
-                                22 *
-                                scale
-                            );
-
-
-                        flameGlow.addColorStop(
-                            0,
-                            "rgba(255,255,255,0.95)"
-                        );
-
-
-                        flameGlow.addColorStop(
-                            0.18,
-                            "rgba(255,231,120,0.95)"
-                        );
-
-
-                        flameGlow.addColorStop(
-                            0.55,
-                            "rgba(255,140,30,0.55)"
-                        );
-
-
-                        flameGlow.addColorStop(
-                            1,
-                            "rgba(255,100,20,0)"
-                        );
-
-
-                        ctx.fillStyle =
-                            flameGlow;
-
-
-                        ctx.beginPath();
-
-                        ctx.arc(
-                            flameX,
-                            flameY,
-                            22 *
-                            scale,
-                            0,
-                            Math.PI * 2
-                        );
-
-                        ctx.fill();
-
-
-                        /* 실제 불꽃 */
-
-                        ctx.save();
-
-                        ctx.translate(
-                            flameX,
-                            flameY
-                        );
-
-
-                        ctx.scale(
-                            scale,
-                            scale
-                        );
-
-
-                        const flameGradient =
-                            ctx.createLinearGradient(
-                                0,
-                                -17,
-                                0,
-                                9
-                            );
-
-
-                        flameGradient.addColorStop(
-                            0,
-                            "#fffde0"
-                        );
-
-
-                        flameGradient.addColorStop(
-                            0.35,
-                            "#fff08a"
-                        );
-
-
-                        flameGradient.addColorStop(
-                            0.75,
-                            "#ff9b28"
-                        );
-
-
-                        flameGradient.addColorStop(
-                            1,
-                            "#ff5a18"
-                        );
-
-
-                        ctx.fillStyle =
-                            flameGradient;
-
-
-                        ctx.beginPath();
-
-                        ctx.moveTo(
-                            0,
-                            -18
-                        );
-
-
-                        ctx.bezierCurveTo(
-                            10,
-                            -8,
-                            9,
-                            5,
-                            0,
-                            9
-                        );
-
-
-                        ctx.bezierCurveTo(
-                            -9,
-                            5,
-                            -8,
-                            -8,
-                            0,
-                            -18
-                        );
-
-
-                        ctx.closePath();
-
-                        ctx.fill();
-
-
-                        /* 불꽃 중심 */
-
-                        ctx.fillStyle =
-                            "#fffbd0";
-
-
-                        ctx.beginPath();
-
-                        ctx.ellipse(
-                            0,
-                            1,
-                            3.5,
-                            7,
-                            0,
-                            0,
-                            Math.PI * 2
-                        );
-
-                        ctx.fill();
-
-
-                        ctx.restore();
-
-                    }
 
                 }
             );
+
         }
 
 
@@ -2439,15 +3490,17 @@
            배경
         ============================================================ */
 
-        function drawBackground(time) {
+        function drawBackground(
+            time
+        ) {
 
             const gradient =
                 ctx.createRadialGradient(
                     width / 2,
-                    height * 0.55,
+                    height * 0.52,
                     20,
                     width / 2,
-                    height * 0.55,
+                    height * 0.52,
                     Math.max(
                         width,
                         height
@@ -2457,19 +3510,25 @@
 
             gradient.addColorStop(
                 0,
-                "#222642"
+                "#292d50"
             );
 
 
             gradient.addColorStop(
-                0.5,
-                "#111526"
+                0.38,
+                "#161a30"
+            );
+
+
+            gradient.addColorStop(
+                0.72,
+                "#0c0f1c"
             );
 
 
             gradient.addColorStop(
                 1,
-                "#070910"
+                "#05070d"
             );
 
 
@@ -2485,13 +3544,48 @@
             );
 
 
-            /* --------------------------------------------------------
-               작은 별
-            -------------------------------------------------------- */
+            /*
+             * 위쪽 은은한 빛
+             */
+
+            const light =
+                ctx.createRadialGradient(
+                    width / 2,
+                    height * 0.18,
+                    10,
+                    width / 2,
+                    height * 0.18,
+                    width * 0.65
+                );
+
+
+            light.addColorStop(
+                0,
+                "rgba(255,160,210,0.09)"
+            );
+
+
+            light.addColorStop(
+                1,
+                "rgba(255,160,210,0)"
+            );
+
 
             ctx.fillStyle =
-                "rgba(255,255,255,0.45)";
+                light;
 
+
+            ctx.fillRect(
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            /*
+             * 별
+             */
 
             for (
                 let i = 0;
@@ -2514,25 +3608,29 @@
                     ) %
                     (
                         height *
-                        0.65
+                        0.72
                     );
 
 
                 const alpha =
-                    0.25 +
-                    Math.sin(
-                        time *
-                        0.001 +
-                        i
+                    0.2 +
+                    (
+                        Math.sin(
+                            time *
+                            0.001 +
+                            i
+                        ) +
+                        1
                     ) *
-                    0.2;
+                    0.12;
 
 
                 ctx.globalAlpha =
-                    Math.max(
-                        alpha,
-                        0.05
-                    );
+                    alpha;
+
+
+                ctx.fillStyle =
+                    "#ffffff";
 
 
                 ctx.beginPath();
@@ -2540,7 +3638,7 @@
                 ctx.arc(
                     x,
                     y,
-                    1.2,
+                    1.1,
                     0,
                     Math.PI * 2
                 );
@@ -2551,11 +3649,12 @@
 
 
             ctx.globalAlpha = 1;
+
         }
 
 
         /* ============================================================
-           파티클
+           파티클 업데이트
         ============================================================ */
 
         function updateParticles() {
@@ -2571,13 +3670,17 @@
                     particles[i];
 
 
-                p.x += p.vx;
+                p.x +=
+                    p.vx;
 
-                p.y += p.vy;
+                p.y +=
+                    p.vy;
 
-                p.vy += 0.06;
+                p.vy +=
+                    p.gravity;
 
-                p.life -= 0.025;
+                p.life -=
+                    0.025;
 
 
                 if (
@@ -2590,6 +3693,7 @@
                     );
 
                     continue;
+
                 }
 
 
@@ -2598,7 +3702,7 @@
 
 
                 ctx.fillStyle =
-                    "#ffd9eb";
+                    "#ffd7e9";
 
 
                 ctx.beginPath();
@@ -2616,12 +3720,95 @@
             }
 
 
-            ctx.globalAlpha = 1;
+            ctx.globalAlpha =
+                1;
+
         }
 
 
         /* ============================================================
-           컨페티
+           연기 업데이트
+        ============================================================ */
+
+        function updateSmoke() {
+
+            for (
+                let i =
+                    smokeParticles.length - 1;
+                i >= 0;
+                i--
+            ) {
+
+                const smoke =
+                    smokeParticles[i];
+
+
+                smoke.x +=
+                    smoke.vx;
+
+                smoke.y +=
+                    smoke.vy;
+
+                smoke.vx +=
+                    (
+                        Math.random() -
+                        0.5
+                    ) *
+                    0.025;
+
+                smoke.size +=
+                    0.06;
+
+                smoke.life -=
+                    0.018;
+
+
+                if (
+                    smoke.life <= 0
+                ) {
+
+                    smokeParticles.splice(
+                        i,
+                        1
+                    );
+
+                    continue;
+
+                }
+
+
+                ctx.globalAlpha =
+                    smoke.life *
+                    0.35;
+
+
+                ctx.fillStyle =
+                    "#d5d8df";
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    smoke.x,
+                    smoke.y,
+                    smoke.size,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+
+
+            ctx.globalAlpha =
+                1;
+
+        }
+
+
+        /* ============================================================
+           컨페티 업데이트
         ============================================================ */
 
         function updateConfetti() {
@@ -2637,11 +3824,14 @@
                     confetti[i];
 
 
-                c.x += c.vx;
+                c.x +=
+                    c.vx;
 
-                c.y += c.vy;
+                c.y +=
+                    c.vy;
 
-                c.vy += 0.025;
+                c.vy +=
+                    0.025;
 
                 c.rotation +=
                     c.rotationSpeed;
@@ -2649,38 +3839,46 @@
 
                 if (
                     c.y >
-                    height + 30
+                    height + 40
                 ) {
 
-                    confetti.splice(
-                        i,
-                        1
-                    );
+                    /*
+                     * 다시 위에서 생성하여
+                     * 축하가 계속 이어지도록 합니다.
+                     */
 
-                    continue;
+                    c.x =
+                        Math.random() *
+                        width;
+
+                    c.y =
+                        -20;
+
+                    c.vy =
+                        1 +
+                        Math.random() *
+                        3;
+
                 }
 
 
                 ctx.save();
-
 
                 ctx.translate(
                     c.x,
                     c.y
                 );
 
-
                 ctx.rotate(
                     c.rotation
                 );
-
 
                 ctx.globalAlpha =
                     c.life;
 
 
                 ctx.fillStyle =
-                    `hsl(${(i * 47) % 360}, 85%, 70%)`;
+                    `hsl(${c.hue}, 85%, 70%)`;
 
 
                 ctx.fillRect(
@@ -2692,169 +3890,91 @@
 
 
                 ctx.restore();
+
             }
 
 
-            ctx.globalAlpha = 1;
+            ctx.globalAlpha =
+                1;
+
         }
 
 
         /* ============================================================
-           Web Audio
-           
-           오르골 / 피아노 사운드 엔진
+           Audio
         ============================================================ */
 
-        let audioContext = null;
+        let audioContext =
+            null;
 
-        let masterGain = null;
+        let masterGain =
+            null;
 
-        let musicGain = null;
+        let musicGain =
+            null;
 
-        let effectGain = null;
+        let effectGain =
+            null;
 
-        let musicPlaying = false;
+        let musicPlaying =
+            false;
 
-        let musicTimer = null;
-
-
-        /*
-         * 브라우저는 Windows / Android 등의
-         * 실제 시스템 마스터 볼륨을 읽을 수 없습니다.
-         *
-         * 따라서 앱 내부 음량을 안전하게 설정하고
-         * 실제 최종 음량은 시스템 볼륨을 따릅니다.
-         */
-
-        const APP_VOLUME = 0.42;
+        let musicTimer =
+            null;
 
 
-        /* ============================================================
-           음계
-        ============================================================ */
+        const APP_VOLUME =
+            0.42;
+
 
         const NOTE = {
 
             C4: 261.63,
-
             D4: 293.66,
-
             E4: 329.63,
-
             F4: 349.23,
-
             G4: 392.00,
-
             A4: 440.00,
-
-            Bb4: 466.16,
-
             B4: 493.88,
-
             C5: 523.25,
-
             D5: 587.33,
-
             E5: 659.25,
-
             F5: 698.46,
-
             G5: 783.99
 
         };
 
 
-        /* ============================================================
-           Happy Birthday 멜로디
-        ============================================================ */
-
         const birthdayMelody = [
 
             [NOTE.G4, 0.32],
-
             [NOTE.G4, 0.32],
-
             [NOTE.A4, 0.58],
-
             [NOTE.G4, 0.58],
-
             [NOTE.C5, 0.58],
-
             [NOTE.B4, 0.90],
 
-
             [NOTE.G4, 0.32],
-
             [NOTE.G4, 0.32],
-
             [NOTE.A4, 0.58],
-
             [NOTE.G4, 0.58],
-
             [NOTE.D5, 0.58],
-
             [NOTE.C5, 0.90],
 
-
             [NOTE.G4, 0.32],
-
             [NOTE.G4, 0.32],
-
             [NOTE.G5, 0.58],
-
             [NOTE.E5, 0.58],
-
             [NOTE.C5, 0.58],
-
             [NOTE.B4, 0.58],
-
             [NOTE.A4, 0.90],
 
-
             [NOTE.F5, 0.32],
-
             [NOTE.F5, 0.32],
-
             [NOTE.E5, 0.58],
-
             [NOTE.C5, 0.58],
-
             [NOTE.D5, 0.58],
-
             [NOTE.C5, 1.05]
-
-        ];
-
-
-        /* ============================================================
-           코드 진행
-        ============================================================ */
-
-        const chords = [
-
-            [
-                NOTE.C4,
-                NOTE.E4,
-                NOTE.G4
-            ],
-
-            [
-                NOTE.G4,
-                NOTE.B4,
-                NOTE.D5
-            ],
-
-            [
-                NOTE.C4,
-                NOTE.E4,
-                NOTE.G4
-            ],
-
-            [
-                NOTE.F4,
-                NOTE.A4,
-                NOTE.C5
-            ]
 
         ];
 
@@ -2865,7 +3985,9 @@
 
         function initAudio() {
 
-            if (audioContext) {
+            if (
+                audioContext
+            ) {
 
                 if (
                     audioContext.state ===
@@ -2877,6 +3999,7 @@
                 }
 
                 return;
+
             }
 
 
@@ -2924,11 +4047,12 @@
             masterGain.connect(
                 audioContext.destination
             );
+
         }
 
 
         /* ============================================================
-           ADSR Envelope
+           ADSR
         ============================================================ */
 
         function applyADSR(
@@ -3005,11 +4129,12 @@
                 0.0001,
                 releaseEnd
             );
+
         }
 
 
         /* ============================================================
-           피아노 / 오르골 한 음
+           피아노
         ============================================================ */
 
         function playPianoNote(
@@ -3019,319 +4144,9 @@
             volume = 0.12
         ) {
 
-            if (!audioContext) {
-                return;
-            }
-
-
-            const fundamental =
-                audioContext.createOscillator();
-
-
-            fundamental.type =
-                "triangle";
-
-
-            fundamental.frequency.setValueAtTime(
-                frequency,
-                startTime
-            );
-
-
-            const harmonic2 =
-                audioContext.createOscillator();
-
-
-            harmonic2.type =
-                "sine";
-
-
-            harmonic2.frequency.setValueAtTime(
-                frequency * 2,
-                startTime
-            );
-
-
-            const harmonic3 =
-                audioContext.createOscillator();
-
-
-            harmonic3.type =
-                "sine";
-
-
-            harmonic3.frequency.setValueAtTime(
-                frequency * 3,
-                startTime
-            );
-
-
-            const harmonic4 =
-                audioContext.createOscillator();
-
-
-            harmonic4.type =
-                "sine";
-
-
-            harmonic4.frequency.setValueAtTime(
-                frequency * 4,
-                startTime
-            );
-
-
-            const fundamentalGain =
-                audioContext.createGain();
-
-
-            const harmonic2Gain =
-                audioContext.createGain();
-
-
-            const harmonic3Gain =
-                audioContext.createGain();
-
-
-            const harmonic4Gain =
-                audioContext.createGain();
-
-
-            fundamentalGain.gain.value =
-                0.72;
-
-
-            harmonic2Gain.gain.value =
-                0.19;
-
-
-            harmonic3Gain.gain.value =
-                0.07;
-
-
-            harmonic4Gain.gain.value =
-                0.025;
-
-
-            const noteGain =
-                audioContext.createGain();
-
-
-            applyADSR(
-                noteGain,
-                startTime,
-                duration,
-                volume,
-                0.012,
-                0.12,
-                0.32,
-                0.55
-            );
-
-
-            fundamental.connect(
-                fundamentalGain
-            );
-
-
-            harmonic2.connect(
-                harmonic2Gain
-            );
-
-
-            harmonic3.connect(
-                harmonic3Gain
-            );
-
-
-            harmonic4.connect(
-                harmonic4Gain
-            );
-
-
-            fundamentalGain.connect(
-                noteGain
-            );
-
-
-            harmonic2Gain.connect(
-                noteGain
-            );
-
-
-            harmonic3Gain.connect(
-                noteGain
-            );
-
-
-            harmonic4Gain.connect(
-                noteGain
-            );
-
-
-            noteGain.connect(
-                musicGain
-            );
-
-
-            fundamental.start(
-                startTime
-            );
-
-
-            harmonic2.start(
-                startTime
-            );
-
-
-            harmonic3.start(
-                startTime
-            );
-
-
-            harmonic4.start(
-                startTime
-            );
-
-
-            const stopTime =
-                startTime +
-                duration +
-                0.7;
-
-
-            fundamental.stop(
-                stopTime
-            );
-
-
-            harmonic2.stop(
-                stopTime
-            );
-
-
-            harmonic3.stop(
-                stopTime
-            );
-
-
-            harmonic4.stop(
-                stopTime
-            );
-        }
-
-
-        /* ============================================================
-           오르골 종소리
-        ============================================================ */
-
-        function playBell(
-            frequency,
-            startTime,
-            volume = 0.035
-        ) {
-
-            if (!audioContext) {
-                return;
-            }
-
-
-            const bell =
-                audioContext.createOscillator();
-
-
-            bell.type =
-                "sine";
-
-
-            bell.frequency.setValueAtTime(
-                frequency * 2,
-                startTime
-            );
-
-
-            const bell2 =
-                audioContext.createOscillator();
-
-
-            bell2.type =
-                "sine";
-
-
-            bell2.frequency.setValueAtTime(
-                frequency * 3,
-                startTime
-            );
-
-
-            const bellGain =
-                audioContext.createGain();
-
-
-            bellGain.gain.setValueAtTime(
-                0.0001,
-                startTime
-            );
-
-
-            bellGain.gain.exponentialRampToValueAtTime(
-                volume,
-                startTime + 0.008
-            );
-
-
-            bellGain.gain.exponentialRampToValueAtTime(
-                0.0001,
-                startTime + 1.15
-            );
-
-
-            bell.connect(
-                bellGain
-            );
-
-
-            bell2.connect(
-                bellGain
-            );
-
-
-            bellGain.connect(
-                musicGain
-            );
-
-
-            bell.start(
-                startTime
-            );
-
-
-            bell2.start(
-                startTime
-            );
-
-
-            bell.stop(
-                startTime + 1.2
-            );
-
-
-            bell2.stop(
-                startTime + 1.2
-            );
-        }
-
-
-        /* ============================================================
-           베이스
-        ============================================================ */
-
-        function playBass(
-            frequency,
-            startTime,
-            duration
-        ) {
-
-            if (!audioContext) {
+            if (
+                !audioContext
+            ) {
                 return;
             }
 
@@ -3341,7 +4156,7 @@
 
 
             oscillator.type =
-                "sine";
+                "triangle";
 
 
             oscillator.frequency.setValueAtTime(
@@ -3358,11 +4173,11 @@
                 gain,
                 startTime,
                 duration,
-                0.055,
-                0.025,
-                0.18,
-                0.22,
-                0.5
+                volume,
+                0.012,
+                0.12,
+                0.32,
+                0.55
             );
 
 
@@ -3386,17 +4201,98 @@
                 duration +
                 0.7
             );
+
         }
 
 
         /* ============================================================
-           곡 스케줄
+           벨
+        ============================================================ */
+
+        function playBell(
+            frequency,
+            startTime,
+            volume = 0.035
+        ) {
+
+            if (
+                !audioContext
+            ) {
+                return;
+            }
+
+
+            const bell =
+                audioContext.createOscillator();
+
+
+            bell.type =
+                "sine";
+
+
+            bell.frequency.setValueAtTime(
+                frequency * 2,
+                startTime
+            );
+
+
+            const gain =
+                audioContext.createGain();
+
+
+            gain.gain.setValueAtTime(
+                0.0001,
+                startTime
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                volume,
+                startTime +
+                0.008
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                startTime +
+                1.15
+            );
+
+
+            bell.connect(
+                gain
+            );
+
+
+            gain.connect(
+                musicGain
+            );
+
+
+            bell.start(
+                startTime
+            );
+
+
+            bell.stop(
+                startTime +
+                1.2
+            );
+
+        }
+
+
+        /* ============================================================
+           생일 음악
         ============================================================ */
 
         function scheduleBirthdaySong() {
 
-            if (!audioContext) {
-                return;
+            if (
+                !audioContext
+            ) {
+                return 0;
             }
 
 
@@ -3409,22 +4305,16 @@
                 now;
 
 
-            const beatLength =
-                0.31;
-
-
             birthdayMelody.forEach(
-                ([frequency, duration], index) => {
-
-                    const noteDuration =
-                        duration *
-                        1.02;
-
+                (
+                    [frequency, duration],
+                    index
+                ) => {
 
                     playPianoNote(
                         frequency,
                         cursor,
-                        noteDuration,
+                        duration,
                         0.115
                     );
 
@@ -3432,74 +4322,36 @@
                     playBell(
                         frequency,
                         cursor,
-                        0.022
+                        0.018
                     );
 
 
                     if (
-                        index % 3 ===
+                        index % 4 ===
                         0
                     ) {
 
                         playPianoNote(
                             frequency / 2,
                             cursor,
-                            noteDuration *
-                            0.9,
+                            duration,
                             0.025
                         );
+
                     }
 
 
                     cursor +=
                         duration +
-                        beatLength *
-                        0.06;
+                        0.02;
 
                 }
             );
 
 
-            /* --------------------------------------------------------
-               베이스
-            -------------------------------------------------------- */
-
-            const phraseLength =
-                3.9;
-
-
-            const bassNotes = [
-
-                NOTE.C4 / 2,
-
-                NOTE.G4 / 2,
-
-                NOTE.C4 / 2,
-
-                NOTE.F4 / 2
-
-            ];
-
-
-            for (
-                let i = 0;
-                i < 4;
-                i++
-            ) {
-
-                playBass(
-                    bassNotes[i],
-                    now +
-                    i *
-                    phraseLength,
-                    phraseLength *
-                    0.82
-                );
-            }
-
-
             return cursor -
                 now;
+
         }
 
 
@@ -3512,12 +4364,15 @@
             initAudio();
 
 
-            if (musicPlaying) {
+            if (
+                musicPlaying
+            ) {
                 return;
             }
 
 
-            musicPlaying = true;
+            musicPlaying =
+                true;
 
 
             musicButton.textContent =
@@ -3526,7 +4381,9 @@
 
             function loop() {
 
-                if (!musicPlaying) {
+                if (
+                    !musicPlaying
+                ) {
                     return;
                 }
 
@@ -3545,10 +4402,12 @@
                             100
                         )
                     );
+
             }
 
 
             loop();
+
         }
 
 
@@ -3558,35 +4417,37 @@
 
         function stopMusic() {
 
-            musicPlaying = false;
+            musicPlaying =
+                false;
 
 
-            if (musicTimer) {
+            if (
+                musicTimer
+            ) {
 
                 clearTimeout(
                     musicTimer
                 );
 
-
                 musicTimer =
                     null;
+
             }
 
 
             musicButton.textContent =
                 "🔇";
+
         }
 
-
-        /* ============================================================
-           음악 버튼
-        ============================================================ */
 
         musicButton.addEventListener(
             "click",
             () => {
 
-                if (musicPlaying) {
+                if (
+                    musicPlaying
+                ) {
 
                     stopMusic();
 
@@ -3606,7 +4467,9 @@
 
         function playExtinguishSound() {
 
-            if (!audioContext) {
+            if (
+                !audioContext
+            ) {
                 return;
             }
 
@@ -3631,7 +4494,8 @@
 
             oscillator.frequency.exponentialRampToValueAtTime(
                 150,
-                now + 0.18
+                now +
+                0.18
             );
 
 
@@ -3647,13 +4511,15 @@
 
             gain.gain.exponentialRampToValueAtTime(
                 0.16,
-                now + 0.01
+                now +
+                0.01
             );
 
 
             gain.gain.exponentialRampToValueAtTime(
                 0.0001,
-                now + 0.22
+                now +
+                0.22
             );
 
 
@@ -3673,18 +4539,22 @@
 
 
             oscillator.stop(
-                now + 0.25
+                now +
+                0.25
             );
+
         }
 
 
         /* ============================================================
-           전체 촛불 완료 효과음
+           축하 효과음
         ============================================================ */
 
         function playCelebrationSound() {
 
-            if (!audioContext) {
+            if (
+                !audioContext
+            ) {
                 return;
             }
 
@@ -3696,18 +4566,18 @@
             const notes = [
 
                 NOTE.C5,
-
                 NOTE.E5,
-
                 NOTE.G5,
-
                 NOTE.C5 * 2
 
             ];
 
 
             notes.forEach(
-                (frequency, index) => {
+                (
+                    frequency,
+                    index
+                ) => {
 
                     playBell(
                         frequency,
@@ -3719,11 +4589,12 @@
 
                 }
             );
+
         }
 
 
         /* ============================================================
-           촛불 클릭 판정
+           촛불 클릭
         ============================================================ */
 
         function handlePointer(
@@ -3732,8 +4603,9 @@
         ) {
 
             if (
-                !musicPlaying &&
-                audioContext
+                audioContext &&
+                audioContext.state ===
+                "suspended"
             ) {
 
                 audioContext.resume();
@@ -3760,8 +4632,7 @@
 
 
             /*
-             * 뒤쪽 초부터 검사합니다.
-             * 겹치는 경우에도 클릭하기 쉬운 초가 우선됩니다.
+             * 앞쪽 촛불부터 검사합니다.
              */
 
             const indices =
@@ -3805,38 +4676,43 @@
                     (
                         candle.type ===
                         "long"
-                            ? 82
-                            : 48
+                            ? 76
+                            : 46
                     ) *
                     scale;
 
 
-                const candleWidth =
-                    34 *
+                /*
+                 * 실제 초보다 훨씬 넓게
+                 * 클릭 영역을 설정합니다.
+                 */
+
+                const hitWidth =
+                    32 *
                     scale;
 
 
                 const hitTop =
                     position.y -
                     candleHeight -
-                    32 *
+                    30 *
                     scale;
 
 
                 const hitBottom =
                     position.y +
-                    14 *
+                    18 *
                     scale;
 
 
                 if (
                     x >=
                     position.x -
-                    candleWidth / 2 &&
+                    hitWidth / 2 &&
 
                     x <=
                     position.x +
-                    candleWidth / 2 &&
+                    hitWidth / 2 &&
 
                     y >=
                     hitTop &&
@@ -3853,7 +4729,15 @@
                         position.x,
                         position.y -
                         candleHeight,
-                        25
+                        20
+                    );
+
+
+                    createSmoke(
+                        position.x,
+                        position.y -
+                        candleHeight -
+                        10
                     );
 
 
@@ -3872,31 +4756,64 @@
                         0
                     ) {
 
-                        setTimeout(
-                            () => {
-
-                                createConfetti(
-                                    150
-                                );
-
-
-                                playCelebrationSound();
-
-                            },
-                            350
-                        );
+                        startCelebration();
 
                     }
 
 
                     break;
+
                 }
+
             }
+
         }
 
 
         /* ============================================================
-           마우스 클릭
+           축하 시작
+        ============================================================ */
+
+        function startCelebration() {
+
+            if (
+                celebrationStarted
+            ) {
+                return;
+            }
+
+
+            celebrationStarted =
+                true;
+
+
+            setTimeout(
+                () => {
+
+                    createConfetti(
+                        180
+                    );
+
+
+                    playCelebrationSound();
+
+
+                    restartButton.style.display =
+                        "block";
+
+
+                    birthdayTitle.textContent =
+                        `🎉 ${birthdayName}님, 정말 축하합니다! 🎉`;
+
+                },
+                500
+            );
+
+        }
+
+
+        /* ============================================================
+           마우스
         ============================================================ */
 
         canvas.addEventListener(
@@ -3913,7 +4830,7 @@
 
 
         /* ============================================================
-           모바일 터치
+           터치
         ============================================================ */
 
         canvas.addEventListener(
@@ -3947,76 +4864,175 @@
 
 
         /* ============================================================
-           시작 버튼
+           시작
         ============================================================ */
 
-        startButton.addEventListener(
-            "click",
-            () => {
+        function startBirthday() {
 
-                birthdayName =
-                    nameInput.value.trim();
+            birthdayName =
+                nameInput.value.trim();
 
 
-                if (
-                    !birthdayName
-                ) {
+            if (
+                !birthdayName
+            ) {
 
-                    nameInput.focus();
+                nameInput.focus();
 
-                    return;
-                }
+                return;
 
-
-                let age =
-                    Number(
-                        ageInput.value
-                    );
+            }
 
 
-                if (
-                    !Number.isFinite(
-                        age
-                    ) ||
-                    age < 1
-                ) {
-
-                    age = 1;
-                }
-
-
-                age =
-                    Math.min(
-                        Math.floor(age),
-                        100
-                    );
-
-
-                createCandles(
-                    age
+            let age =
+                Number(
+                    ageInput.value
                 );
 
 
-                birthdayTitle.textContent =
-                    `🎂 ${birthdayName}님, 생일 축하합니다!`;
+            if (
+                !Number.isFinite(
+                    age
+                )
+            ) {
+
+                age = 1;
+
+            }
 
 
-                setup.classList.add(
+            age =
+                Math.max(
+                    1,
+                    Math.min(
+                        100,
+                        Math.floor(age)
+                    )
+                );
+
+
+            particles = [];
+
+            smokeParticles = [];
+
+            confetti = [];
+
+
+            createCandles(
+                age
+            );
+
+
+            birthdayTitle.textContent =
+                `🎂 ${birthdayName}님, 생일 축하합니다!`;
+
+
+            setup.classList.add(
+                "hidden"
+            );
+
+
+            sceneUI.style.display =
+                "block";
+
+
+            musicButton.style.display =
+                "block";
+
+
+            restartButton.style.display =
+                "none";
+
+
+            initAudio();
+
+            startMusic();
+
+        }
+
+
+        startButton.addEventListener(
+            "click",
+            startBirthday
+        );
+
+
+        /* ============================================================
+           Enter 키로 시작
+        ============================================================ */
+
+        nameInput.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    startBirthday();
+
+                }
+
+            }
+        );
+
+
+        ageInput.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    startBirthday();
+
+                }
+
+            }
+        );
+
+
+        /* ============================================================
+           다시 시작
+        ============================================================ */
+
+        restartButton.addEventListener(
+            "click",
+            () => {
+
+                stopMusic();
+
+
+                setup.classList.remove(
                     "hidden"
                 );
 
 
                 sceneUI.style.display =
-                    "block";
+                    "none";
 
 
                 musicButton.style.display =
-                    "block";
+                    "none";
 
 
-                initAudio();
+                restartButton.style.display =
+                    "none";
 
-                startMusic();
+
+                particles = [];
+
+                smokeParticles = [];
+
+                confetti = [];
+
+                candles = [];
+
+                celebrationStarted =
+                    false;
 
             }
         );
@@ -4026,7 +5042,9 @@
            렌더링
         ============================================================ */
 
-        function render(time) {
+        function render(
+            time
+        ) {
 
             drawBackground(
                 time
@@ -4047,6 +5065,8 @@
 
                 updateParticles();
 
+                updateSmoke();
+
                 updateConfetti();
 
             }
@@ -4055,6 +5075,7 @@
             requestAnimationFrame(
                 render
             );
+
         }
 
 
@@ -4065,4 +5086,5 @@
     </script>
 
 </body>
+
 </html>
