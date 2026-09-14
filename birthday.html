@@ -5,15 +5,11 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <title>생일 축하합니다 🎂</title>
 
     <style>
-
         /* ============================================================
            기본 초기화
         ============================================================ */
@@ -78,17 +74,14 @@
             padding: 32px;
 
             border:
-                1px solid
-                rgba(255, 255, 255, 0.13);
+                1px solid rgba(255, 255, 255, 0.13);
 
             border-radius: 30px;
 
             background:
-                linear-gradient(
-                    145deg,
+                linear-gradient(145deg,
                     rgba(31, 35, 57, 0.97),
-                    rgba(15, 18, 31, 0.96)
-                );
+                    rgba(15, 18, 31, 0.96));
 
             backdrop-filter: blur(22px);
 
@@ -105,8 +98,7 @@
             opacity: 0;
 
             transform:
-                translateY(20px)
-                scale(0.96);
+                translateY(20px) scale(0.96);
 
             pointer-events: none;
         }
@@ -117,19 +109,16 @@
             text-align: center;
 
             font-size:
-                clamp(
-                    28px,
+                clamp(28px,
                     7vw,
-                    36px
-                );
+                    36px);
 
             font-weight: 900;
 
             letter-spacing: -1.8px;
 
             text-shadow:
-                0 4px 20px
-                rgba(255, 130, 190, 0.3);
+                0 4px 20px rgba(255, 130, 190, 0.3);
         }
 
         .subtitle {
@@ -164,8 +153,7 @@
             padding: 0 16px;
 
             border:
-                1px solid
-                rgba(255, 255, 255, 0.09);
+                1px solid rgba(255, 255, 255, 0.09);
 
             border-radius: 15px;
 
@@ -195,11 +183,9 @@
                 rgba(12, 15, 28, 0.95);
 
             box-shadow:
-                0 0 0 3px
-                rgba(255, 143, 186, 0.11),
+                0 0 0 3px rgba(255, 143, 186, 0.11),
 
-                0 8px 30px
-                rgba(255, 100, 170, 0.08);
+                0 8px 30px rgba(255, 100, 170, 0.08);
         }
 
         /* ============================================================
@@ -221,17 +207,14 @@
             min-height: 82px;
 
             border:
-                1px solid
-                rgba(255, 255, 255, 0.08);
+                1px solid rgba(255, 255, 255, 0.08);
 
             border-radius: 17px;
 
             background:
-                linear-gradient(
-                    145deg,
+                linear-gradient(145deg,
                     #171b2c,
-                    #101322
-                );
+                    #101322);
 
             color: #dce1ef;
 
@@ -258,11 +241,9 @@
             inset: 0;
 
             background:
-                linear-gradient(
-                    120deg,
-                    rgba(255,255,255,0.08),
-                    transparent 45%
-                );
+                linear-gradient(120deg,
+                    rgba(255, 255, 255, 0.08),
+                    transparent 45%);
 
             pointer-events: none;
         }
@@ -275,10 +256,7 @@
             font-size: 27px;
 
             filter:
-                drop-shadow(
-                    0 4px 8px
-                    rgba(0, 0, 0, 0.25)
-                );
+                drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
         }
 
         .cake:hover {
@@ -286,35 +264,28 @@
                 translateY(-3px);
 
             background:
-                linear-gradient(
-                    145deg,
+                linear-gradient(145deg,
                     #20253b,
-                    #15192a
-                );
+                    #15192a);
         }
 
         .cake:active {
             transform:
-                translateY(0)
-                scale(0.97);
+                translateY(0) scale(0.97);
         }
 
         .cake.selected {
             border-color: #ff8fb9;
 
             background:
-                linear-gradient(
-                    145deg,
+                linear-gradient(145deg,
                     rgba(255, 143, 185, 0.18),
-                    rgba(168, 113, 255, 0.10)
-                );
+                    rgba(168, 113, 255, 0.10));
 
             box-shadow:
-                0 0 0 1px
-                rgba(255, 143, 185, 0.08),
+                0 0 0 1px rgba(255, 143, 185, 0.08),
 
-                0 10px 35px
-                rgba(255, 100, 170, 0.12);
+                0 10px 35px rgba(255, 100, 170, 0.12);
         }
 
         /* ============================================================
@@ -332,12 +303,10 @@
             border-radius: 17px;
 
             background:
-                linear-gradient(
-                    135deg,
+                linear-gradient(135deg,
                     #ff72a9,
                     #bd7aff 55%,
-                    #7f9cff
-                );
+                    #7f9cff);
 
             color: #ffffff;
 
@@ -350,11 +319,9 @@
             cursor: pointer;
 
             box-shadow:
-                0 12px 35px
-                rgba(213, 91, 180, 0.28),
+                0 12px 35px rgba(213, 91, 180, 0.28),
 
-                inset 0 1px 0
-                rgba(255, 255, 255, 0.25);
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
 
             transition:
                 transform 0.2s ease,
@@ -370,14 +337,12 @@
                 brightness(1.08);
 
             box-shadow:
-                0 16px 42px
-                rgba(213, 91, 180, 0.35);
+                0 16px 42px rgba(213, 91, 180, 0.35);
         }
 
         .start:active {
             transform:
-                translateY(0)
-                scale(0.98);
+                translateY(0) scale(0.98);
         }
 
         /* ============================================================
@@ -398,10 +363,8 @@
             position: absolute;
 
             top:
-                max(
-                    5%,
-                    env(safe-area-inset-top)
-                );
+                max(5%,
+                    env(safe-area-inset-top));
 
             width: 100%;
 
@@ -410,43 +373,30 @@
             text-align: center;
 
             font-size:
-                clamp(
-                    25px,
+                clamp(25px,
                     5vw,
-                    58px
-                );
+                    58px);
 
             font-weight: 900;
 
             letter-spacing: -2px;
 
             text-shadow:
-                0 0 10px
-                rgba(255, 255, 255, 0.45),
+                0 0 10px rgba(255, 255, 255, 0.45),
 
-                0 0 30px
-                rgba(255, 130, 190, 0.45),
+                0 0 30px rgba(255, 130, 190, 0.45),
 
-                0 8px 35px
-                rgba(0, 0, 0, 0.35);
+                0 8px 35px rgba(0, 0, 0, 0.35);
         }
 
         .birthday-subtitle {
             position: absolute;
 
             top:
-                calc(
-                    max(
-                        5%,
-                        env(safe-area-inset-top)
-                    )
-                    +
-                    clamp(
-                        43px,
+                calc(max(5%,
+                        env(safe-area-inset-top)) + clamp(43px,
                         7vw,
-                        78px
-                    )
-                );
+                        78px));
 
             width: 100%;
 
@@ -459,8 +409,7 @@
             font-size: 14px;
 
             text-shadow:
-                0 2px 10px
-                rgba(0, 0, 0, 0.6);
+                0 2px 10px rgba(0, 0, 0, 0.6);
         }
 
         /* ============================================================
@@ -473,23 +422,18 @@
             z-index: 20;
 
             right:
-                max(
-                    18px,
-                    env(safe-area-inset-right)
-                );
+                max(18px,
+                    env(safe-area-inset-right));
 
             top:
-                max(
-                    18px,
-                    env(safe-area-inset-top)
-                );
+                max(18px,
+                    env(safe-area-inset-top));
 
             width: 46px;
             height: 46px;
 
             border:
-                1px solid
-                rgba(255, 255, 255, 0.13);
+                1px solid rgba(255, 255, 255, 0.13);
 
             border-radius: 50%;
 
@@ -503,8 +447,7 @@
             backdrop-filter: blur(12px);
 
             box-shadow:
-                0 8px 25px
-                rgba(0, 0, 0, 0.25);
+                0 8px 25px rgba(0, 0, 0, 0.25);
 
             transition:
                 transform 0.15s ease;
@@ -525,10 +468,8 @@
             z-index: 5;
 
             bottom:
-                max(
-                    5%,
-                    env(safe-area-inset-bottom)
-                );
+                max(5%,
+                    env(safe-area-inset-bottom));
 
             width: 100%;
 
@@ -537,20 +478,17 @@
             text-align: center;
 
             color:
-                rgba(
+                rgba(255,
                     255,
                     255,
-                    255,
-                    0.68
-                );
+                    0.68);
 
             font-size: 14px;
 
             pointer-events: none;
 
             text-shadow:
-                0 2px 10px
-                rgba(0, 0, 0, 0.5);
+                0 2px 10px rgba(0, 0, 0, 0.5);
 
             transition:
                 opacity 0.3s ease;
@@ -568,10 +506,8 @@
             left: 50%;
 
             bottom:
-                max(
-                    25px,
-                    env(safe-area-inset-bottom)
-                );
+                max(25px,
+                    env(safe-area-inset-bottom));
 
             transform:
                 translateX(-50%);
@@ -583,8 +519,7 @@
             padding: 0 22px;
 
             border:
-                1px solid
-                rgba(255, 255, 255, 0.15);
+                1px solid rgba(255, 255, 255, 0.15);
 
             border-radius: 999px;
 
@@ -604,8 +539,7 @@
             backdrop-filter: blur(12px);
 
             box-shadow:
-                0 8px 25px
-                rgba(0, 0, 0, 0.25);
+                0 8px 25px rgba(0, 0, 0, 0.25);
         }
 
         /* ============================================================
@@ -639,9 +573,7 @@
 
             .birthday-subtitle {
                 top:
-                    calc(
-                        3% + 45px
-                    );
+                    calc(3% + 45px);
             }
 
             .hint {
@@ -665,7 +597,6 @@
             }
 
         }
-
     </style>
 
 </head>
@@ -683,10 +614,7 @@
          시작 화면
     ============================================================ -->
 
-    <div
-        class="setup"
-        id="setup"
-    >
+    <div class="setup" id="setup">
 
         <h1>
             🎂 생일 축하하기
@@ -702,13 +630,7 @@
             이름
         </label>
 
-        <input
-            id="name"
-            type="text"
-            maxlength="20"
-            autocomplete="off"
-            placeholder="예: 홍길동"
-        >
+        <input id="name" type="text" maxlength="20" autocomplete="off" placeholder="예: 홍길동">
 
 
         <label>
@@ -717,38 +639,22 @@
 
         <div class="cakes">
 
-            <button
-                class="cake selected"
-                data-cake="strawberry"
-                type="button"
-            >
+            <button class="cake selected" data-cake="strawberry" type="button">
                 <span>🍓</span>
                 딸기
             </button>
 
-            <button
-                class="cake"
-                data-cake="cream"
-                type="button"
-            >
+            <button class="cake" data-cake="cream" type="button">
                 <span>🍰</span>
                 생크림
             </button>
 
-            <button
-                class="cake"
-                data-cake="chocolate"
-                type="button"
-            >
+            <button class="cake" data-cake="chocolate" type="button">
                 <span>🍫</span>
                 초콜릿
             </button>
 
-            <button
-                class="cake"
-                data-cake="cheese"
-                type="button"
-            >
+            <button class="cake" data-cake="cheese" type="button">
                 <span>🧀</span>
                 치즈
             </button>
@@ -760,22 +666,10 @@
             나이 / 초 개수
         </label>
 
-        <input
-            id="age"
-            type="number"
-            min="1"
-            max="100"
-            value="10"
-            inputmode="numeric"
-            placeholder="나이를 입력하세요"
-        >
+        <input id="age" type="number" min="1" max="100" value="10" inputmode="numeric" placeholder="나이를 입력하세요">
 
 
-        <button
-            class="start"
-            id="startButton"
-            type="button"
-        >
+        <button class="start" id="startButton" type="button">
             🎉 생일 시작하기
         </button>
 
@@ -786,28 +680,15 @@
          장면 UI
     ============================================================ -->
 
-    <div
-        class="scene-ui"
-        id="sceneUI"
-        style="display:none;"
-    >
+    <div class="scene-ui" id="sceneUI" style="display:none;">
 
-        <div
-            class="birthday-title"
-            id="birthdayTitle"
-        ></div>
+        <div class="birthday-title" id="birthdayTitle"></div>
 
-        <div
-            class="birthday-subtitle"
-            id="birthdaySubtitle"
-        >
+        <div class="birthday-subtitle" id="birthdaySubtitle">
             촛불을 하나씩 눌러 꺼주세요 🕯️
         </div>
 
-        <div
-            class="hint"
-            id="hint"
-        >
+        <div class="hint" id="hint">
             ✨ 모든 촛불을 끄면 특별한 축하가 시작됩니다 ✨
         </div>
 
@@ -818,13 +699,7 @@
          음악
     ============================================================ -->
 
-    <button
-        class="music-button"
-        id="musicButton"
-        style="display:none;"
-        type="button"
-        aria-label="음악 켜기 또는 끄기"
-    >
+    <button class="music-button" id="musicButton" style="display:none;" type="button" aria-label="음악 켜기 또는 끄기">
         🔊
     </button>
 
@@ -833,18 +708,12 @@
          다시 시작
     ============================================================ -->
 
-    <button
-        class="restart"
-        id="restartButton"
-        type="button"
-        style="display:none;"
-    >
+    <button class="restart" id="restartButton" type="button" style="display:none;">
         🎂 다시 시작
     </button>
 
 
     <script>
-
         "use strict";
 
 
@@ -860,8 +729,7 @@
 
         const ctx =
             canvas.getContext(
-                "2d",
-                {
+                "2d", {
                     alpha: false,
                     desynchronized: true
                 }
@@ -938,29 +806,23 @@
 
 
             for (
-                let i = 0;
-                i < 60;
-                i++
+                let i = 0; i < 60; i++
             ) {
 
                 stars.push({
 
-                    x:
-                        Math.random() *
+                    x: Math.random() *
                         width,
 
-                    y:
-                        Math.random() *
+                    y: Math.random() *
                         height *
                         0.72,
 
-                    size:
-                        0.5 +
+                    size: 0.5 +
                         Math.random() *
                         1.5,
 
-                    phase:
-                        Math.random() *
+                    phase: Math.random() *
                         Math.PI *
                         2
 
@@ -973,8 +835,7 @@
 
         window.addEventListener(
             "resize",
-            resizeCanvas,
-            {
+            resizeCanvas, {
                 passive: true
             }
         );
@@ -1226,9 +1087,7 @@
 
 
             for (
-                let i = 0;
-                i < longCount;
-                i++
+                let i = 0; i < longCount; i++
             ) {
 
                 candles.push({
@@ -1237,13 +1096,11 @@
 
                     blown: false,
 
-                    flame:
-                        Math.random() *
+                    flame: Math.random() *
                         Math.PI *
                         2,
 
-                    phase:
-                        Math.random() *
+                    phase: Math.random() *
                         Math.PI *
                         2
 
@@ -1253,9 +1110,7 @@
 
 
             for (
-                let i = 0;
-                i < shortCount;
-                i++
+                let i = 0; i < shortCount; i++
             ) {
 
                 candles.push({
@@ -1264,13 +1119,11 @@
 
                     blown: false,
 
-                    flame:
-                        Math.random() *
+                    flame: Math.random() *
                         Math.PI *
                         2,
 
-                    phase:
-                        Math.random() *
+                    phase: Math.random() *
                         Math.PI *
                         2
 
@@ -1330,9 +1183,7 @@
 
 
             for (
-                let i = 0;
-                i < amount;
-                i++
+                let i = 0; i < amount; i++
             ) {
 
                 const angle =
@@ -1353,22 +1204,17 @@
 
                     y: y,
 
-                    vx:
-                        Math.cos(angle) *
+                    vx: Math.cos(angle) *
                         speed,
 
-                    vy:
-                        Math.sin(angle) *
+                    vy: Math.sin(angle) *
                         speed,
 
-                    gravity:
-                        0.06,
+                    gravity: 0.06,
 
-                    life:
-                        1,
+                    life: 1,
 
-                    size:
-                        1 +
+                    size: 1 +
                         Math.random() *
                         3
 
@@ -1389,26 +1235,21 @@
         ) {
 
             for (
-                let i = 0;
-                i < 6;
-                i++
+                let i = 0; i < 6; i++
             ) {
 
                 smokeParticles.push({
 
-                    x:
-                        x +
+                    x: x +
                         (
                             Math.random() -
                             0.5
                         ) *
                         8,
 
-                    y:
-                        y,
+                    y: y,
 
-                    vx:
-                        (
+                    vx: (
                             Math.random() -
                             0.5
                         ) *
@@ -1419,11 +1260,9 @@
                         Math.random() *
                         0.8,
 
-                    life:
-                        1,
+                    life: 1,
 
-                    size:
-                        3 +
+                    size: 3 +
                         Math.random() *
                         4
 
@@ -1453,55 +1292,45 @@
 
 
             for (
-                let i = 0;
-                i < amount;
-                i++
+                let i = 0; i < amount; i++
             ) {
 
                 confetti.push({
 
-                    x:
-                        Math.random() *
+                    x: Math.random() *
                         width,
 
                     y:
                         -Math.random() *
                         height,
 
-                    vx:
-                        (
+                    vx: (
                             Math.random() -
                             0.5
                         ) *
                         2.5,
 
-                    vy:
-                        1 +
+                    vy: 1 +
                         Math.random() *
                         4,
 
-                    rotation:
-                        Math.random() *
+                    rotation: Math.random() *
                         Math.PI,
 
-                    rotationSpeed:
-                        (
+                    rotationSpeed: (
                             Math.random() -
                             0.5
                         ) *
                         0.18,
 
-                    size:
-                        4 +
+                    size: 4 +
                         Math.random() *
                         7,
 
-                    hue:
-                        Math.random() *
+                    hue: Math.random() *
                         360,
 
-                    life:
-                        1
+                    life: 1
 
                 });
 
@@ -1520,35 +1349,28 @@
 
 
             for (
-                let i = 0;
-                i < 80;
-                i++
+                let i = 0; i < 80; i++
             ) {
 
                 celebrationSparkles.push({
 
-                    angle:
-                        Math.random() *
+                    angle: Math.random() *
                         Math.PI *
                         2,
 
-                    radius:
-                        80 +
+                    radius: 80 +
                         Math.random() *
                         260,
 
-                    speed:
-                        0.002 +
+                    speed: 0.002 +
                         Math.random() *
                         0.006,
 
-                    size:
-                        1 +
+                    size: 1 +
                         Math.random() *
                         3,
 
-                    phase:
-                        Math.random() *
+                    phase: Math.random() *
                         Math.PI *
                         2
 
@@ -1573,9 +1395,9 @@
                 Math.min(
                     width *
                     (
-                        mobile
-                            ? 0.86
-                            : 0.72
+                        mobile ?
+                        0.86 :
+                        0.72
                     ),
                     680
                 );
@@ -1585,9 +1407,9 @@
                 Math.min(
                     height *
                     (
-                        mobile
-                            ? 0.28
-                            : 0.31
+                        mobile ?
+                        0.28 :
+                        0.31
                     ),
                     250
                 );
@@ -1627,17 +1449,13 @@
 
             return {
 
-                x:
-                    width / 2,
+                x: width / 2,
 
-                width:
-                    cakeWidth,
+                width: cakeWidth,
 
-                height:
-                    cakeHeight,
+                height: cakeHeight,
 
-                bottom:
-                    bottom
+                bottom: bottom
 
             };
 
@@ -1708,12 +1526,12 @@
 
 
             const rowGap =
-                total <= 10
-                    ? 0
-                    : Math.min(
-                        25,
-                        cake.height * 0.10
-                    );
+                total <= 10 ?
+                0 :
+                Math.min(
+                    25,
+                    cake.height * 0.10
+                );
 
 
             candles.forEach(
@@ -1743,21 +1561,20 @@
                     const usableWidth =
                         cake.width *
                         (
-                            total <= 5
-                                ? 0.55
-                                : 0.72
+                            total <= 5 ?
+                            0.55 :
+                            0.72
                         );
 
 
                     const spacing =
-                        rowCount <= 1
-                            ? 0
-                            :
-                            usableWidth /
-                            (
-                                rowCount -
-                                1
-                            );
+                        rowCount <= 1 ?
+                        0 :
+                        usableWidth /
+                        (
+                            rowCount -
+                            1
+                        );
 
 
                     const rowWidth =
@@ -1769,18 +1586,17 @@
 
 
                     const normalized =
-                        rowCount <= 1
-                            ? 0
-                            :
+                        rowCount <= 1 ?
+                        0 :
+                        (
+                            col /
                             (
-                                col /
-                                (
-                                    rowCount -
-                                    1
-                                )
-                            ) *
-                            2 -
-                            1;
+                                rowCount -
+                                1
+                            )
+                        ) *
+                        2 -
+                        1;
 
 
                     const curve =
@@ -1845,17 +1661,15 @@
 
                         y: y,
 
-                        depth:
-                            row +
+                        depth: row +
                             (
                                 candle.type ===
-                                "short"
-                                    ? 0.5
-                                    : 0
+                                "short" ?
+                                0.5 :
+                                0
                             ),
 
-                        scale:
-                            scale
+                        scale: scale
 
                     };
 
@@ -2554,9 +2368,7 @@
 
 
             for (
-                let i = 0;
-                i <= segments;
-                i++
+                let i = 0; i <= segments; i++
             ) {
 
                 const t =
@@ -2578,13 +2390,13 @@
 
 
                 const drip =
-                    i % 4 === 0
-                        ? 12 +
-                          (
-                              i % 3
-                          ) *
-                          3
-                        : 0;
+                    i % 4 === 0 ?
+                    12 +
+                    (
+                        i % 3
+                    ) *
+                    3 :
+                    0;
 
 
                 const y =
@@ -2680,9 +2492,7 @@
 
 
             for (
-                let i = 0;
-                i <= count;
-                i++
+                let i = 0; i <= count; i++
             ) {
 
                 const x =
@@ -2702,9 +2512,9 @@
 
 
                 const drip =
-                    i % 5 === 0
-                        ? 9
-                        : 0;
+                    i % 5 === 0 ?
+                    9 :
+                    0;
 
 
                 ctx.lineTo(
@@ -2735,9 +2545,7 @@
              */
 
             for (
-                let i = 0;
-                i < 12;
-                i++
+                let i = 0; i < 12; i++
             ) {
 
                 const x =
@@ -2916,9 +2724,7 @@
 
 
                     for (
-                        let i = 0;
-                        i < 8;
-                        i++
+                        let i = 0; i < 8; i++
                     ) {
 
                         const angle =
@@ -3009,9 +2815,7 @@
              */
 
             for (
-                let i = 0;
-                i < 7;
-                i++
+                let i = 0; i < 7; i++
             ) {
 
                 const x =
@@ -3077,9 +2881,7 @@
              */
 
             for (
-                let i = 0;
-                i < 9;
-                i++
+                let i = 0; i < 9; i++
             ) {
 
                 const x =
@@ -3266,9 +3068,7 @@
 
 
             for (
-                let i = 0;
-                i <= 24;
-                i++
+                let i = 0; i <= 24; i++
             ) {
 
                 const x =
@@ -3325,9 +3125,7 @@
              */
 
             for (
-                let i = 0;
-                i < 8;
-                i++
+                let i = 0; i < 8; i++
             ) {
 
                 const x =
@@ -3420,9 +3218,7 @@
 
 
             for (
-                let i = 0;
-                i < 13;
-                i++
+                let i = 0; i < 13; i++
             ) {
 
                 const x =
@@ -3606,9 +3402,7 @@
              */
 
             for (
-                let i = 0;
-                i < 13;
-                i++
+                let i = 0; i < 13; i++
             ) {
 
                 const x =
@@ -3830,9 +3624,9 @@
             const heightCandle =
                 (
                     candle.type ===
-                    "long"
-                        ? 76
-                        : 45
+                    "long" ?
+                    76 :
+                    45
                 ) *
                 scale;
 
@@ -3966,9 +3760,7 @@
 
 
             for (
-                let i = -2;
-                i < heightCandle / 14 + 2;
-                i++
+                let i = -2; i < heightCandle / 14 + 2; i++
             ) {
 
                 ctx.beginPath();
@@ -4249,28 +4041,27 @@
 
             const order =
                 candles
-                    .map(
-                        (
-                            candle,
+                .map(
+                    (
+                        candle,
+                        index
+                    ) => ({
+
+                        candle,
+
+                        index,
+
+                        position: positions[
                             index
-                        ) => ({
+                        ]
 
-                            candle,
-
-                            index,
-
-                            position:
-                                positions[
-                                    index
-                                ]
-
-                        })
-                    )
-                    .sort(
-                        (a, b) =>
-                            a.position.depth -
-                            b.position.depth
-                    );
+                    })
+                )
+                .sort(
+                    (a, b) =>
+                    a.position.depth -
+                    b.position.depth
+                );
 
 
             order.forEach(
@@ -4549,9 +4340,7 @@
 
             for (
                 let i =
-                    particles.length - 1;
-                i >= 0;
-                i--
+                    particles.length - 1; i >= 0; i--
             ) {
 
                 const p =
@@ -4627,9 +4416,7 @@
 
             for (
                 let i =
-                    smokeParticles.length - 1;
-                i >= 0;
-                i--
+                    smokeParticles.length - 1; i >= 0; i--
             ) {
 
                 const smoke =
@@ -4714,9 +4501,7 @@
 
             for (
                 let i =
-                    confetti.length - 1;
-                i >= 0;
-                i--
+                    confetti.length - 1; i >= 0; i--
             ) {
 
                 const c =
@@ -4749,8 +4534,7 @@
                         width;
 
 
-                    c.y =
-                        -20;
+                    c.y = -20;
 
 
                     c.vy =
@@ -4969,7 +4753,7 @@
 
 
             audioContext =
-                new (
+                new(
                     window.AudioContext ||
                     window.webkitAudioContext
                 )();
@@ -5942,15 +5726,15 @@
 
             const indices =
                 candles
-                    .map(
-                        (_, index) =>
-                            index
-                    )
-                    .sort(
-                        (a, b) =>
-                            positions[b].depth -
-                            positions[a].depth
-                    );
+                .map(
+                    (_, index) =>
+                    index
+                )
+                .sort(
+                    (a, b) =>
+                    positions[b].depth -
+                    positions[a].depth
+                );
 
 
             for (
@@ -5982,9 +5766,9 @@
                 const candleHeight =
                     (
                         candle.type ===
-                        "long"
-                            ? 76
-                            : 45
+                        "long" ?
+                        76 :
+                        45
                     ) *
                     scale;
 
@@ -6051,7 +5835,7 @@
                     const remaining =
                         candles.filter(
                             item =>
-                                !item.blown
+                            !item.blown
                         ).length;
 
 
@@ -6174,8 +5958,7 @@
 
                 event.preventDefault();
 
-            },
-            {
+            }, {
                 passive: false
             }
         );
@@ -6443,7 +6226,6 @@
         requestAnimationFrame(
             render
         );
-
     </script>
 
 </body>
