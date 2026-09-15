@@ -5,11 +5,15 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
     <title>생일 축하합니다 🎂</title>
 
     <style>
+
         /* ============================================================
            기본 초기화
         ============================================================ */
@@ -74,14 +78,17 @@
             padding: 32px;
 
             border:
-                1px solid rgba(255, 255, 255, 0.13);
+                1px solid
+                rgba(255, 255, 255, 0.13);
 
             border-radius: 30px;
 
             background:
-                linear-gradient(145deg,
+                linear-gradient(
+                    145deg,
                     rgba(31, 35, 57, 0.97),
-                    rgba(15, 18, 31, 0.96));
+                    rgba(15, 18, 31, 0.96)
+                );
 
             backdrop-filter: blur(22px);
 
@@ -98,7 +105,8 @@
             opacity: 0;
 
             transform:
-                translateY(20px) scale(0.96);
+                translateY(20px)
+                scale(0.96);
 
             pointer-events: none;
         }
@@ -109,16 +117,19 @@
             text-align: center;
 
             font-size:
-                clamp(28px,
+                clamp(
+                    28px,
                     7vw,
-                    36px);
+                    36px
+                );
 
             font-weight: 900;
 
             letter-spacing: -1.8px;
 
             text-shadow:
-                0 4px 20px rgba(255, 130, 190, 0.3);
+                0 4px 20px
+                rgba(255, 130, 190, 0.3);
         }
 
         .subtitle {
@@ -153,7 +164,8 @@
             padding: 0 16px;
 
             border:
-                1px solid rgba(255, 255, 255, 0.09);
+                1px solid
+                rgba(255, 255, 255, 0.09);
 
             border-radius: 15px;
 
@@ -183,9 +195,11 @@
                 rgba(12, 15, 28, 0.95);
 
             box-shadow:
-                0 0 0 3px rgba(255, 143, 186, 0.11),
+                0 0 0 3px
+                rgba(255, 143, 186, 0.11),
 
-                0 8px 30px rgba(255, 100, 170, 0.08);
+                0 8px 30px
+                rgba(255, 100, 170, 0.08);
         }
 
         /* ============================================================
@@ -207,14 +221,17 @@
             min-height: 82px;
 
             border:
-                1px solid rgba(255, 255, 255, 0.08);
+                1px solid
+                rgba(255, 255, 255, 0.08);
 
             border-radius: 17px;
 
             background:
-                linear-gradient(145deg,
+                linear-gradient(
+                    145deg,
                     #171b2c,
-                    #101322);
+                    #101322
+                );
 
             color: #dce1ef;
 
@@ -241,9 +258,11 @@
             inset: 0;
 
             background:
-                linear-gradient(120deg,
-                    rgba(255, 255, 255, 0.08),
-                    transparent 45%);
+                linear-gradient(
+                    120deg,
+                    rgba(255,255,255,0.08),
+                    transparent 45%
+                );
 
             pointer-events: none;
         }
@@ -256,7 +275,10 @@
             font-size: 27px;
 
             filter:
-                drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+                drop-shadow(
+                    0 4px 8px
+                    rgba(0, 0, 0, 0.25)
+                );
         }
 
         .cake:hover {
@@ -264,28 +286,35 @@
                 translateY(-3px);
 
             background:
-                linear-gradient(145deg,
+                linear-gradient(
+                    145deg,
                     #20253b,
-                    #15192a);
+                    #15192a
+                );
         }
 
         .cake:active {
             transform:
-                translateY(0) scale(0.97);
+                translateY(0)
+                scale(0.97);
         }
 
         .cake.selected {
             border-color: #ff8fb9;
 
             background:
-                linear-gradient(145deg,
+                linear-gradient(
+                    145deg,
                     rgba(255, 143, 185, 0.18),
-                    rgba(168, 113, 255, 0.10));
+                    rgba(168, 113, 255, 0.10)
+                );
 
             box-shadow:
-                0 0 0 1px rgba(255, 143, 185, 0.08),
+                0 0 0 1px
+                rgba(255, 143, 185, 0.08),
 
-                0 10px 35px rgba(255, 100, 170, 0.12);
+                0 10px 35px
+                rgba(255, 100, 170, 0.12);
         }
 
         /* ============================================================
@@ -303,10 +332,12 @@
             border-radius: 17px;
 
             background:
-                linear-gradient(135deg,
+                linear-gradient(
+                    135deg,
                     #ff72a9,
                     #bd7aff 55%,
-                    #7f9cff);
+                    #7f9cff
+                );
 
             color: #ffffff;
 
@@ -319,9 +350,11 @@
             cursor: pointer;
 
             box-shadow:
-                0 12px 35px rgba(213, 91, 180, 0.28),
+                0 12px 35px
+                rgba(213, 91, 180, 0.28),
 
-                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.25);
 
             transition:
                 transform 0.2s ease,
@@ -337,12 +370,14 @@
                 brightness(1.08);
 
             box-shadow:
-                0 16px 42px rgba(213, 91, 180, 0.35);
+                0 16px 42px
+                rgba(213, 91, 180, 0.35);
         }
 
         .start:active {
             transform:
-                translateY(0) scale(0.98);
+                translateY(0)
+                scale(0.98);
         }
 
         /* ============================================================
@@ -363,8 +398,10 @@
             position: absolute;
 
             top:
-                max(5%,
-                    env(safe-area-inset-top));
+                max(
+                    5%,
+                    env(safe-area-inset-top)
+                );
 
             width: 100%;
 
@@ -373,30 +410,43 @@
             text-align: center;
 
             font-size:
-                clamp(25px,
+                clamp(
+                    25px,
                     5vw,
-                    58px);
+                    58px
+                );
 
             font-weight: 900;
 
             letter-spacing: -2px;
 
             text-shadow:
-                0 0 10px rgba(255, 255, 255, 0.45),
+                0 0 10px
+                rgba(255, 255, 255, 0.45),
 
-                0 0 30px rgba(255, 130, 190, 0.45),
+                0 0 30px
+                rgba(255, 130, 190, 0.45),
 
-                0 8px 35px rgba(0, 0, 0, 0.35);
+                0 8px 35px
+                rgba(0, 0, 0, 0.35);
         }
 
         .birthday-subtitle {
             position: absolute;
 
             top:
-                calc(max(5%,
-                        env(safe-area-inset-top)) + clamp(43px,
+                calc(
+                    max(
+                        5%,
+                        env(safe-area-inset-top)
+                    )
+                    +
+                    clamp(
+                        43px,
                         7vw,
-                        78px));
+                        78px
+                    )
+                );
 
             width: 100%;
 
@@ -409,7 +459,8 @@
             font-size: 14px;
 
             text-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.6);
+                0 2px 10px
+                rgba(0, 0, 0, 0.6);
         }
 
         /* ============================================================
@@ -422,18 +473,23 @@
             z-index: 20;
 
             right:
-                max(18px,
-                    env(safe-area-inset-right));
+                max(
+                    18px,
+                    env(safe-area-inset-right)
+                );
 
             top:
-                max(18px,
-                    env(safe-area-inset-top));
+                max(
+                    18px,
+                    env(safe-area-inset-top)
+                );
 
             width: 46px;
             height: 46px;
 
             border:
-                1px solid rgba(255, 255, 255, 0.13);
+                1px solid
+                rgba(255, 255, 255, 0.13);
 
             border-radius: 50%;
 
@@ -447,7 +503,8 @@
             backdrop-filter: blur(12px);
 
             box-shadow:
-                0 8px 25px rgba(0, 0, 0, 0.25);
+                0 8px 25px
+                rgba(0, 0, 0, 0.25);
 
             transition:
                 transform 0.15s ease;
@@ -468,8 +525,10 @@
             z-index: 5;
 
             bottom:
-                max(5%,
-                    env(safe-area-inset-bottom));
+                max(
+                    5%,
+                    env(safe-area-inset-bottom)
+                );
 
             width: 100%;
 
@@ -478,17 +537,20 @@
             text-align: center;
 
             color:
-                rgba(255,
+                rgba(
                     255,
                     255,
-                    0.68);
+                    255,
+                    0.68
+                );
 
             font-size: 14px;
 
             pointer-events: none;
 
             text-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.5);
+                0 2px 10px
+                rgba(0, 0, 0, 0.5);
 
             transition:
                 opacity 0.3s ease;
@@ -506,8 +568,10 @@
             left: 50%;
 
             bottom:
-                max(25px,
-                    env(safe-area-inset-bottom));
+                max(
+                    25px,
+                    env(safe-area-inset-bottom)
+                );
 
             transform:
                 translateX(-50%);
@@ -519,7 +583,8 @@
             padding: 0 22px;
 
             border:
-                1px solid rgba(255, 255, 255, 0.15);
+                1px solid
+                rgba(255, 255, 255, 0.15);
 
             border-radius: 999px;
 
@@ -539,7 +604,8 @@
             backdrop-filter: blur(12px);
 
             box-shadow:
-                0 8px 25px rgba(0, 0, 0, 0.25);
+                0 8px 25px
+                rgba(0, 0, 0, 0.25);
         }
 
         /* ============================================================
@@ -573,7 +639,9 @@
 
             .birthday-subtitle {
                 top:
-                    calc(3% + 45px);
+                    calc(
+                        3% + 45px
+                    );
             }
 
             .hint {
@@ -597,6 +665,7 @@
             }
 
         }
+
     </style>
 
 </head>
@@ -614,7 +683,10 @@
          시작 화면
     ============================================================ -->
 
-    <div class="setup" id="setup">
+    <div
+        class="setup"
+        id="setup"
+    >
 
         <h1>
             🎂 생일 축하하기
@@ -630,7 +702,13 @@
             이름
         </label>
 
-        <input id="name" type="text" maxlength="20" autocomplete="off" placeholder="예: 홍길동">
+        <input
+            id="name"
+            type="text"
+            maxlength="20"
+            autocomplete="off"
+            placeholder="예: 홍길동"
+        >
 
 
         <label>
@@ -639,22 +717,38 @@
 
         <div class="cakes">
 
-            <button class="cake selected" data-cake="strawberry" type="button">
+            <button
+                class="cake selected"
+                data-cake="strawberry"
+                type="button"
+            >
                 <span>🍓</span>
                 딸기
             </button>
 
-            <button class="cake" data-cake="cream" type="button">
+            <button
+                class="cake"
+                data-cake="cream"
+                type="button"
+            >
                 <span>🍰</span>
                 생크림
             </button>
 
-            <button class="cake" data-cake="chocolate" type="button">
+            <button
+                class="cake"
+                data-cake="chocolate"
+                type="button"
+            >
                 <span>🍫</span>
                 초콜릿
             </button>
 
-            <button class="cake" data-cake="cheese" type="button">
+            <button
+                class="cake"
+                data-cake="cheese"
+                type="button"
+            >
                 <span>🧀</span>
                 치즈
             </button>
@@ -666,10 +760,22 @@
             나이 / 초 개수
         </label>
 
-        <input id="age" type="number" min="1" max="100" value="10" inputmode="numeric" placeholder="나이를 입력하세요">
+        <input
+            id="age"
+            type="number"
+            min="1"
+            max="100"
+            value="10"
+            inputmode="numeric"
+            placeholder="나이를 입력하세요"
+        >
 
 
-        <button class="start" id="startButton" type="button">
+        <button
+            class="start"
+            id="startButton"
+            type="button"
+        >
             🎉 생일 시작하기
         </button>
 
@@ -680,15 +786,28 @@
          장면 UI
     ============================================================ -->
 
-    <div class="scene-ui" id="sceneUI" style="display:none;">
+    <div
+        class="scene-ui"
+        id="sceneUI"
+        style="display:none;"
+    >
 
-        <div class="birthday-title" id="birthdayTitle"></div>
+        <div
+            class="birthday-title"
+            id="birthdayTitle"
+        ></div>
 
-        <div class="birthday-subtitle" id="birthdaySubtitle">
+        <div
+            class="birthday-subtitle"
+            id="birthdaySubtitle"
+        >
             촛불을 하나씩 눌러 꺼주세요 🕯️
         </div>
 
-        <div class="hint" id="hint">
+        <div
+            class="hint"
+            id="hint"
+        >
             ✨ 모든 촛불을 끄면 특별한 축하가 시작됩니다 ✨
         </div>
 
@@ -699,7 +818,13 @@
          음악
     ============================================================ -->
 
-    <button class="music-button" id="musicButton" style="display:none;" type="button" aria-label="음악 켜기 또는 끄기">
+    <button
+        class="music-button"
+        id="musicButton"
+        style="display:none;"
+        type="button"
+        aria-label="음악 켜기 또는 끄기"
+    >
         🔊
     </button>
 
@@ -708,12 +833,18 @@
          다시 시작
     ============================================================ -->
 
-    <button class="restart" id="restartButton" type="button" style="display:none;">
+    <button
+        class="restart"
+        id="restartButton"
+        type="button"
+        style="display:none;"
+    >
         🎂 다시 시작
     </button>
 
 
     <script>
+
         "use strict";
 
 
@@ -729,7 +860,8 @@
 
         const ctx =
             canvas.getContext(
-                "2d", {
+                "2d",
+                {
                     alpha: false,
                     desynchronized: true
                 }
@@ -806,23 +938,29 @@
 
 
             for (
-                let i = 0; i < 60; i++
+                let i = 0;
+                i < 60;
+                i++
             ) {
 
                 stars.push({
 
-                    x: Math.random() *
+                    x:
+                        Math.random() *
                         width,
 
-                    y: Math.random() *
+                    y:
+                        Math.random() *
                         height *
                         0.72,
 
-                    size: 0.5 +
+                    size:
+                        0.5 +
                         Math.random() *
                         1.5,
 
-                    phase: Math.random() *
+                    phase:
+                        Math.random() *
                         Math.PI *
                         2
 
@@ -835,7 +973,8 @@
 
         window.addEventListener(
             "resize",
-            resizeCanvas, {
+            resizeCanvas,
+            {
                 passive: true
             }
         );
@@ -971,70 +1110,39 @@
         const cakeColors = {
 
             strawberry: {
-
                 bodyTop: "#fff8fb",
-
-                bodyBottom: "#d95d88",
-
-                cream: "#fffafd",
-
-                accent: "#ff416d",
-
-                dark: "#a91f48",
-
-                shadow: "#9f3158"
-
+                bodyBottom: "#f38aa6",
+                cream: "#fffbfd",
+                accent: "#ff6d93",
+                dark: "#c23566",
+                shadow: "#a83a5c"
             },
-
 
             cream: {
-
-                bodyTop: "#fffef8",
-
-                bodyBottom: "#d7b77d",
-
+                bodyTop: "#fffef9",
+                bodyBottom: "#e6cd9c",
                 cream: "#ffffff",
-
-                accent: "#e8c982",
-
-                dark: "#ad8341",
-
-                shadow: "#9b7137"
-
+                accent: "#eecf95",
+                dark: "#b8925a",
+                shadow: "#a17d49"
             },
-
 
             chocolate: {
-
-                bodyTop: "#9a6047",
-
-                bodyBottom: "#3c1710",
-
-                cream: "#f4d7c2",
-
-                accent: "#6e2f1e",
-
-                dark: "#35130c",
-
-                shadow: "#24100b"
-
+                bodyTop: "#8d5d44",
+                bodyBottom: "#4a2115",
+                cream: "#f2d4bb",
+                accent: "#75392a",
+                dark: "#3a1710",
+                shadow: "#2a120c"
             },
 
-
             cheese: {
-
-                bodyTop: "#ffe991",
-
-                bodyBottom: "#bf7915",
-
-                cream: "#fff1a4",
-
-                accent: "#e3a526",
-
-                dark: "#89540b",
-
-                shadow: "#74450b"
-
+                bodyTop: "#ffedb0",
+                bodyBottom: "#dd9a34",
+                cream: "#fff3b0",
+                accent: "#e8b143",
+                dark: "#a06b1c",
+                shadow: "#8a5813"
             }
 
         };
@@ -1087,7 +1195,9 @@
 
 
             for (
-                let i = 0; i < longCount; i++
+                let i = 0;
+                i < longCount;
+                i++
             ) {
 
                 candles.push({
@@ -1096,11 +1206,13 @@
 
                     blown: false,
 
-                    flame: Math.random() *
+                    flame:
+                        Math.random() *
                         Math.PI *
                         2,
 
-                    phase: Math.random() *
+                    phase:
+                        Math.random() *
                         Math.PI *
                         2
 
@@ -1110,7 +1222,9 @@
 
 
             for (
-                let i = 0; i < shortCount; i++
+                let i = 0;
+                i < shortCount;
+                i++
             ) {
 
                 candles.push({
@@ -1119,11 +1233,13 @@
 
                     blown: false,
 
-                    flame: Math.random() *
+                    flame:
+                        Math.random() *
                         Math.PI *
                         2,
 
-                    phase: Math.random() *
+                    phase:
+                        Math.random() *
                         Math.PI *
                         2
 
@@ -1183,7 +1299,9 @@
 
 
             for (
-                let i = 0; i < amount; i++
+                let i = 0;
+                i < amount;
+                i++
             ) {
 
                 const angle =
@@ -1204,17 +1322,22 @@
 
                     y: y,
 
-                    vx: Math.cos(angle) *
+                    vx:
+                        Math.cos(angle) *
                         speed,
 
-                    vy: Math.sin(angle) *
+                    vy:
+                        Math.sin(angle) *
                         speed,
 
-                    gravity: 0.06,
+                    gravity:
+                        0.06,
 
-                    life: 1,
+                    life:
+                        1,
 
-                    size: 1 +
+                    size:
+                        1 +
                         Math.random() *
                         3
 
@@ -1235,21 +1358,26 @@
         ) {
 
             for (
-                let i = 0; i < 6; i++
+                let i = 0;
+                i < 6;
+                i++
             ) {
 
                 smokeParticles.push({
 
-                    x: x +
+                    x:
+                        x +
                         (
                             Math.random() -
                             0.5
                         ) *
                         8,
 
-                    y: y,
+                    y:
+                        y,
 
-                    vx: (
+                    vx:
+                        (
                             Math.random() -
                             0.5
                         ) *
@@ -1260,9 +1388,11 @@
                         Math.random() *
                         0.8,
 
-                    life: 1,
+                    life:
+                        1,
 
-                    size: 3 +
+                    size:
+                        3 +
                         Math.random() *
                         4
 
@@ -1292,45 +1422,55 @@
 
 
             for (
-                let i = 0; i < amount; i++
+                let i = 0;
+                i < amount;
+                i++
             ) {
 
                 confetti.push({
 
-                    x: Math.random() *
+                    x:
+                        Math.random() *
                         width,
 
                     y:
                         -Math.random() *
                         height,
 
-                    vx: (
+                    vx:
+                        (
                             Math.random() -
                             0.5
                         ) *
                         2.5,
 
-                    vy: 1 +
+                    vy:
+                        1 +
                         Math.random() *
                         4,
 
-                    rotation: Math.random() *
+                    rotation:
+                        Math.random() *
                         Math.PI,
 
-                    rotationSpeed: (
+                    rotationSpeed:
+                        (
                             Math.random() -
                             0.5
                         ) *
                         0.18,
 
-                    size: 4 +
+                    size:
+                        4 +
                         Math.random() *
                         7,
 
-                    hue: Math.random() *
+                    hue:
+                        Math.random() *
                         360,
 
-                    life: 1
+                    life:
+                        1
 
                 });
 
@@ -1349,28 +1489,35 @@
 
 
             for (
-                let i = 0; i < 80; i++
+                let i = 0;
+                i < 80;
+                i++
             ) {
 
                 celebrationSparkles.push({
 
-                    angle: Math.random() *
+                    angle:
+                        Math.random() *
                         Math.PI *
                         2,
 
-                    radius: 80 +
+                    radius:
+                        80 +
                         Math.random() *
                         260,
 
-                    speed: 0.002 +
+                    speed:
+                        0.002 +
                         Math.random() *
                         0.006,
 
-                    size: 1 +
+                    size:
+                        1 +
                         Math.random() *
                         3,
 
-                    phase: Math.random() *
+                    phase:
+                        Math.random() *
                         Math.PI *
                         2
 
@@ -1395,9 +1542,9 @@
                 Math.min(
                     width *
                     (
-                        mobile ?
-                        0.86 :
-                        0.72
+                        mobile
+                            ? 0.86
+                            : 0.72
                     ),
                     680
                 );
@@ -1407,9 +1554,9 @@
                 Math.min(
                     height *
                     (
-                        mobile ?
-                        0.28 :
-                        0.31
+                        mobile
+                            ? 0.28
+                            : 0.31
                     ),
                     250
                 );
@@ -1449,13 +1596,17 @@
 
             return {
 
-                x: width / 2,
+                x:
+                    width / 2,
 
-                width: cakeWidth,
+                width:
+                    cakeWidth,
 
-                height: cakeHeight,
+                height:
+                    cakeHeight,
 
-                bottom: bottom
+                bottom:
+                    bottom
 
             };
 
@@ -1468,214 +1619,78 @@
 
         function getCandlePositions() {
 
-            const cake =
-                getCakeData();
+            const cake = getCakeData();
+            const positions = new Array(candles.length);
 
+            const surfaceY = cake.bottom - cake.height + 38;
+            const upperWidth = cake.width * 0.82;
 
-            const positions =
-                new Array(
-                    candles.length
-                );
+            const total = candles.length;
+            const scale = Math.max(0.56, Math.min(1, 1 - Math.max(0, total - 8) * 0.032));
 
+            const longIndexes = [];
+            const shortIndexes = [];
 
-            const total =
-                candles.length;
+            candles.forEach((candle, index) => {
+                if (candle.type === "long") {
+                    longIndexes.push(index);
+                } else {
+                    shortIndexes.push(index);
+                }
+            });
 
+            function layoutArc(indexes, options) {
 
-            /*
-             * 케이크 상단 표면입니다.
-             */
+                const count = indexes.length;
 
-            const surfaceY =
-                cake.bottom -
-                cake.height +
-                38;
+                if (count === 0) {
+                    return;
+                }
 
+                let arcWidth = options.spacing * (count - 1);
 
-            /*
-             * 촛불 개수에 따라
-             * 줄 수를 결정합니다.
-             */
+                if (arcWidth > options.maxWidth) {
+                    arcWidth = options.maxWidth;
+                }
 
-            let columns;
+                indexes.forEach((candleIndex, i) => {
 
+                    const t = count === 1 ? 0 : (i / (count - 1)) * 2 - 1;
+                    const x = cake.x + t * (arcWidth / 2);
+                    const y = options.baseY + Math.abs(t) * options.curveDepth;
 
-            if (
-                total <= 5
-            ) {
+                    positions[candleIndex] = {
+                        x: x,
+                        y: y,
+                        depth: options.depthBase + i / Math.max(1, count),
+                        scale: scale
+                    };
 
-                columns = total;
-
-            } else if (
-                total <= 10
-            ) {
-
-                columns = 5;
-
-            } else if (
-                total <= 20
-            ) {
-
-                columns = 7;
-
-            } else {
-
-                columns = 8;
+                });
 
             }
 
+            /*
+             * 십의 자리(긴 초)는 뒤쪽에 넓게 부채꼴로,
+             * 일의 자리(짧은 초)는 앞쪽에 조금 더
+             * 아늑하게 모아 배치합니다.
+             */
 
-            const rowGap =
-                total <= 10 ?
-                0 :
-                Math.min(
-                    25,
-                    cake.height * 0.10
-                );
+            layoutArc(longIndexes, {
+                baseY: surfaceY - 5 * scale,
+                spacing: 46 * scale,
+                maxWidth: upperWidth * 0.74,
+                curveDepth: 9 * scale,
+                depthBase: 0
+            });
 
-
-            candles.forEach(
-                (candle, index) => {
-
-                    const row =
-                        Math.floor(
-                            index /
-                            columns
-                        );
-
-
-                    const col =
-                        index %
-                        columns;
-
-
-                    const rowCount =
-                        Math.min(
-                            columns,
-                            total -
-                            row *
-                            columns
-                        );
-
-
-                    const usableWidth =
-                        cake.width *
-                        (
-                            total <= 5 ?
-                            0.55 :
-                            0.72
-                        );
-
-
-                    const spacing =
-                        rowCount <= 1 ?
-                        0 :
-                        usableWidth /
-                        (
-                            rowCount -
-                            1
-                        );
-
-
-                    const rowWidth =
-                        spacing *
-                        (
-                            rowCount -
-                            1
-                        );
-
-
-                    const normalized =
-                        rowCount <= 1 ?
-                        0 :
-                        (
-                            col /
-                            (
-                                rowCount -
-                                1
-                            )
-                        ) *
-                        2 -
-                        1;
-
-
-                    const curve =
-                        Math.abs(
-                            normalized
-                        ) *
-                        8;
-
-
-                    const x =
-                        cake.x -
-                        rowWidth / 2 +
-                        col *
-                        spacing;
-
-
-                    let y =
-                        surfaceY +
-                        row *
-                        rowGap +
-                        curve;
-
-
-                    /*
-                     * 짧은 촛불은 앞쪽에 배치합니다.
-                     */
-
-                    if (
-                        candle.type ===
-                        "short"
-                    ) {
-
-                        y += 19;
-
-                    }
-
-
-                    /*
-                     * 촛불 수가 많을수록
-                     * 전체 크기를 줄입니다.
-                     */
-
-                    const scale =
-                        Math.max(
-                            0.48,
-                            Math.min(
-                                1,
-                                1 -
-                                Math.max(
-                                    0,
-                                    total -
-                                    12
-                                ) *
-                                0.022
-                            )
-                        );
-
-
-                    positions[index] = {
-
-                        x: x,
-
-                        y: y,
-
-                        depth: row +
-                            (
-                                candle.type ===
-                                "short" ?
-                                0.5 :
-                                0
-                            ),
-
-                        scale: scale
-
-                    };
-
-                }
-            );
-
+            layoutArc(shortIndexes, {
+                baseY: surfaceY + 21 * scale,
+                spacing: 40 * scale,
+                maxWidth: upperWidth * 0.6,
+                curveDepth: 7 * scale,
+                depthBase: 1
+            });
 
             return positions;
 
@@ -1947,152 +1962,44 @@
            케이크 하단 1단
         ============================================================ */
 
-        function drawLowerTier(
-            cake,
-            colors
-        ) {
+        function drawLowerTier(cake, colors) {
 
-            const left =
-                cake.x -
-                cake.width / 2;
+            const left = cake.x - cake.width / 2;
+            const tierHeight = cake.height * 0.46;
+            const tierTop = cake.bottom - tierHeight - 5;
 
+            const body = ctx.createLinearGradient(0, tierTop, 0, cake.bottom);
+            body.addColorStop(0, colors.bodyTop);
+            body.addColorStop(0.42, colors.bodyTop);
+            body.addColorStop(1, colors.bodyBottom);
 
-            const tierHeight =
-                cake.height * 0.46;
-
-
-            const tierTop =
-                cake.bottom -
-                tierHeight -
-                5;
-
-
-            /*
-             * 케이크 옆면 그라데이션
-             */
-
-            const body =
-                ctx.createLinearGradient(
-                    0,
-                    tierTop,
-                    0,
-                    cake.bottom
-                );
-
-
-            body.addColorStop(
-                0,
-                colors.bodyTop
-            );
-
-
-            body.addColorStop(
-                0.38,
-                colors.bodyTop
-            );
-
-
-            body.addColorStop(
-                1,
-                colors.bodyBottom
-            );
-
-
-            ctx.fillStyle =
-                body;
-
-
-            roundRect(
-                ctx,
-                left,
-                tierTop,
-                cake.width,
-                tierHeight,
-                24
-            );
-
-
+            ctx.fillStyle = body;
+            roundRect(ctx, left, tierTop, cake.width, tierHeight, 26);
             ctx.fill();
 
-
             /*
-             * 옆면 음영
+             * 원통형 입체감을 위한 좌우 음영입니다.
              */
 
-            const shade =
-                ctx.createLinearGradient(
-                    0,
-                    tierTop,
-                    0,
-                    cake.bottom
-                );
+            const shade = ctx.createLinearGradient(left, 0, left + cake.width, 0);
+            shade.addColorStop(0, "rgba(20,10,15,0.14)");
+            shade.addColorStop(0.16, "rgba(20,10,15,0)");
+            shade.addColorStop(0.82, "rgba(20,10,15,0)");
+            shade.addColorStop(1, "rgba(20,10,15,0.18)");
 
-
-            shade.addColorStop(
-                0,
-                "rgba(255,255,255,0)"
-            );
-
-
-            shade.addColorStop(
-                0.55,
-                "rgba(60,15,30,0.02)"
-            );
-
-
-            shade.addColorStop(
-                1,
-                "rgba(50,10,20,0.23)"
-            );
-
-
-            ctx.fillStyle =
-                shade;
-
-
-            roundRect(
-                ctx,
-                left + 2,
-                tierTop + 2,
-                cake.width - 4,
-                tierHeight - 2,
-                22
-            );
-
-
+            ctx.fillStyle = shade;
+            roundRect(ctx, left + 1, tierTop + 1, cake.width - 2, tierHeight - 2, 25);
             ctx.fill();
 
-
             /*
-             * 하단 단면 라인
+             * 위쪽 단과 만나는 이음선입니다.
              */
 
-            ctx.strokeStyle =
-                "rgba(255,255,255,0.16)";
-
-
+            ctx.strokeStyle = "rgba(255,255,255,0.18)";
             ctx.lineWidth = 2;
-
-
             ctx.beginPath();
-
-
-            ctx.moveTo(
-                left + 18,
-                cake.bottom -
-                29
-            );
-
-
-            ctx.lineTo(
-                left +
-                cake.width -
-                18,
-                cake.bottom -
-                29
-            );
-
-
+            ctx.moveTo(left + 20, cake.bottom - 29);
+            ctx.lineTo(left + cake.width - 20, cake.bottom - 29);
             ctx.stroke();
 
         }
@@ -2102,210 +2009,58 @@
            케이크 상단 2단
         ============================================================ */
 
-        function drawUpperTier(
-            cake,
-            colors
-        ) {
+        function drawUpperTier(cake, colors) {
 
-            const upperWidth =
-                cake.width * 0.82;
+            const upperWidth = cake.width * 0.82;
+            const left = cake.x - upperWidth / 2;
+            const upperHeight = cake.height * 0.43;
+            const bottom = cake.bottom - cake.height * 0.38;
+            const top = bottom - upperHeight;
 
+            const body = ctx.createLinearGradient(0, top, 0, bottom);
+            body.addColorStop(0, colors.bodyTop);
+            body.addColorStop(1, colors.bodyBottom);
 
-            const left =
-                cake.x -
-                upperWidth / 2;
-
-
-            const upperHeight =
-                cake.height * 0.43;
-
-
-            const bottom =
-                cake.bottom -
-                cake.height * 0.38;
-
-
-            const top =
-                bottom -
-                upperHeight;
-
-
-            /*
-             * 상단 케이크 몸체
-             */
-
-            const body =
-                ctx.createLinearGradient(
-                    0,
-                    top,
-                    0,
-                    bottom
-                );
-
-
-            body.addColorStop(
-                0,
-                colors.bodyTop
-            );
-
-
-            body.addColorStop(
-                1,
-                colors.bodyBottom
-            );
-
-
-            ctx.fillStyle =
-                body;
-
-
-            roundRect(
-                ctx,
-                left,
-                top + 18,
-                upperWidth,
-                upperHeight,
-                23
-            );
-
-
+            ctx.fillStyle = body;
+            roundRect(ctx, left, top + 18, upperWidth, upperHeight, 24);
             ctx.fill();
 
-
             /*
-             * 상단 옆면 빛
+             * 아래쪽 단과 통일감을 주는 좌우 음영입니다.
              */
 
-            const shine =
-                ctx.createLinearGradient(
-                    left,
-                    0,
-                    left + upperWidth,
-                    0
-                );
+            const shade = ctx.createLinearGradient(left, 0, left + upperWidth, 0);
+            shade.addColorStop(0, "rgba(20,10,15,0.13)");
+            shade.addColorStop(0.18, "rgba(20,10,15,0)");
+            shade.addColorStop(0.84, "rgba(20,10,15,0)");
+            shade.addColorStop(1, "rgba(20,10,15,0.17)");
 
-
-            shine.addColorStop(
-                0,
-                "rgba(255,255,255,0.04)"
-            );
-
-
-            shine.addColorStop(
-                0.3,
-                "rgba(255,255,255,0.18)"
-            );
-
-
-            shine.addColorStop(
-                0.55,
-                "rgba(255,255,255,0)"
-            );
-
-
-            shine.addColorStop(
-                1,
-                "rgba(255,255,255,0.03)"
-            );
-
-
-            ctx.fillStyle =
-                shine;
-
-
-            roundRect(
-                ctx,
-                left + 2,
-                top + 20,
-                upperWidth - 4,
-                upperHeight - 2,
-                21
-            );
-
-
+            ctx.fillStyle = shade;
+            roundRect(ctx, left + 1, top + 19, upperWidth - 2, upperHeight - 2, 23);
             ctx.fill();
 
-
             /*
-             * 상단 표면
+             * 상단 표면입니다.
              */
 
-            const topGradient =
-                ctx.createRadialGradient(
-                    cake.x -
-                    upperWidth * 0.16,
-                    top + 13,
-                    2,
-                    cake.x,
-                    top + 22,
-                    upperWidth * 0.55
-                );
-
-
-            topGradient.addColorStop(
-                0,
-                "#ffffff"
+            const topGradient = ctx.createRadialGradient(
+                cake.x - upperWidth * 0.14, top + 12, 2,
+                cake.x, top + 22, upperWidth * 0.56
             );
 
+            topGradient.addColorStop(0, "#ffffff");
+            topGradient.addColorStop(0.55, colors.cream);
+            topGradient.addColorStop(1, colors.bodyTop);
 
-            topGradient.addColorStop(
-                0.5,
-                colors.cream
-            );
-
-
-            topGradient.addColorStop(
-                1,
-                colors.bodyTop
-            );
-
-
-            ctx.fillStyle =
-                topGradient;
-
-
+            ctx.fillStyle = topGradient;
             ctx.beginPath();
-
-
-            ctx.ellipse(
-                cake.x,
-                top + 21,
-                upperWidth / 2,
-                31,
-                0,
-                0,
-                Math.PI * 2
-            );
-
-
+            ctx.ellipse(cake.x, top + 21, upperWidth / 2, 31, 0, 0, Math.PI * 2);
             ctx.fill();
 
-
-            /*
-             * 윗면 외곽선
-             */
-
-            ctx.strokeStyle =
-                "rgba(255,255,255,0.24)";
-
-
+            ctx.strokeStyle = "rgba(255,255,255,0.28)";
             ctx.lineWidth = 2;
-
-
             ctx.beginPath();
-
-
-            ctx.ellipse(
-                cake.x,
-                top + 21,
-                upperWidth / 2 - 2,
-                29,
-                0,
-                0,
-                Math.PI * 2
-            );
-
-
+            ctx.ellipse(cake.x, top + 21, upperWidth / 2 - 2, 29, 0, 0, Math.PI * 2);
             ctx.stroke();
 
         }
@@ -2315,142 +2070,60 @@
            크림 드립
         ============================================================ */
 
-        function drawFrostingDrips(
-            cake,
-            colors
-        ) {
+        function drawFrostingDrips(cake, colors) {
 
-            const upperWidth =
-                cake.width * 0.82;
+            const upperWidth = cake.width * 0.82;
+            const left = cake.x - upperWidth / 2;
+            const upperHeight = cake.height * 0.43;
+            const bottom = cake.bottom - cake.height * 0.38;
+            const top = bottom - upperHeight;
 
+            const frostingTop = top + 38;
+            const restY = frostingTop + 13;
 
-            const left =
-                cake.x -
-                upperWidth / 2;
+            const dripCount = 6;
+            const dripWidth = upperWidth / dripCount;
+            const dripDepths = [15, 22, 13, 24, 14, 20];
 
-
-            const upperHeight =
-                cake.height * 0.43;
-
-
-            const bottom =
-                cake.bottom -
-                cake.height * 0.38;
-
-
-            const top =
-                bottom -
-                upperHeight;
-
-
-            const frostingY =
-                top + 38;
-
-
-            /*
-             * 크림 베이스
-             */
-
-            ctx.fillStyle =
-                colors.cream;
-
-
+            ctx.fillStyle = colors.cream;
             ctx.beginPath();
+            ctx.moveTo(left, frostingTop);
+            ctx.lineTo(left, restY);
 
+            for (let i = 0; i < dripCount; i++) {
 
-            ctx.moveTo(
-                left,
-                frostingY
-            );
+                const x0 = left + i * dripWidth;
+                const xMid = x0 + dripWidth / 2;
+                const x1 = x0 + dripWidth;
+                const depth = restY + dripDepths[i % dripDepths.length];
 
+                ctx.bezierCurveTo(
+                    x0 + dripWidth * 0.2, restY + 2,
+                    xMid - dripWidth * 0.15, depth,
+                    xMid, depth
+                );
 
-            const segments = 28;
-
-
-            for (
-                let i = 0; i <= segments; i++
-            ) {
-
-                const t =
-                    i /
-                    segments;
-
-
-                const x =
-                    left +
-                    upperWidth *
-                    t;
-
-
-                const wave =
-                    Math.sin(
-                        i * 1.35
-                    ) *
-                    2.5;
-
-
-                const drip =
-                    i % 4 === 0 ?
-                    12 +
-                    (
-                        i % 3
-                    ) *
-                    3 :
-                    0;
-
-
-                const y =
-                    frostingY +
-                    13 +
-                    wave +
-                    drip;
-
-
-                ctx.lineTo(
-                    x,
-                    y
+                ctx.bezierCurveTo(
+                    xMid + dripWidth * 0.15, depth,
+                    x1 - dripWidth * 0.2, restY + 2,
+                    x1, restY
                 );
 
             }
 
-
-            ctx.lineTo(
-                left + upperWidth,
-                frostingY
-            );
-
-
+            ctx.lineTo(left + upperWidth, frostingTop);
             ctx.closePath();
-
-
             ctx.fill();
 
-
             /*
-             * 크림 위쪽의 부드러운 광택
+             * 크림 위쪽의 부드러운 광택입니다.
              */
 
-            ctx.strokeStyle =
-                "rgba(255,255,255,0.75)";
-
-
+            ctx.strokeStyle = "rgba(255,255,255,0.7)";
             ctx.lineWidth = 2;
-
-
             ctx.beginPath();
-
-
-            ctx.ellipse(
-                cake.x,
-                frostingY,
-                upperWidth * 0.48,
-                20,
-                0,
-                Math.PI,
-                Math.PI * 2
-            );
-
-
+            ctx.moveTo(left + upperWidth * 0.06, frostingTop + 3);
+            ctx.quadraticCurveTo(cake.x, frostingTop - 2, left + upperWidth * 0.94, frostingTop + 3);
             ctx.stroke();
 
         }
@@ -2460,124 +2133,64 @@
            하단 크림 띠
         ============================================================ */
 
-        function drawLowerFrosting(
-            cake,
-            colors
-        ) {
+        function drawLowerFrosting(cake, colors) {
 
-            const left =
-                cake.x -
-                cake.width / 2;
+            const left = cake.x - cake.width / 2;
+            const bandTop = cake.bottom - cake.height * 0.46;
+            const restY = bandTop + 10;
 
+            const dripCount = 5;
+            const dripWidth = cake.width / dripCount;
+            const dripDepths = [8, 12, 7, 13, 9];
 
-            const y =
-                cake.bottom -
-                cake.height * 0.46;
-
-
-            ctx.fillStyle =
-                colors.cream;
-
-
+            ctx.fillStyle = colors.cream;
             ctx.beginPath();
+            ctx.moveTo(left, bandTop);
+            ctx.lineTo(left, restY);
 
+            for (let i = 0; i < dripCount; i++) {
 
-            ctx.moveTo(
-                left,
-                y
-            );
+                const x0 = left + i * dripWidth;
+                const xMid = x0 + dripWidth / 2;
+                const x1 = x0 + dripWidth;
+                const depth = restY + dripDepths[i % dripDepths.length];
 
+                ctx.bezierCurveTo(
+                    x0 + dripWidth * 0.2, restY + 1,
+                    xMid - dripWidth * 0.15, depth,
+                    xMid, depth
+                );
 
-            const count = 26;
-
-
-            for (
-                let i = 0; i <= count; i++
-            ) {
-
-                const x =
-                    left +
-                    cake.width *
-                    (
-                        i /
-                        count
-                    );
-
-
-                const wave =
-                    Math.sin(
-                        i * 1.25
-                    ) *
-                    2;
-
-
-                const drip =
-                    i % 5 === 0 ?
-                    9 :
-                    0;
-
-
-                ctx.lineTo(
-                    x,
-                    y +
-                    10 +
-                    wave +
-                    drip
+                ctx.bezierCurveTo(
+                    xMid + dripWidth * 0.15, depth,
+                    x1 - dripWidth * 0.2, restY + 1,
+                    x1, restY
                 );
 
             }
 
-
-            ctx.lineTo(
-                left + cake.width,
-                y
-            );
-
-
+            ctx.lineTo(left + cake.width, bandTop);
             ctx.closePath();
-
-
             ctx.fill();
 
-
             /*
-             * 크림 아래쪽 파이핑
+             * 이음선 아래의 파이핑 도트입니다.
              */
 
-            for (
-                let i = 0; i < 12; i++
-            ) {
+            const dotCount = 13;
 
-                const x =
-                    left +
-                    25 +
-                    i *
-                    (
-                        (
-                            cake.width -
-                            50
-                        ) /
-                        11
-                    );
+            for (let i = 0; i < dotCount; i++) {
 
+                const x = left + 20 + i * ((cake.width - 40) / (dotCount - 1));
+                const y = restY + 8;
 
-                const yy =
-                    y +
-                    17;
+                const gradient = ctx.createRadialGradient(x - 2, y - 3, 1, x, y, 8);
+                gradient.addColorStop(0, "#ffffff");
+                gradient.addColorStop(1, colors.cream);
 
-
+                ctx.fillStyle = gradient;
                 ctx.beginPath();
-
-
-                ctx.arc(
-                    x,
-                    yy,
-                    7,
-                    0,
-                    Math.PI * 2
-                );
-
-
+                ctx.arc(x, y, 6.5, 0, Math.PI * 2);
                 ctx.fill();
 
             }
@@ -2589,271 +2202,113 @@
            딸기 케이크 장식
         ============================================================ */
 
-        function drawStrawberryDecoration(
-            cake
-        ) {
+        function drawStrawberryDecoration(cake) {
 
-            const upperWidth =
-                cake.width * 0.82;
-
-
-            const top =
-                cake.bottom -
-                cake.height +
-                cake.height * 0.57;
-
+            const upperWidth = cake.width * 0.82;
+            const top = cake.bottom - cake.height + cake.height * 0.57;
 
             const berries = [
-
-                [-0.33, 3, 13],
-
-                [-0.16, -3, 15],
-
-                [0, 4, 16],
-
-                [0.17, -3, 15],
-
-                [0.34, 3, 13]
-
+                [-0.32, 2, 15],
+                [-0.13, -4, 17],
+                [0.06, 3, 18],
+                [0.24, -4, 16],
+                [0.40, 3, 14]
             ];
 
+            berries.forEach(item => {
 
-            berries.forEach(
-                item => {
+                const x = cake.x + upperWidth * item[0];
+                const y = top + item[1];
+                const r = item[2];
 
-                    const x =
-                        cake.x +
-                        upperWidth *
-                        item[0];
+                /*
+                 * 딸기 그림자
+                 */
 
+                ctx.fillStyle = "rgba(90,10,30,0.18)";
+                ctx.beginPath();
+                ctx.ellipse(x, y + 4, r * 0.95, r * 0.35, 0, 0, Math.PI * 2);
+                ctx.fill();
 
-                    const y =
-                        top +
-                        item[1];
+                /*
+                 * 딸기 본체
+                 */
 
+                const berry = ctx.createRadialGradient(x - r * 0.35, y - r * 0.45, 1, x, y, r);
+                berry.addColorStop(0, "#ffc1cd");
+                berry.addColorStop(0.42, "#ff5075");
+                berry.addColorStop(1, "#c21f49");
 
-                    const r =
-                        item[2];
+                ctx.fillStyle = berry;
+                ctx.beginPath();
+                ctx.ellipse(x, y, r, r * 1.12, 0, 0, Math.PI * 2);
+                ctx.fill();
 
+                /*
+                 * 씨앗은 나선형으로 자연스럽게 배치합니다.
+                 */
 
-                    /*
-                     * 딸기 그림자
-                     */
+                ctx.fillStyle = "#ffe58a";
 
-                    ctx.fillStyle =
-                        "rgba(90,10,30,0.22)";
+                for (let i = 0; i < 9; i++) {
 
-
-                    ctx.beginPath();
-
-
-                    ctx.ellipse(
-                        x,
-                        y + 3,
-                        r,
-                        r * 1.08,
-                        0,
-                        0,
-                        Math.PI * 2
-                    );
-
-
-                    ctx.fill();
-
-
-                    /*
-                     * 딸기 본체
-                     */
-
-                    const berry =
-                        ctx.createRadialGradient(
-                            x - r * 0.35,
-                            y - r * 0.45,
-                            1,
-                            x,
-                            y,
-                            r
-                        );
-
-
-                    berry.addColorStop(
-                        0,
-                        "#ffb1c1"
-                    );
-
-
-                    berry.addColorStop(
-                        0.4,
-                        "#ff4d73"
-                    );
-
-
-                    berry.addColorStop(
-                        1,
-                        "#c51d47"
-                    );
-
-
-                    ctx.fillStyle =
-                        berry;
-
+                    const angle = i * 0.9 - 0.4;
+                    const radiusFactor = 0.3 + (i % 3) * 0.16;
+                    const sx = x + Math.cos(angle) * r * radiusFactor;
+                    const sy = y + Math.sin(angle) * r * (radiusFactor + 0.18) + r * 0.12;
 
                     ctx.beginPath();
-
-
-                    ctx.ellipse(
-                        x,
-                        y,
-                        r,
-                        r * 1.1,
-                        0,
-                        0,
-                        Math.PI * 2
-                    );
-
-
-                    ctx.fill();
-
-
-                    /*
-                     * 딸기 씨
-                     */
-
-                    ctx.fillStyle =
-                        "#ffe580";
-
-
-                    for (
-                        let i = 0; i < 8; i++
-                    ) {
-
-                        const angle =
-                            i *
-                            0.78;
-
-
-                        const sx =
-                            x +
-                            Math.cos(angle) *
-                            r *
-                            0.48;
-
-
-                        const sy =
-                            y +
-                            Math.sin(angle) *
-                            r *
-                            0.68;
-
-
-                        ctx.beginPath();
-
-
-                        ctx.ellipse(
-                            sx,
-                            sy,
-                            1.2,
-                            2,
-                            0,
-                            0,
-                            Math.PI * 2
-                        );
-
-
-                        ctx.fill();
-
-                    }
-
-
-                    /*
-                     * 잎
-                     */
-
-                    ctx.fillStyle =
-                        "#57954d";
-
-
-                    ctx.beginPath();
-
-
-                    ctx.ellipse(
-                        x - 5,
-                        y - r + 3,
-                        5,
-                        8,
-                        -0.5,
-                        0,
-                        Math.PI * 2
-                    );
-
-
-                    ctx.fill();
-
-
-                    ctx.beginPath();
-
-
-                    ctx.ellipse(
-                        x + 5,
-                        y - r + 3,
-                        5,
-                        8,
-                        0.5,
-                        0,
-                        Math.PI * 2
-                    );
-
-
+                    ctx.ellipse(sx, sy, 1.3, 2.1, angle, 0, Math.PI * 2);
                     ctx.fill();
 
                 }
-            );
 
+                /*
+                 * 광택
+                 */
 
-            /*
-             * 작은 딸기 조각
-             */
-
-            for (
-                let i = 0; i < 7; i++
-            ) {
-
-                const x =
-                    cake.x -
-                    cake.width * 0.36 +
-                    i *
-                    (
-                        cake.width *
-                        0.12
-                    );
-
-
-                const y =
-                    cake.bottom -
-                    27 +
-                    Math.sin(i) *
-                    2;
-
-
-                ctx.fillStyle =
-                    "#ff5a7e";
-
-
+                ctx.fillStyle = "rgba(255,255,255,0.55)";
                 ctx.beginPath();
-
-
-                ctx.arc(
-                    x,
-                    y,
-                    4.5,
-                    0,
-                    Math.PI * 2
-                );
-
-
+                ctx.ellipse(x - r * 0.32, y - r * 0.4, r * 0.22, r * 0.32, -0.4, 0, Math.PI * 2);
                 ctx.fill();
 
+                /*
+                 * 잎
+                 */
+
+                ctx.fillStyle = "#5fa356";
+                ctx.beginPath();
+                ctx.ellipse(x - 6, y - r + 2, 5.5, 9, -0.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(x + 6, y - r + 2, 5.5, 9, 0.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(x, y - r, 4.5, 7, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+            });
+
+            /*
+             * 마무리로 얇은 딸기 글레이즈 드리즐을 더합니다.
+             */
+
+            ctx.strokeStyle = "rgba(255,90,130,0.55)";
+            ctx.lineWidth = 3;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(cake.x - cake.width * 0.36, cake.bottom - 28);
+
+            for (let i = 1; i <= 6; i++) {
+
+                const x = cake.x - cake.width * 0.36 + i * (cake.width * 0.72) / 6;
+                const y = cake.bottom - 28 + Math.sin(i * 1.1) * 3;
+
+                ctx.lineTo(x, y);
+
             }
+
+            ctx.stroke();
 
         }
 
@@ -2862,170 +2317,69 @@
            생크림 케이크 장식
         ============================================================ */
 
-        function drawCreamDecoration(
-            cake
-        ) {
+        function drawCreamDecoration(cake) {
 
-            const upperWidth =
-                cake.width * 0.82;
+            const upperWidth = cake.width * 0.82;
+            const y = cake.bottom - cake.height + cake.height * 0.57;
 
+            const peakCount = 7;
 
-            const y =
-                cake.bottom -
-                cake.height +
-                cake.height * 0.57;
+            for (let i = 0; i < peakCount; i++) {
 
+                const x = cake.x - upperWidth * 0.36 + i * (upperWidth * 0.72) / (peakCount - 1);
+                const yy = y + Math.sin(i * 1.1) * 2;
 
-            /*
-             * 크림 봉우리
-             */
+                /*
+                 * 두 개의 원을 겹쳐 파이핑된 스월 느낌을 냅니다.
+                 */
 
-            for (
-                let i = 0; i < 9; i++
-            ) {
+                const gradient = ctx.createRadialGradient(x - 3, yy - 6, 1, x, yy, 12);
+                gradient.addColorStop(0, "#ffffff");
+                gradient.addColorStop(1, "#e6dde3");
 
-                const x =
-                    cake.x -
-                    upperWidth * 0.38 +
-                    i *
-                    (
-                        upperWidth *
-                        0.095
-                    );
-
-
-                const yy =
-                    y +
-                    Math.sin(i * 0.9) *
-                    3;
-
-
-                const gradient =
-                    ctx.createRadialGradient(
-                        x - 3,
-                        yy - 5,
-                        1,
-                        x,
-                        yy,
-                        11
-                    );
-
-
-                gradient.addColorStop(
-                    0,
-                    "#ffffff"
-                );
-
-
-                gradient.addColorStop(
-                    1,
-                    "#ded6dc"
-                );
-
-
-                ctx.fillStyle =
-                    gradient;
-
-
+                ctx.fillStyle = gradient;
                 ctx.beginPath();
+                ctx.arc(x, yy, 11, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(x, yy - 7, 7, 0, Math.PI * 2);
+                ctx.fill();
 
-
-                ctx.arc(
-                    x,
-                    yy,
-                    10,
-                    0,
-                    Math.PI * 2
-                );
-
-
+                ctx.fillStyle = "rgba(255,255,255,0.85)";
+                ctx.beginPath();
+                ctx.ellipse(x - 3, yy - 9, 2, 3, 0, 0, Math.PI * 2);
                 ctx.fill();
 
             }
 
-
-            /*
-             * 블루베리
-             */
-
             const berries = [
-
-                [-0.30, -2],
-
-                [-0.15, 5],
-
-                [0.03, -4],
-
-                [0.20, 4],
-
-                [0.34, -2]
-
+                [-0.30, 8],
+                [-0.11, 2],
+                [0.11, 8],
+                [0.30, 2]
             ];
 
+            berries.forEach(item => {
 
-            berries.forEach(
-                item => {
+                const x = cake.x + upperWidth * item[0];
+                const yy = y + item[1];
 
-                    const x =
-                        cake.x +
-                        upperWidth *
-                        item[0];
+                const gradient = ctx.createRadialGradient(x - 2, yy - 3, 1, x, yy, 8);
+                gradient.addColorStop(0, "#a9bdff");
+                gradient.addColorStop(0.5, "#5673cf");
+                gradient.addColorStop(1, "#263a72");
 
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(x, yy, 7.5, 0, Math.PI * 2);
+                ctx.fill();
 
-                    const yy =
-                        y +
-                        item[1];
+                ctx.fillStyle = "rgba(255,255,255,0.5)";
+                ctx.beginPath();
+                ctx.arc(x - 2, yy - 2.5, 1.6, 0, Math.PI * 2);
+                ctx.fill();
 
-
-                    const gradient =
-                        ctx.createRadialGradient(
-                            x - 2,
-                            yy - 3,
-                            1,
-                            x,
-                            yy,
-                            8
-                        );
-
-
-                    gradient.addColorStop(
-                        0,
-                        "#9fb7ff"
-                    );
-
-
-                    gradient.addColorStop(
-                        0.5,
-                        "#526fc9"
-                    );
-
-
-                    gradient.addColorStop(
-                        1,
-                        "#26396f"
-                    );
-
-
-                    ctx.fillStyle =
-                        gradient;
-
-
-                    ctx.beginPath();
-
-
-                    ctx.arc(
-                        x,
-                        yy,
-                        8,
-                        0,
-                        Math.PI * 2
-                    );
-
-
-                    ctx.fill();
-
-                }
-            );
+            });
 
         }
 
@@ -3034,230 +2388,108 @@
            초콜릿 케이크 장식
         ============================================================ */
 
-        function drawChocolateDecoration(
-            cake
-        ) {
+        function drawChocolateDecoration(cake) {
 
-            const upperWidth =
-                cake.width * 0.82;
+            const upperWidth = cake.width * 0.82;
+            const top = cake.bottom - cake.height + cake.height * 0.57;
+            const restY = top - 8;
 
-
-            const top =
-                cake.bottom -
-                cake.height +
-                cake.height * 0.57;
-
+            const dripCount = 6;
+            const dripWidth = upperWidth / dripCount;
+            const dripDepths = [12, 20, 10, 22, 13, 18];
 
             /*
              * 초콜릿 드립
              */
 
-            ctx.fillStyle =
-                "#552318";
-
-
+            ctx.fillStyle = "#4a2015";
             ctx.beginPath();
+            ctx.moveTo(cake.x - upperWidth / 2, restY - 12);
+            ctx.lineTo(cake.x - upperWidth / 2, restY);
 
+            for (let i = 0; i < dripCount; i++) {
 
-            ctx.moveTo(
-                cake.x -
-                upperWidth / 2,
-                top -
-                18
-            );
+                const x0 = cake.x - upperWidth / 2 + i * dripWidth;
+                const xMid = x0 + dripWidth / 2;
+                const x1 = x0 + dripWidth;
+                const depth = restY + dripDepths[i % dripDepths.length];
 
+                ctx.bezierCurveTo(
+                    x0 + dripWidth * 0.2, restY + 2,
+                    xMid - dripWidth * 0.15, depth,
+                    xMid, depth
+                );
 
-            for (
-                let i = 0; i <= 24; i++
-            ) {
-
-                const x =
-                    cake.x -
-                    upperWidth / 2 +
-                    upperWidth *
-                    (
-                        i /
-                        24
-                    );
-
-
-                const y =
-                    top -
-                    5 +
-                    Math.sin(
-                        i * 1.2
-                    ) *
-                    2;
-
-
-                ctx.lineTo(
-                    x,
-                    y
+                ctx.bezierCurveTo(
+                    xMid + dripWidth * 0.15, depth,
+                    x1 - dripWidth * 0.2, restY + 2,
+                    x1, restY
                 );
 
             }
 
-
-            ctx.lineTo(
-                cake.x +
-                upperWidth / 2,
-                top +
-                13
-            );
-
-
-            ctx.lineTo(
-                cake.x -
-                upperWidth / 2,
-                top +
-                13
-            );
-
-
+            ctx.lineTo(cake.x + upperWidth / 2, restY - 12);
             ctx.closePath();
-
-
             ctx.fill();
 
-
             /*
-             * 초콜릿 조각
+             * 곱슬한 초콜릿 셰이빙
              */
 
-            for (
-                let i = 0; i < 8; i++
-            ) {
+            const curls = [
+                [-0.30, -6, 0.2],
+                [-0.12, 2, -0.3],
+                [0.08, -8, 0.35],
+                [0.26, 3, -0.2]
+            ];
 
-                const x =
-                    cake.x -
-                    upperWidth * 0.38 +
-                    i *
-                    upperWidth *
-                    0.108;
+            curls.forEach(item => {
 
-
-                const y =
-                    top -
-                    2 +
-                    Math.sin(i * 1.4) *
-                    5;
-
+                const x = cake.x + upperWidth * item[0];
+                const yy = top + item[1];
 
                 ctx.save();
+                ctx.translate(x, yy);
+                ctx.rotate(item[2]);
 
+                const gradient = ctx.createLinearGradient(-16, -6, 16, 6);
+                gradient.addColorStop(0, "#9b5137");
+                gradient.addColorStop(0.5, "#69301f");
+                gradient.addColorStop(1, "#32120c");
 
-                ctx.translate(
-                    x,
-                    y
-                );
-
-
-                ctx.rotate(
-                    (
-                        i - 4
-                    ) *
-                    0.08
-                );
-
-
-                const chocolate =
-                    ctx.createLinearGradient(
-                        -14,
-                        -6,
-                        14,
-                        6
-                    );
-
-
-                chocolate.addColorStop(
-                    0,
-                    "#9b5137"
-                );
-
-
-                chocolate.addColorStop(
-                    0.5,
-                    "#69301f"
-                );
-
-
-                chocolate.addColorStop(
-                    1,
-                    "#32120c"
-                );
-
-
-                ctx.fillStyle =
-                    chocolate;
-
-
-                roundRect(
-                    ctx,
-                    -14,
-                    -5,
-                    28,
-                    10,
-                    4
-                );
-
-
-                ctx.fill();
-
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 7;
+                ctx.lineCap = "round";
+                ctx.beginPath();
+                ctx.moveTo(-16, 4);
+                ctx.quadraticCurveTo(0, -14, 16, 4);
+                ctx.stroke();
 
                 ctx.restore();
 
-            }
-
+            });
 
             /*
              * 초콜릿 칩
              */
 
-            ctx.fillStyle =
-                "#32130d";
+            const chipPositions = [
+                [0.12, 0.65], [0.26, 0.35], [0.38, 0.7], [0.5, 0.4],
+                [0.62, 0.68], [0.74, 0.38], [0.86, 0.62]
+            ];
 
+            ctx.fillStyle = "#32130d";
 
-            for (
-                let i = 0; i < 13; i++
-            ) {
+            chipPositions.forEach((pos, i) => {
 
-                const x =
-                    cake.x -
-                    cake.width * 0.38 +
-                    (
-                        i * 37
-                    ) %
-                    (
-                        cake.width *
-                        0.76
-                    );
-
-
-                const y =
-                    cake.bottom -
-                    35 -
-                    (
-                        i % 3
-                    ) *
-                    5;
-
+                const x = cake.x - upperWidth / 2 + upperWidth * pos[0];
+                const y = cake.bottom - 30 - pos[1] * 14;
 
                 ctx.beginPath();
-
-
-                ctx.arc(
-                    x,
-                    y,
-                    3 +
-                    (i % 2),
-                    0,
-                    Math.PI * 2
-                );
-
-
+                ctx.arc(x, y, 3 + (i % 2), 0, Math.PI * 2);
                 ctx.fill();
 
-            }
+            });
 
         }
 
@@ -3266,118 +2498,46 @@
            치즈 케이크 장식
         ============================================================ */
 
-        function drawCheeseDecoration(
-            cake
-        ) {
+        function drawCheeseDecoration(cake) {
 
-            const upperWidth =
-                cake.width * 0.82;
+            const upperWidth = cake.width * 0.82;
+            const top = cake.bottom - cake.height + cake.height * 0.57;
 
+            cheeseHoles.forEach(hole => {
 
-            const top =
-                cake.bottom -
-                cake.height +
-                cake.height * 0.57;
+                const x = cake.x - upperWidth / 2 + upperWidth * hole[0];
+                const y = top - 14 + hole[1] * 38;
+                const r = hole[2] * 0.8;
 
+                /*
+                 * 구멍 안쪽의 부드러운 그림자입니다.
+                 */
 
-            /*
-             * 치즈 표면
-             */
+                ctx.fillStyle = "rgba(125,72,7,0.14)";
+                ctx.beginPath();
+                ctx.ellipse(x, y + 2, r, r * 0.9, 0, 0, Math.PI * 2);
+                ctx.fill();
 
-            cheeseHoles.forEach(
-                hole => {
+                const gradient = ctx.createRadialGradient(x - 2, y - 2, 1, x, y, r);
+                gradient.addColorStop(0, "rgba(140,84,10,0.42)");
+                gradient.addColorStop(0.7, "rgba(140,84,10,0.22)");
+                gradient.addColorStop(1, "rgba(140,84,10,0.06)");
 
-                    const x =
-                        cake.x -
-                        upperWidth / 2 +
-                        upperWidth *
-                        hole[0];
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.ellipse(x, y, r, r * 0.88, 0.3, 0, Math.PI * 2);
+                ctx.fill();
 
-
-                    const y =
-                        top -
-                        14 +
-                        hole[1] *
-                        38;
-
-
-                    const r =
-                        hole[2] *
-                        0.75;
-
-
-                    const gradient =
-                        ctx.createRadialGradient(
-                            x - 2,
-                            y - 2,
-                            1,
-                            x,
-                            y,
-                            r
-                        );
-
-
-                    gradient.addColorStop(
-                        0,
-                        "rgba(125,72,7,0.48)"
-                    );
-
-
-                    gradient.addColorStop(
-                        1,
-                        "rgba(125,72,7,0.12)"
-                    );
-
-
-                    ctx.fillStyle =
-                        gradient;
-
-
-                    ctx.beginPath();
-
-
-                    ctx.arc(
-                        x,
-                        y,
-                        r,
-                        0,
-                        Math.PI * 2
-                    );
-
-
-                    ctx.fill();
-
-                }
-            );
-
+            });
 
             /*
              * 황금빛 치즈 테두리
              */
 
-            ctx.strokeStyle =
-                "rgba(164,104,14,0.4)";
-
-
+            ctx.strokeStyle = "rgba(164,104,14,0.32)";
             ctx.lineWidth = 5;
-
-
             ctx.beginPath();
-
-
-            ctx.ellipse(
-                cake.x,
-                cake.bottom -
-                cake.height +
-                39,
-                upperWidth * 0.46,
-                28,
-                0,
-                0,
-                Math.PI * 2
-            );
-
-
+            ctx.ellipse(cake.x, cake.bottom - cake.height + 39, upperWidth * 0.46, 28, 0, 0, Math.PI * 2);
             ctx.stroke();
 
         }
@@ -3387,87 +2547,23 @@
            하단 장식
         ============================================================ */
 
-        function drawBottomDecoration(
-            cake,
-            colors
-        ) {
+        function drawBottomDecoration(cake, colors) {
 
-            const left =
-                cake.x -
-                cake.width / 2;
+            const left = cake.x - cake.width / 2;
+            const dotCount = 13;
+            const y = cake.bottom - 15;
 
+            for (let i = 0; i < dotCount; i++) {
 
-            /*
-             * 하단 크림 파이핑
-             */
+                const x = left + 22 + i * ((cake.width - 44) / (dotCount - 1));
 
-            for (
-                let i = 0; i < 13; i++
-            ) {
+                const gradient = ctx.createRadialGradient(x - 3, y - 4, 1, x, y, 16);
+                gradient.addColorStop(0, "#ffffff");
+                gradient.addColorStop(1, colors.cream);
 
-                const x =
-                    left +
-                    22 +
-                    i *
-                    (
-                        (
-                            cake.width -
-                            44
-                        ) /
-                        12
-                    );
-
-
-                const y =
-                    cake.bottom -
-                    15 +
-                    Math.sin(
-                        i * 1.15
-                    ) *
-                    2;
-
-
-                const gradient =
-                    ctx.createRadialGradient(
-                        x - 3,
-                        y - 4,
-                        1,
-                        x,
-                        y,
-                        16
-                    );
-
-
-                gradient.addColorStop(
-                    0,
-                    "#ffffff"
-                );
-
-
-                gradient.addColorStop(
-                    1,
-                    colors.cream
-                );
-
-
-                ctx.fillStyle =
-                    gradient;
-
-
+                ctx.fillStyle = gradient;
                 ctx.beginPath();
-
-
-                ctx.ellipse(
-                    x,
-                    y,
-                    15,
-                    9,
-                    0,
-                    0,
-                    Math.PI * 2
-                );
-
-
+                ctx.ellipse(x, y, 15, 9, 0, 0, Math.PI * 2);
                 ctx.fill();
 
             }
@@ -3624,9 +2720,9 @@
             const heightCandle =
                 (
                     candle.type ===
-                    "long" ?
-                    76 :
-                    45
+                    "long"
+                        ? 76
+                        : 45
                 ) *
                 scale;
 
@@ -3760,7 +2856,9 @@
 
 
             for (
-                let i = -2; i < heightCandle / 14 + 2; i++
+                let i = -2;
+                i < heightCandle / 14 + 2;
+                i++
             ) {
 
                 ctx.beginPath();
@@ -4041,27 +3139,28 @@
 
             const order =
                 candles
-                .map(
-                    (
-                        candle,
-                        index
-                    ) => ({
-
-                        candle,
-
-                        index,
-
-                        position: positions[
+                    .map(
+                        (
+                            candle,
                             index
-                        ]
+                        ) => ({
 
-                    })
-                )
-                .sort(
-                    (a, b) =>
-                    a.position.depth -
-                    b.position.depth
-                );
+                            candle,
+
+                            index,
+
+                            position:
+                                positions[
+                                    index
+                                ]
+
+                        })
+                    )
+                    .sort(
+                        (a, b) =>
+                            a.position.depth -
+                            b.position.depth
+                    );
 
 
             order.forEach(
@@ -4340,7 +3439,9 @@
 
             for (
                 let i =
-                    particles.length - 1; i >= 0; i--
+                    particles.length - 1;
+                i >= 0;
+                i--
             ) {
 
                 const p =
@@ -4416,7 +3517,9 @@
 
             for (
                 let i =
-                    smokeParticles.length - 1; i >= 0; i--
+                    smokeParticles.length - 1;
+                i >= 0;
+                i--
             ) {
 
                 const smoke =
@@ -4501,7 +3604,9 @@
 
             for (
                 let i =
-                    confetti.length - 1; i >= 0; i--
+                    confetti.length - 1;
+                i >= 0;
+                i--
             ) {
 
                 const c =
@@ -4534,7 +3639,8 @@
                         width;
 
 
-                    c.y = -20;
+                    c.y =
+                        -20;
 
 
                     c.vy =
@@ -4753,7 +3859,7 @@
 
 
             audioContext =
-                new(
+                new (
                     window.AudioContext ||
                     window.webkitAudioContext
                 )();
@@ -5726,15 +4832,15 @@
 
             const indices =
                 candles
-                .map(
-                    (_, index) =>
-                    index
-                )
-                .sort(
-                    (a, b) =>
-                    positions[b].depth -
-                    positions[a].depth
-                );
+                    .map(
+                        (_, index) =>
+                            index
+                    )
+                    .sort(
+                        (a, b) =>
+                            positions[b].depth -
+                            positions[a].depth
+                    );
 
 
             for (
@@ -5766,9 +4872,9 @@
                 const candleHeight =
                     (
                         candle.type ===
-                        "long" ?
-                        76 :
-                        45
+                        "long"
+                            ? 76
+                            : 45
                     ) *
                     scale;
 
@@ -5835,7 +4941,7 @@
                     const remaining =
                         candles.filter(
                             item =>
-                            !item.blown
+                                !item.blown
                         ).length;
 
 
@@ -5958,7 +5064,8 @@
 
                 event.preventDefault();
 
-            }, {
+            },
+            {
                 passive: false
             }
         );
@@ -6226,6 +5333,7 @@
         requestAnimationFrame(
             render
         );
+
     </script>
 
 </body>
